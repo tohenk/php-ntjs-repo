@@ -127,6 +127,39 @@ EOF
     }
 
     /**
+     * Include locale javascript.
+     *
+     * @param string $name     Javascript name
+     * @param string $culture  The user culture
+     * @param string $default  Default culture
+     * @return \NTLAB\JS\Script\JQuery
+     */
+    public function useLocaleJavascript($name, $culture = null, $default = 'en')
+    {
+        $culture = null === $culture ? $this->getBackend()->getConfig('default-culture') : $culture;
+        // change culture delimeter from _ to -
+        $culture = str_replace('_', '-', $culture);
+        $locales = array($culture);
+        if (false!== ($p = strpos($culture, '-'))) {
+            $locales[] = substr($culture, 0, $p);
+        }
+        if (!in_array($default, $locales)) {
+            $locales[] = $default;
+        }
+        // check file
+        $baseDir = $this->getBackend()->getConfig('jquery-base-dir');
+        foreach ($locales as $locale) {
+          $js = $this->getJsDir($name.$locale.'.js');
+          if (is_readable($baseDir.DIRECTORY_SEPARATOR.$js)) {
+            $this->addJavascript($js);
+            break;
+          }
+        }
+
+        return $this;
+    }
+
+    /**
      * Include a jquery stylesheet.
      *
      * @param string $name  The stylesheet name, e.q. ui
