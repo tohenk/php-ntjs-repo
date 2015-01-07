@@ -1,0 +1,31 @@
+{
+	"name" : "ntlab/ntjs",
+	"type" : "library",
+	"description" : "PHP Javascript Repository",
+	"keywords" : [
+		"ntjs",
+		"javascript",
+		"repository"
+	],
+	"homepage" : "https://github.com/tohenk/php-ntjs",
+	"license" : "MIT",
+	"authors" : [{
+			"name" : "Toha",
+			"email" : "tohenk@yahoo.com",
+			"role" : "Developer"
+		}
+	],
+	"require" : {
+		"php" : ">=5.3.0",
+		"tedivm/jshrink" : "dev-master",
+		"mrclay/minify": "dev-master"
+	},
+	"require-dev" : {
+		"phpunit/phpunit" : "4.1.*"
+	},
+	"autoload" : {
+		"psr-0" : {
+			"NTLAB\\JS\\" : "src/"
+		}
+	}
+}
