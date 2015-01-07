@@ -372,6 +372,17 @@ abstract class Script
     }
 
     /**
+     * Translate URL.
+     *
+     * @param string $url  Raw url
+     * @return string
+     */
+    protected function url($url)
+    {
+        return $this->getBackend()->url($url);
+    }
+
+    /**
      * Indent lines of code.
      *
      * @param string $lines  The code
