@@ -189,9 +189,10 @@ class Manager
     /**
      * Get all scripts content.
      *
+     * @param boolean $includeTag  Wheter to include javascript tag or not
      * @return string
      */
-    public function getScript()
+    public function getScript($includeTag = false)
     {
         $content = null;
         foreach ($this->repositories as $repository) {
@@ -201,6 +202,16 @@ class Manager
                 }
                 $content .= $script;
             }
+        }
+        if (strlen($content) && $includeTag) {
+            $content = sprintf(<<<EOF
+<script type="text/javascript">
+//<![CDATA[
+%s
+//]]>
+</script>
+EOF
+, $content);
         }
 
         return $content;
