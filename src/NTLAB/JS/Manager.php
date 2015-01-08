@@ -204,7 +204,21 @@ class Manager
             }
         }
         if (strlen($content) && $includeTag) {
-            $content = sprintf(<<<EOF
+            $content = $this->scriptTag($content);
+        }
+
+        return $content;
+    }
+
+    /**
+     * Create script tag for javascript.
+     *
+     * @param string $content  Script content
+     * @return string
+     */
+    public function scriptTag($content)
+    {
+        return sprintf(<<<EOF
 <script type="text/javascript">
 //<![CDATA[
 %s
@@ -212,9 +226,6 @@ class Manager
 </script>
 EOF
 , $content);
-        }
-
-        return $content;
     }
 
     /**
