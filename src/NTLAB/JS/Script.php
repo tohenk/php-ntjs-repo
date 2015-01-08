@@ -374,11 +374,12 @@ abstract class Script
      * Translate URL.
      *
      * @param string $url  Raw url
+     * @param array $options  URL options
      * @return string
      */
-    protected function url($url)
+    protected function url($url, $options = array())
     {
-        return $this->getBackend()->url($url);
+        return $this->getBackend()->url($url, $options);
     }
 
     /**

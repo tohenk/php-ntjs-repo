@@ -54,9 +54,10 @@ interface BackendInterface
      * Perform URL translation or transform.
      *
      * @param string $url  Raw URL
+     * @param array $options  URL options
      * @return string
      */
-    public function url($url);
+    public function url($url, $options = array());
 
     /**
      * Perform asset translation for javascript or stylesheet.

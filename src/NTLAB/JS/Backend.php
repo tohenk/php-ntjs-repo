@@ -50,7 +50,7 @@ class Backend implements BackendInterface
      * (non-PHPdoc)
      * @see \NTLAB\JS\BackendInterface::url()
      */
-    public function url($url)
+    public function url($url, $options = array())
     {
         return $url;
     }
