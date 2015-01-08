@@ -76,16 +76,14 @@ abstract class Script
             if (null == $class = Manager::getInstance()->resolveDependency($name)) {
                 throw new \RuntimeException(sprintf('Can\'t resolve script "%s".', $name));
             }
-            static::$maps[$name] = $class;
-        } else {
-            $class = static::$maps[$name];
+            static::$maps[$name] = array('class' => $class);
         }
-        if (!isset(static::$included[$class])) {
-            $script = new $class();
-            $script->includeScript();
+        if (!isset(static::$maps[$name]['obj'])) {
+            $class = static::$maps[$name]['class'];
+            static::$maps[$name]['obj'] = new $class();
         }
 
-        return static::$included[$class];
+        return static::$maps[$name]['obj'];
     }
 
     /**
@@ -218,7 +216,8 @@ abstract class Script
     {
         $dependencies = null === $dependencies ? $this->dependencies : $dependencies;
         foreach ((array) $dependencies as $class) {
-            $this->create($class);
+            $this->create($class)
+              ->includeScript();
         }
 
         return $this;
