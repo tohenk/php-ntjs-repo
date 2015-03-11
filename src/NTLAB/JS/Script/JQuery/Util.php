@@ -24,64 +24,40 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery\Dialog;
+namespace NTLAB\JS\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery\UI as Base;
+use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
- * JQuery UI confirm dialog.
+ * Common utility for javascript.
  *
  * Usage:
- * $.ntdlg.confirm('my', 'Confirm', 'Do you want to do something?', 'ui-icon-help',
- *     function() {
- *         alert('Okay!');
- *     },
- *     function() {
- *         alert('Nope!');
- *     }
- * );
+ * $.util.dump($('#me'));
  *
  * @author Toha
+ *
  */
-class Confirm extends Base
+class Util extends Base
 {
     protected function configure()
     {
-        $this->addDependencies('JQuery.NS', 'JQuery.Dialog');
+        $this->addDependencies('JQuery.NS');
         $this->setPosition(Repository::POSITION_FIRST);
     }
 
     public function getScript()
     {
-        $yes = $this->trans('Yes');
-        $no = $this->trans('No');
-
         return <<<EOF
-$.define('ntdlg', {
-    confirm: function(id, title, message, icon, cb_yes, cb_no) {
-        if (typeof icon == 'function') {
-            var cb_no = cb_yes;
-            var cb_yes = icon;
-            var icon = undefined;
+$.define('util', {
+    dump: function(o, p) {
+        if (typeof o == 'object') {
+            for (a in o) $.util.dump(o[a], (p != undefined ? p + '.' : '') + a);
+        } else {
+            alert((p != undefined ? p + ' = ' : '') + o);
         }
-        var icon = icon || 'ui-icon-help';
-        $.ntdlg.dialog(id, title, message, true, icon, {
-            '$yes': function() {
-                $(this).dialog('close');
-                if (typeof cb_yes == 'function') {
-                    cb_yes();
-                }
-            },
-            '$no': function() {
-                $(this).dialog('close');
-                if (typeof cb_no == 'function') {
-                    cb_no();
-                }
-            }
-        });
     }
-}, true);
+});
 
 EOF;
     }
