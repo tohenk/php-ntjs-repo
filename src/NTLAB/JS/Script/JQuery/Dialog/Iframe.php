@@ -82,6 +82,7 @@ $.define('ntdlg', {
                 var w = Math.floor(d.width());
                 url += (url.indexOf('?') > -1 ? '&' : '?') + 'height=' + h + '&width=' + w + '&closecb=' + (close_cb ? close_cb : '') + '&_dialog=1';
                 d.html('<iframe src="' + url + '" frameborder="0" hspace="0" width="' + w + '" height="' + h + '" style="overflow: ' + overflow + ';"></iframe>');
+                d.addClass('ui-dialog-iframe-container');
             }
         };
         // adjust dialog size
