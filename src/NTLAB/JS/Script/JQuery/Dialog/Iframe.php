@@ -132,7 +132,7 @@ EOF;
 
         $url = $this->getBackend()->url($url);
         if (isset($options['query_string'])) {
-            $url .= '?'.$options['query_string'];
+            $url .= (false !== strpos($url, '?') ? '&' : '?').$options['query_string'];
             unset($options['query_string']);
         }
 
