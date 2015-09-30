@@ -180,13 +180,8 @@ class Repository
     {
         if (!$this->included) {
             $this->included = true;
-            if (strlen($content = $this->__toString())) {
-                if (null !== ($compressor = Manager::getInstance()->getCompressor())) {
-                    $content = $compressor->compress($content);
-                }
-            }
 
-            return $content;
+            return Manager::getInstance()->compress($this->__toString());
         }
     }
 

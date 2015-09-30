@@ -265,4 +265,19 @@ EOF
             }
         }
     }
+
+    /**
+     * Compress content using registered compressor.
+     *
+     * @param string $content  Raw content
+     * @return string
+     */
+    public function compress($content)
+    {
+        if (strlen($content) && null !== ($compressor = $this->getCompressor())) {
+            $content = $compressor->compress($content);
+        }
+
+        return $content;
+    }
 }

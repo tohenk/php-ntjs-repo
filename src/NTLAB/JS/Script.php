@@ -96,7 +96,17 @@ abstract class Script
     }
 
     /**
-     * Get the script reposiotry instance.
+     * Get the script manager instance.
+     *
+     * @return \NTLAB\JS\Manager
+     */
+    public function getManager()
+    {
+        return Manager::getInstance();
+    }
+
+    /**
+     * Get the script repository instance.
      *
      * @return \NTLAB\JS\Repository
      */
@@ -105,8 +115,8 @@ abstract class Script
         if (null === ($repoName = $this->getRepositoryName())) {
             throw new \Exception(sprintf('Repository "%s" is not implemented yet.', $repoName));
         }
-        $exist = Manager::getInstance()->has($repoName);
-        $repo = Manager::getInstance()->get($repoName);
+        $exist = $this->getManager()->has($repoName);
+        $repo = $this->getManager()->get($repoName);
         if (!$exist) {
             $this->initRepository($repo);
         }
@@ -153,11 +163,11 @@ abstract class Script
      */
     protected function getBackend()
     {
-        return Manager::getInstance()->getBackend();
+        return $this->getManager()->getBackend();
     }
 
     /**
-     * Add script depedencies.
+     * Add script dependencies.
      *
      * @param array $dependencies  The dependencies
      * @return \NTLAB\JS\Script
@@ -207,7 +217,7 @@ abstract class Script
     }
 
     /**
-     * Include script depedencies.
+     * Include script dependencies.
      *
      * @param array $dependencies  The dependencies to load
      * @return \NTLAB\JS\Script
@@ -276,7 +286,7 @@ abstract class Script
     abstract public function getScript();
 
     /**
-     * Get script initialiaztion code.
+     * Get script initialization code.
      */
     public function getInitScript()
     {
