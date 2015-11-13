@@ -27,7 +27,7 @@
 namespace NTLAB\JS\Compressor;
 
 use NTLAB\JS\Compressor as Base;
-use JSMin as Minifier;
+use JSMin\JSMin as Minifier;
 
 class JSMin extends Base
 {
