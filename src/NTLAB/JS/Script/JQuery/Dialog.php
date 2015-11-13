@@ -59,7 +59,7 @@ class Dialog extends Base
 $.define('ntdlg', {
     hideOverflow: null,
     minWidth: $width,
-    dialogTmpl: '<div id="%ID%" title="%TITLE%">%CONTENT%</div>',
+    dialogTmpl: '<div id="%ID%" class="ntdlg-container" title="%TITLE%">%CONTENT%</div>',
     iconTmpl: '<span class="ui-icon %ICON%"></span>',
     messageTmpl: '<div class="msg-container"><div class="msg-icon" style="float:left;margin:0 10px 0 0;padding:0 10px 0 10px;">%ICON%</div><div class="msg-content" style="margin-left: 50px;">%MESSAGE%</div></div>',
     template: function(tmpl, replaces) {
