@@ -84,127 +84,128 @@ class Loader
      */
     public function autoload()
     {
+        $manager = Manager::getInstance();
         $js = array();
         foreach ($this->javascripts as $file) {
-            $js[] = Manager::getInstance()->getBackend()->asset($file, BackendInterface::ASSET_JS);
+            $js[] = $manager->getBackend()->asset($file, BackendInterface::ASSET_JS);
         }
         $css = array();
         foreach ($this->stylesheets as $file) {
-            $css[] = Manager::getInstance()->getBackend()->asset($file, BackendInterface::ASSET_CSS);
+            $css[] = $manager->getBackend()->asset($file, BackendInterface::ASSET_CSS);
         }
-        $assets = Escaper::escape(array('js' => $js, 'css' => $css), null, 1);
-
-        return <<<EOF
-<script type="text/javascript">
-//<![CDATA[
-    document.ntloader = {
-        parent: document.head ? document.head : document.body,
-        scriptQueue: [],
-        scriptLoaded: [],
-        isStylesheetLoaded: function(path) {
-            var elems = this.parent.getElementsByTagName('link');
-            for (var i = 0; i < elems.length; i++) {
-                var el = elems[i];
-                if (!el.hasAttribute('rel') || 'stylesheet' !== el.getAttribute('rel')) continue;
-                if (el.hasAttribute('href') && path == el.getAttribute('href')) {
-                    if (console) console.debug('Stylesheet "' + path + '" already loaded.');
-                    return true;
-                }
+        if (count($js) || count($css)) {
+            $assets = Escaper::escape(array('js' => $js, 'css' => $css));
+            $script = $manager->compress(<<<EOF
+document.ntloader = {
+    parent: document.head ? document.head : document.body,
+    scriptQueue: [],
+    scriptLoaded: [],
+    isStylesheetLoaded: function(path) {
+        var elems = this.parent.getElementsByTagName('link');
+        for (var i = 0; i < elems.length; i++) {
+            var el = elems[i];
+            if (!el.hasAttribute('rel') || 'stylesheet' !== el.getAttribute('rel')) continue;
+            if (el.hasAttribute('href') && path == el.getAttribute('href')) {
+                if (console) console.debug('Stylesheet "' + path + '" already loaded.');
+                return true;
             }
-            return false;
-        },
-        queueStylesheet: function(path) {
-            var self = this;
-            var el = document.createElement('link');
-            el.rel = 'stylesheet';
-            el.type = 'text/css';
-            el.href = path;
-            self.parent.appendChild(el);
-            if (console) console.debug('Stylesheet "' + path + '" queued.');
-        },
-        loadStylesheets: function(paths) {
-            var self = this;
-            var items = [];
-            for (var i = 0; i < paths.length; i++) {
-                if (!self.isStylesheetLoaded(paths[i])) {
-                    items.push(paths[i]);
-                }
+        }
+        return false;
+    },
+    queueStylesheet: function(path) {
+        var self = this;
+        var el = document.createElement('link');
+        el.rel = 'stylesheet';
+        el.type = 'text/css';
+        el.href = path;
+        self.parent.appendChild(el);
+        if (console) console.debug('Stylesheet "' + path + '" queued.');
+    },
+    loadStylesheets: function(paths) {
+        var self = this;
+        var items = [];
+        for (var i = 0; i < paths.length; i++) {
+            if (!self.isStylesheetLoaded(paths[i])) {
+                items.push(paths[i]);
             }
-            return items;
-        },
-        isJavascriptLoaded: function(path) {
-            var elems = this.parent.getElementsByTagName('script');
-            for (var i = 0; i < elems.length; i++) {
-                var el = elems[i];
-                if (!el.hasAttribute('type') || 'text/javascript' !== el.getAttribute('type')) continue;
-                if (el.hasAttribute('src') && path == el.getAttribute('src')) {
-                    if (console) console.debug('Javascript "' + path + '" already loaded.');
-                    return true;
-                }
+        }
+        return items;
+    },
+    isJavascriptLoaded: function(path) {
+        var elems = this.parent.getElementsByTagName('script');
+        for (var i = 0; i < elems.length; i++) {
+            var el = elems[i];
+            if (!el.hasAttribute('type') || 'text/javascript' !== el.getAttribute('type')) continue;
+            if (el.hasAttribute('src') && path == el.getAttribute('src')) {
+                if (console) console.debug('Javascript "' + path + '" already loaded.');
+                return true;
             }
-            return false;
-        },
-        queueJavascript: function(path) {
-            var self = this;
-            var el = document.createElement('script');
-            el.type = 'text/javascript';
-            el.src = path;
-            // http://stackoverflow.com/questions/1293367/how-to-detect-if-javascript-files-are-loaded
-            el.onload = function() {
+        }
+        return false;
+    },
+    queueJavascript: function(path) {
+        var self = this;
+        var el = document.createElement('script');
+        el.type = 'text/javascript';
+        el.src = path;
+        // http://stackoverflow.com/questions/1293367/how-to-detect-if-javascript-files-are-loaded
+        el.onload = function() {
+            self.removeQueue(path);
+        }
+        el.onreadystatechange = function() {
+            if (this.readyState == 'complete') {
                 self.removeQueue(path);
             }
-            el.onreadystatechange = function() {
-                if (this.readyState == 'complete') {
-                    self.removeQueue(path);
-                }
+        }
+        self.parent.appendChild(el);
+        if (console) console.debug('Javascript "' + path + '" queued.');
+    },
+    removeQueue: function(path) {
+        var idx = this.scriptQueue.indexOf(path);
+        if (idx >= 0) {
+            if (console) console.debug('Javascript "' + path + '" done.');
+            this.scriptQueue.splice(idx, 1);
+            this.processJavascriptQueue();
+        }
+    },
+    processJavascriptQueue: function() {
+        if (0 == this.scriptQueue.length) return;
+        this.queueJavascript(this.scriptQueue[0]);
+    },
+    loadJavascripts: function(paths) {
+        var self = this;
+        var items = [];
+        for (var i = 0; i < paths.length; i++) {
+            if (!self.isJavascriptLoaded(paths[i])) {
+                items.push(paths[i]);
             }
-            self.parent.appendChild(el);
-            if (console) console.debug('Javascript "' + path + '" queued.');
-        },
-        removeQueue: function(path) {
-            var idx = this.scriptQueue.indexOf(path);
-            if (idx >= 0) {
-                if (console) console.debug('Javascript "' + path + '" done.');
-                this.scriptQueue.splice(idx, 1);
+        }
+        return items;
+    },
+    isScriptLoaded: function() {
+        return this.scriptQueue.length == 0 ? true : false;
+    },
+    load: function(assets) {
+        if (assets.css) {
+            var css = this.loadStylesheets(assets.css);
+            for (var i = 0; i < css.length; i++) {
+                this.queueStylesheet(css[i]);
+            }
+        }
+        if (assets.js) {
+            this.scriptQueue = this.loadJavascripts(assets.js);
+            if (this.scriptQueue.length) {
                 this.processJavascriptQueue();
-            }
-        },
-        processJavascriptQueue: function() {
-            if (0 == this.scriptQueue.length) return;
-            this.queueJavascript(this.scriptQueue[0]);
-        },
-        loadJavascripts: function(paths) {
-            var self = this;
-            var items = [];
-            for (var i = 0; i < paths.length; i++) {
-                if (!self.isJavascriptLoaded(paths[i])) {
-                    items.push(paths[i]);
-                }
-            }
-            return items;
-        },
-        isScriptLoaded: function() {
-            return this.scriptQueue.length == 0 ? true : false;
-        },
-        load: function(assets) {
-            if (assets.css) {
-                var css = this.loadStylesheets(assets.css);
-                for (var i = 0; i < css.length; i++) {
-                    this.queueStylesheet(css[i]);
-                }
-            }
-            if (assets.js) {
-                this.scriptQueue = this.loadJavascripts(assets.js);
-                if (this.scriptQueue.length) {
-                    this.processJavascriptQueue();
-                }
             }
         }
     }
-    // load all assets
-    document.ntloader.load($assets);
-//]]>
-</script>
-EOF;
+}
+// load all assets
+document.ntloader.load($assets);
+EOF
+            );
+
+            return $manager->scriptTag($script);
+        }
     }
 }
