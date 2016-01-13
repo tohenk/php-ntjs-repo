@@ -97,49 +97,112 @@ class Loader
         return <<<EOF
 <script type="text/javascript">
 //<![CDATA[
-    assets = $assets;
-    p = document.head ? document.head : document.body;
-    // load stylesheets
-    elems = p.getElementsByTagName('link');
-    for (i = 0; i < assets.css.length; i++) {
-        css = assets.css[i];
-        exist = false;
-        for (j = 0; j < elems.length; j++) {
-            el = elems[j];
-            if (!el.hasAttribute('rel') || 'stylesheet' !== el.getAttribute('rel')) continue;
-            if (el.hasAttribute('href') && css == el.getAttribute('href')) {
-                exist = true;
-                break;
+    document.ntloader = {
+        parent: document.head ? document.head : document.body,
+        scriptQueue: [],
+        scriptLoaded: [],
+        isStylesheetLoaded: function(path) {
+            var elems = this.parent.getElementsByTagName('link');
+            for (var i = 0; i < elems.length; i++) {
+                var el = elems[i];
+                if (!el.hasAttribute('rel') || 'stylesheet' !== el.getAttribute('rel')) continue;
+                if (el.hasAttribute('href') && path == el.getAttribute('href')) {
+                    if (console) console.debug('Stylesheet "' + path + '" already loaded.');
+                    return true;
+                }
             }
-        }
-        if (!exist) {
-            el = document.createElement('link');
+            return false;
+        },
+        queueStylesheet: function(path) {
+            var self = this;
+            var el = document.createElement('link');
             el.rel = 'stylesheet';
             el.type = 'text/css';
-            el.href = css;
-            p.appendChild(el);
-        }
-    }
-    // load javascript
-    elems = p.getElementsByTagName('script');
-    for (i = 0; i < assets.js.length; i++) {
-        js = assets.js[i];
-        exist = false;
-        for (j = 0; j < elems.length; j++) {
-            el = elems[j];
-            if (!el.hasAttribute('type') || 'text/javascript' !== el.getAttribute('type')) continue;
-            if (el.hasAttribute('src') && js == el.getAttribute('src')) {
-                exist = true;
-                break;
+            el.href = path;
+            self.parent.appendChild(el);
+            if (console) console.debug('Stylesheet "' + path + '" queued.');
+        },
+        loadStylesheets: function(paths) {
+            var self = this;
+            var items = [];
+            for (var i = 0; i < paths.length; i++) {
+                if (!self.isStylesheetLoaded(paths[i])) {
+                    items.push(paths[i]);
+                }
+            }
+            return items;
+        },
+        isJavascriptLoaded: function(path) {
+            var elems = this.parent.getElementsByTagName('script');
+            for (var i = 0; i < elems.length; i++) {
+                var el = elems[i];
+                if (!el.hasAttribute('type') || 'text/javascript' !== el.getAttribute('type')) continue;
+                if (el.hasAttribute('src') && path == el.getAttribute('src')) {
+                    if (console) console.debug('Javascript "' + path + '" already loaded.');
+                    return true;
+                }
+            }
+            return false;
+        },
+        queueJavascript: function(path) {
+            var self = this;
+            var el = document.createElement('script');
+            el.type = 'text/javascript';
+            el.src = path;
+            // http://stackoverflow.com/questions/1293367/how-to-detect-if-javascript-files-are-loaded
+            el.onload = function() {
+                self.removeQueue(path);
+            }
+            el.onreadystatechange = function() {
+                if (this.readyState == 'complete') {
+                    self.removeQueue(path);
+                }
+            }
+            self.parent.appendChild(el);
+            if (console) console.debug('Javascript "' + path + '" queued.');
+        },
+        removeQueue: function(path) {
+            var idx = this.scriptQueue.indexOf(path);
+            if (idx >= 0) {
+                if (console) console.debug('Javascript "' + path + '" done.');
+                this.scriptQueue.splice(idx, 1);
+                this.processJavascriptQueue();
+            }
+        },
+        processJavascriptQueue: function() {
+            if (0 == this.scriptQueue.length) return;
+            this.queueJavascript(this.scriptQueue[0]);
+        },
+        loadJavascripts: function(paths) {
+            var self = this;
+            var items = [];
+            for (var i = 0; i < paths.length; i++) {
+                if (!self.isJavascriptLoaded(paths[i])) {
+                    items.push(paths[i]);
+                }
+            }
+            return items;
+        },
+        isScriptLoaded: function() {
+            return this.scriptQueue.length == 0 ? true : false;
+        },
+        load: function(assets) {
+            if (assets.css) {
+                var css = this.loadStylesheets(assets.css);
+                for (var i = 0; i < css.length; i++) {
+                    this.queueStylesheet(css[i]);
+                }
+            }
+            if (assets.js) {
+                this.scriptQueue = this.loadJavascripts(assets.js);
+                if (this.scriptQueue.length) {
+                    this.processJavascriptQueue();
+                }
             }
         }
-        if (!exist) {
-            el = document.createElement('script');
-            el.type = 'text/javascript';
-            el.src = js;
-            p.appendChild(el);
-        }
     }
+    // load all assets
+    document.ntloader.load($assets);
 //]]>
 </script>
 EOF;
