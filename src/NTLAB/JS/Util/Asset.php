@@ -1,0 +1,169 @@
+<?php
+
+/*
+ * The MIT License
+ *
+ * Copyright (c) 2016 Toha <tohenk@yahoo.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+namespace NTLAB\JS\Util;
+
+use NTLAB\JS\Manager;
+use NTLAB\JS\BackendInterface;
+
+/**
+ * Javascript assets helper.
+ *
+ * @author Toha
+ */
+class Asset
+{
+    const ASSET_JAVASCRIPT = 'js';
+    const ASSET_STYLESHEET = 'css';
+    const ASSET_IMAGE = 'img';
+
+    /**
+     * @var \NTLAB\JS\BackendInterface
+     */
+    protected $backed = null;
+
+    /**
+     * @var string
+     */
+    protected $repository = null;
+
+    /**
+     * @var array
+     */
+    protected $dirs = array();
+
+    /**
+     * Constructor.
+     *
+     * @param string $repository
+     * @param array $options
+     */
+    public function __construct($repository, $options = array())
+    {
+        $this->backed = Manager::getInstance()->getBackend();
+        $this->repository = $repository;
+        foreach (array(static::ASSET_JAVASCRIPT, static::ASSET_STYLESHEET, static::ASSET_IMAGE) as $asset) {
+            if (isset($options[$asset])) {
+                $this->dirs[$asset] = $options[$asset];
+            }
+        }
+    }
+
+    /**
+     * Set asset path.
+     *
+     * @param string $asset  Asset type
+     * @param string $dir  Path name
+     * @return \NTLAB\JS\Util\Asset
+     */
+    public function setPath($asset, $dir)
+    {
+        if (null === $dir) {
+            unset($this->dirs[$asset]);
+        } else {
+            $this->dirs[$asset] = $dir;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Generate asset name.
+     *
+     * @param string $name  Asset name
+     * @param string $version  Version
+     * @param boolean $minified  Is asset minified
+     * @return string
+     */
+    public function generate($name, $version = null, $minified = null)
+    {
+        $assetName = $name.($version ? '-'.$version : '').($minified ? '.min' : '');
+
+        return $assetName;
+    }
+
+    /**
+     * Get asset extension.
+     *
+     * @param string $asset  Asset type
+     * @return string
+     */
+    public function getExtension($asset)
+    {
+        switch ($asset) {
+            case static::ASSET_JAVASCRIPT:
+                return '.js';
+            case static::ASSET_STYLESHEET:
+                return '.css';
+        }
+    }
+
+    /**
+     * Get the directory name for asset.
+     *
+     * @param string $asset  Asset type
+     * @return string
+     */
+    public function getDirName($asset)
+    {
+        if (null !== $asset && isset($this->dirs[$asset])) {
+            return $this->dirs[$asset];
+        }
+    }
+
+    /**
+     * Get repository directory.
+     *
+     * @param string $asset  Asset type
+     * @param string $repository  Repository name
+     * @return string
+     */
+    public function getDir($asset = null, $repository = null)
+    {
+        $dir = $this->backed->getAssetDir(null !== $repository ? $repository : $this->repository);
+        if (strlen($dirName = $this->getDirName($asset))) {
+            $dir .= '/'.$dirName;
+        }
+
+        return $dir;
+    }
+
+    /**
+     * Get asset name.
+     *
+     * @param string $asset  Asset type
+     * @param string $name  Asset name
+     * @return string
+     */
+    public function get($asset, $name)
+    {
+        if (null !== ($extension = $this->getExtension($asset)) && substr($name, -strlen($extension)) != $extension) {
+          $name .= $extension;
+        }
+
+        return $this->getDir($asset).'/'.$name;
+    }
+}

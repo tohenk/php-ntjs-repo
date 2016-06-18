@@ -27,6 +27,7 @@
 namespace NTLAB\JS\Script\JQuery;
 
 use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Util\Asset;
 
 /**
  * Include javascript for notify.
@@ -37,8 +38,15 @@ use NTLAB\JS\Script\JQuery as Base;
  */
 class Notify extends Base
 {
+    protected $asset = null;
+
+    protected function configure()
+    {
+        $this->asset = new Asset('notifyjs', array(Asset::ASSET_JAVASCRIPT => 'dist'));
+    }
+
     public function getScript()
     {
-        $this->useJavascript('notify', null, true);
+        $this->useJavascript('notify', $this->asset);
     }
 }

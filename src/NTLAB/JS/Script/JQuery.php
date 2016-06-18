@@ -28,6 +28,7 @@ namespace NTLAB\JS\Script;
 
 use NTLAB\JS\Script as Base;
 use NTLAB\JS\Repository;
+use NTLAB\JS\Util\Asset;
 
 /**
  * JQuery javascript code repository for PHP.
@@ -70,6 +71,10 @@ class JQuery extends Base
 {
     protected function initialize()
     {
+        $this->getAsset()
+          ->setPath(Asset::ASSET_JAVASCRIPT, 'js')
+          ->setPath(Asset::ASSET_STYLESHEET, 'css')
+        ;
         $this->useJavascript('jquery');
     }
 
@@ -81,7 +86,7 @@ class JQuery extends Base
     protected function initRepository(Repository $repo)
     {
         $repo->setWrapper(<<<EOF
-func = function($) {%s}
+var func = function($) {%s}
 function iamReady() {
     if (document.ntloader && !document.ntloader.isScriptLoaded()) {
         setTimeout(iamReady, 100);
@@ -91,96 +96,7 @@ function iamReady() {
 }
 jQuery(iamReady);
 EOF
-);
-    }
-
-    /**
-     * Get JQuery JS directory name.
-     *
-     * @param string $js  The javascript name
-     * @return string
-     */
-    public function getJsDir($js = null)
-    {
-        return $this->getAssetDir().'/js/'.$js;
-    }
-
-    /**
-     * Get JQuery CSS directory name.
-     *
-     * @param string $css  The stylesheet name
-     * @return string
-     */
-    public function getCssDir($css = null)
-    {
-        return $this->getAssetDir().'/css/'.$css;
-    }
-
-    /**
-     * Include a jquery javascript.  The javascript name accepted with the following
-     * format:
-     * jquery-%name%-%version%.%minified%.js
-     *
-     * @param string $name  The javascript name, e.q. ui
-     * @param string $version  The javascript version
-     * @param bool $minified  The minified version used
-     * @return \NTLAB\JS\Script\JQuery
-     */
-    public function useJavascript($name, $version = null, $minified = false)
-    {
-        $js = $this->getJsDir($name.($version ? '-'.$version : '').($minified ? '.min' : '').'.js');
-        $this->addJavascript($js);
-
-        return $this;
-    }
-
-    /**
-     * Include locale javascript.
-     *
-     * @param string $name     Javascript name
-     * @param string $culture  The user culture
-     * @param string $default  Default culture
-     * @return \NTLAB\JS\Script\JQuery
-     */
-    public function useLocaleJavascript($name, $culture = null, $default = 'en')
-    {
-        $culture = null === $culture ? $this->getBackend()->getConfig('default-culture') : $culture;
-        // change culture delimeter from _ to -
-        $culture = str_replace('_', '-', $culture);
-        $locales = array($culture);
-        if (false!== ($p = strpos($culture, '-'))) {
-            $locales[] = substr($culture, 0, $p);
-        }
-        if (!in_array($default, $locales)) {
-            $locales[] = $default;
-        }
-        // check file
-        $baseDir = $this->getBackend()->getConfig('jquery-base-dir');
-        foreach ($locales as $locale) {
-          $js = $this->getJsDir($name.$locale.'.js');
-          if (is_readable($baseDir.DIRECTORY_SEPARATOR.$js)) {
-            $this->addJavascript($js);
-            break;
-          }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Include a jquery stylesheet.
-     *
-     * @param string $name  The stylesheet name, e.q. ui
-     * @param string $version  The stylesheet version
-     * @param bool $minified  The minified version used
-     * @return \NTLAB\JS\Script\JQuery
-     */
-    public function useStylesheet($name, $version = null, $minified = false)
-    {
-        $css = $this->getCssDir($name.($version ? '-'.$version : '').($minified ? '.min' : '').'.css');
-        $this->addStylesheet($css);
-
-        return $this;
+        );
     }
 
     public function getScript()

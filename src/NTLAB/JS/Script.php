@@ -26,6 +26,7 @@
 
 namespace NTLAB\JS;
 
+use NTLAB\JS\Util\Asset;
 use NTLAB\JS\Util\Escaper;
 
 /**
@@ -64,6 +65,11 @@ abstract class Script
     protected static $maps = array();
 
     /**
+     * @var \NTLAB\JS\Util\Asset
+     */
+    protected $_asset = null;
+
+    /**
      * Create script object.
      *
      * @param string $name  The script name
@@ -91,6 +97,7 @@ abstract class Script
      */
     public function __construct()
     {
+        $this->_asset = new Asset($this->getRepositoryName());
         $this->initialize();
         $this->configure();
     }
@@ -319,13 +326,13 @@ abstract class Script
     }
 
     /**
-     * Get asset directory.
+     * Get asset helper.
      *
-     * @return string
+     * @return \NTLAB\JS\Util\Asset
      */
-    public function getAssetDir()
+    public function getAsset()
     {
-        return $this->getBackend()->getAssetDir($this->getRepositoryName());
+        return $this->_asset;
     }
 
     /**
@@ -350,6 +357,81 @@ abstract class Script
     public function addStylesheet($css)
     {
         $this->getBackend()->addAsset($css, BackendInterface::ASSET_CSS);
+
+        return $this;
+    }
+
+    /**
+     * Include a jquery javascript.  The javascript name accepted with the following
+     * format:
+     * jquery-%name%-%version%.%minified%.js
+     *
+     * @param string $name  The javascript name, e.q. ui
+     * @param string $version  The javascript version
+     * @param bool $minified  The minified version used
+     * @param \NTLAB\JS\Util\Asset $asset  Asset helper
+     * @return \NTLAB\JS\Script\JQuery
+     */
+    public function useJavascript($name, $asset = null)
+    {
+        $asset = null != $asset ? $asset : $this->getAsset();
+        $this->addJavascript($asset->get(Asset::ASSET_JAVASCRIPT, $name));
+
+        return $this;
+    }
+
+    /**
+     * Include locale javascript.
+     *
+     * @param string $name     Javascript name
+     * @param string $culture  The user culture
+     * @param string $default  Default culture
+     * @param \NTLAB\JS\Util\Asset $asset  Asset helper
+     * @return \NTLAB\JS\Script
+     */
+    public function useLocaleJavascript($name, $culture = null, $default = 'en', $asset = null)
+    {
+        $asset = null != $asset ? $asset : $this->getAsset();
+        $default = null !== $default ? $default : 'en';
+        $baseDir = $this->getBackend()->getConfig('web-dir').DIRECTORY_SEPARATOR.$asset->getDir();
+        $culture = null === $culture ? $this->getBackend()->getConfig('default-culture') : $culture;
+        // change culture delimeter from _ to -
+        $culture = str_replace('_', '-', $culture);
+        $locales = array($culture);
+        if (false!== ($p = strpos($culture, '-'))) {
+            $locales[] = substr($culture, 0, $p);
+        }
+        if (!in_array($default, $locales)) {
+            $locales[] = $default;
+        }
+        // check file
+        foreach ($locales as $locale) {
+            $localeJs = $name.$locale.$asset->getExtension(Asset::ASSET_JAVASCRIPT);
+            $realJs = $baseDir;
+            if ($dirName = $asset->getDirName(Asset::ASSET_JAVASCRIPT)) {
+                $realJs .= DIRECTORY_SEPARATOR.$dirName;
+            }
+            $realJs .= DIRECTORY_SEPARATOR.$localeJs;
+            if (is_readable($realJs)) {
+                $this->useJavascript($localeJs, $asset);
+                break;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Include a jquery stylesheet.
+     *
+     * @param string $name  The stylesheet name, e.q. ui
+     * @param \NTLAB\JS\Util\Asset $asset  Asset helper
+     * @return \NTLAB\JS\Script
+     */
+    public function useStylesheet($name, $asset = null)
+    {
+        $asset = null != $asset ? $asset : $this->getAsset();
+        $this->addStylesheet($asset->get(Asset::ASSET_STYLESHEET, $name));
 
         return $this;
     }

@@ -152,7 +152,7 @@ class Repository
     public function add($text, $position = self::POSITION_LAST)
     {
         if ($text) {
-            if (!('}' == substr(rtrim($text), - 1) || ';' == substr(rtrim($text), - 1))) {
+            if (!('}' == substr(rtrim($text), -1) || ';' == substr(rtrim($text), -1) || '*/' == substr(rtrim($text), -2))) {
                 $text = rtrim($text).";".Escaper::getEol();
             }
             $text .= Escaper::getEol();

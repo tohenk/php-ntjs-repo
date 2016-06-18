@@ -28,6 +28,7 @@ namespace NTLAB\JS\Script\JQuery;
 
 use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
+use NTLAB\JS\Util\Asset;
 
 /**
  * Include on-screen keyboard javascript and assets. To use the on-screen
@@ -40,10 +41,16 @@ use NTLAB\JS\Repository;
  */
 class Keyboard extends Base
 {
+    protected $asset = null;
+
+    protected function configure()
+    {
+        $this->asset = new Asset('keyboard');
+    }
+
     public function getScript()
     {
-        $assetDir = $this->getBackend()->getAssetDir('');
-        $this->addJavascript($assetDir.'/keyboard/keyboard.js');
-        $this->addStylesheet($assetDir.'/keyboard/keyboard.css');
+        $this->useJavascript('keyboard', $this->asset);
+        $this->useStylesheet('keyboard', $this->asset);
     }
 }
