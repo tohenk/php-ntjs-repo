@@ -100,17 +100,41 @@ document.ntloader = {
     parent: document.head ? document.head : document.body,
     scriptQueue: [],
     scriptLoaded: [],
-    isStylesheetLoaded: function(path) {
-        var elems = this.parent.getElementsByTagName('link');
-        for (var i = 0; i < elems.length; i++) {
-            var el = elems[i];
-            if (!el.hasAttribute('rel') || 'stylesheet' !== el.getAttribute('rel')) continue;
-            if (el.hasAttribute('href') && path == el.getAttribute('href')) {
-                if (console) console.debug('Stylesheet "' + path + '" already loaded.');
-                return true;
+    hasAsset: function(parent, tag, path) {
+        if (parent) {
+            var elems = parent.getElementsByTagName(tag);
+            for (var i = 0; i < elems.length; i++) {
+                var el = elems[i];
+                // stylesheet
+                if ('link' == tag) {
+                    if (!el.hasAttribute('rel') || 'stylesheet' !== el.getAttribute('rel')) continue;
+                    if (el.hasAttribute('href') && path == el.getAttribute('href')) {
+                        if (console) console.debug('Stylesheet "' + path + '" already loaded.');
+                        return true;
+                    }
+                }
+                // javascript
+                if ('script' == tag) {
+                    if (!el.hasAttribute('type') || 'text/javascript' !== el.getAttribute('type')) continue;
+                    if (el.hasAttribute('src') && path == el.getAttribute('src')) {
+                        if (console) console.debug('Javascript "' + path + '" already loaded.');
+                        return true;
+                    }
+                }
             }
         }
         return false;
+    },
+    isAssetExist: function(tag, path) {
+        if (document.head && this.hasAsset(document.head, tag, path)) {
+            return true;
+        } else if (document.body && this.hasAsset(document.body, tag, path)) {
+            return true;
+        }
+        return false;
+    },
+    isStylesheetLoaded: function(path) {
+        return this.isAssetExist('link', path);
     },
     queueStylesheet: function(path) {
         var self = this;
@@ -132,16 +156,7 @@ document.ntloader = {
         return items;
     },
     isJavascriptLoaded: function(path) {
-        var elems = this.parent.getElementsByTagName('script');
-        for (var i = 0; i < elems.length; i++) {
-            var el = elems[i];
-            if (!el.hasAttribute('type') || 'text/javascript' !== el.getAttribute('type')) continue;
-            if (el.hasAttribute('src') && path == el.getAttribute('src')) {
-                if (console) console.debug('Javascript "' + path + '" already loaded.');
-                return true;
-            }
-        }
-        return false;
+        return this.isAssetExist('script', path);
     },
     queueJavascript: function(path) {
         var self = this;
