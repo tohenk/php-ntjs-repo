@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,29 +24,49 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery\Callback;
+namespace NTLAB\JS\Script\Bootstrap;
 
-use NTLAB\JS\Script\JQuery as Base;
-use NTLAB\JS\Repository;
+use NTLAB\JS\Script\JQuery\FormPost as Base;
+use NTLAB\JS\Util\Escaper;
 
 /**
- * A callback handler to set the value of an element, such as an input tag.
+ * Handling form submission using ajax.
+ *
+ * Usage:
+ * <?php
+ * 
+ * use NTLAB\JS\Script;
+ * 
+ * $script = Script::create('Bootstrap.FormPost');
+ * $script->call('#myform');
+ * ?>
  *
  * @author Toha
  */
-class SetValue extends Base
+class FormPost extends Base
 {
     protected function configure()
     {
-        $this->setPosition(Repository::POSITION_MIDDLE);
+        parent::configure();
+        $this->addDependencies(array('Bootstrap.Dialog', 'Bootstrap.Dialog.Wait'));
     }
 
-    public function getScript()
+    protected function getErrHelperOptions()
     {
-        return <<<EOF
-$.elSetValue = function(el, data) {
-    $(el).val(data);
-}
-EOF;
+        return array(
+            'errorContainer' => '.alert-danger',
+            'defaultError' => 1,
+            'parentClass' => 'has-error',
+            'inplace' => new Escaper(<<<EOF
+function(el, error) {
+            // don't add tooltip on hidden input
+            if (el.is('input[type="hidden"]')) {
+                var el = el.siblings('input');
+            }
+            el.tooltip({title: error, placement: 'right'});
+        }
+EOF
+            ),
+        );
     }
 }

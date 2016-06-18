@@ -47,7 +47,6 @@ class SetHtml extends Base
 $.elSetHtml = function(el, data) {
     $(el).html(data);
 }
-
 EOF;
     }
 }

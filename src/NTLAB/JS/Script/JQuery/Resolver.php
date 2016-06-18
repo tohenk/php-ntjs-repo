@@ -82,7 +82,6 @@ $.define('resolver', {
         }
     }
 });
-
 EOF;
     }
 }

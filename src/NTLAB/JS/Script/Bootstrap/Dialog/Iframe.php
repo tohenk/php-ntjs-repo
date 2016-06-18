@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery\Dialog;
+namespace NTLAB\JS\Script\Bootstrap\Dialog;
 
-use NTLAB\JS\Script\JQuery\UI as Base;
+use NTLAB\JS\Script\Bootstrap as Base;
 use NTLAB\JS\Repository;
 use NTLAB\JS\Util\Escaper;
 
@@ -52,7 +52,7 @@ class Iframe extends Base
 
     protected function configure()
     {
-        $this->addDependencies('JQuery.NS', 'JQuery.Dialog');
+        $this->addDependencies('JQuery.NS', 'Bootstrap.Dialog');
         $this->setPosition(Repository::POSITION_FIRST);
         if (null === self::$dlg_rand) {
             self::$dlg_rand = mt_rand();
@@ -74,32 +74,19 @@ $.define('ntdlg', {
         var close_cb = options.close_cb || null;
         var params = {
             modal: modal ? true : false,
-            resizable: false,
             buttons: [],
-            create: function(event, ui) {
-                $.overflow.hide();
-            },
-            close: function(event, ui) {
-                $.overflow.restore();
-            },
-            open: function() {
-                var d = $(this);
-                var h = Math.floor(d.height());
-                var w = Math.floor(d.width());
-                url += (url.indexOf('?') > -1 ? '&' : '?') + 'height=' + h + '&width=' + w + '&closecb=' + (close_cb ? close_cb : '') + '&_dialog=1';
-                d.html('<iframe src="' + url + '" frameborder="0" hspace="0" width="' + w + '" height="' + h + '" style="overflow: ' + overflow + ';"></iframe>');
+            'shown.bs.modal': function() {
+                var d = $(this).find('.modal-body');
+                url += (url.indexOf('?') > -1 ? '&' : '?') + 'w=' + w + '&h=' + h + '&closecb=' + (close_cb ? close_cb : '') + '&_dialog=1';
+                d.html('<iframe src="' + url + '" frameborder="0" hspace="0" width="100%" height="' + h + '" style="overflow: ' + overflow + ';"></iframe>');
                 d.addClass('ui-dialog-iframe-container');
             }
-        };
-        // adjust dialog size
-        var win = $(window);
-        if (typeof(h) == 'number') {
-            if (h > win.height()) h = win.height() - 10;
-            params.height = h;
         }
-        if (typeof(w) == 'number') {
-            if (w > win.width()) w = win.width() - 10;
-            params.width = w;
+        if (typeof options.size != 'undefined') {
+            params.size = options.size;
+        }
+        if (typeof options.closable != 'undefined') {
+            params.closable = options.closable;
         }
         $.ntdlg.create(id, title, '', params);
     }
@@ -129,11 +116,13 @@ EOF;
     public function call($title, $content, $url, $options = array())
     {
         $dlg = isset($options['dialog_id']) ? $options['dialog_id'] : $this->getDlgId();
-        $height = Escaper::escape(isset($options['height']) ? $options['height'] : 500);
+        $height = Escaper::escape(isset($options['height']) ? $options['height'] : 350);
         $width = Escaper::escape(isset($options['width']) ? $options['width'] : 600);
-        $modal = isset($options['modal']) ? ($options['modal'] ? 'true' : 'false') : 'true';
+        $modal = isset($options['modal']) ? ($options['modal'] ? true : false) : true;
         $overflow = isset($options['overflow']) ? $options['overflow'] : 'hidden';
-        unset($options['dialog_id'], $options['height'], $options['width'], $options['modal'], $options['overflow']);
+        $size = isset($options['size']) ? $options['size'] : null;
+        $clicker_class = isset($options['clicker_class']) ? $options['clicker_class'] : null;
+        unset($options['dialog_id'], $options['height'], $options['width'], $options['modal'], $options['overflow'], $options['clicker_class']);
 
         $url = $this->getBackend()->url($url);
         if (isset($options['query_string'])) {
@@ -147,6 +136,7 @@ EOF;
             'h'         => $height,
             'w'         => $width,
             'overflow'  => $overflow,
+            'size'      => $size,
             'close_cb'  => '$.ntdlg.closeIframe'.$dlg,
         ), null, 1);
 
@@ -162,6 +152,6 @@ $('#ref-dlg$dlg').click(function(e) {
 EOF
 , Repository::POSITION_LAST);
 
-        return $this->getBackend()->ctag('a', $content, array_merge(array('href' => $url, 'class' => 'dialog', 'id' => 'ref-dlg'.$dlg), $options));
+        return $this->getBackend()->ctag('a', $content, array_merge(array('href' => $url, 'class' => 'dialog'.(null !== $clicker_class ? ' '.$clicker_class : ''), 'id' => 'ref-dlg'.$dlg), $options));
     }
 }

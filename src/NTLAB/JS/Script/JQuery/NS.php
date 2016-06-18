@@ -56,11 +56,12 @@ class NS extends Base
         // http://stackoverflow.com/questions/527089/is-it-possible-to-create-a-namespace-in-jquery
         return <<<EOF
 if (!$.define) {
+    'use strict';
     $.namespace = {
         create: function(ns) {
-            o = $;
-            p = ns.split('.');
-            for (i = 0; i < p.length; i++) {
+            var o = $;
+            var p = ns.split('.');
+            for (var i = 0; i < p.length; i++) {
                 o[p[i]] = o[p[i]] || {};
                 o = o[p[i]];
             }
@@ -68,9 +69,9 @@ if (!$.define) {
             return o;
         },
         has: function(ns) {
-            o = $;
-            p = ns.split('.');
-            for (i = 0; i < p.length; i++) {
+            var o = $;
+            var p = ns.split('.');
+            for (var i = 0; i < p.length; i++) {
                 if (!o[p[i]]) {
                     return false;
                 }
@@ -87,7 +88,6 @@ if (!$.define) {
 
     $.define = $.namespace.define;
 }
-
 EOF;
     }
 }

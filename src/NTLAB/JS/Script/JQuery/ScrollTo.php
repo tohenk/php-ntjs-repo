@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -30,19 +30,15 @@ use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
- * Create a collapsible panel.
+ * Update window scroll top based on element.
  *
  * Usage:
- * <div id="mypanel" class="task-container ui-widget ui-widget-content ui-corner-all">
- * <div class="task-header ui-widget-header ui-corner-all">My Title</div>
- * <div class="task-content">My Content</div>
- * </div>
- *
- * $.panel.collapse('#mypanel');
+ * $.scrollto($('#me'));
  *
  * @author Toha
+ *
  */
-class CollapsiblePanel extends Base
+class ScrollTo extends Base
 {
     protected function configure()
     {
@@ -53,36 +49,19 @@ class CollapsiblePanel extends Base
     public function getScript()
     {
         return <<<EOF
-$.define('panel', {
-    collapse: function(id) {
-        $(id + ' .task-header').prepend('<span class="ui-icon ui-icon-triangle-1-n"></span>');
-        $(id + ' .ui-icon').click(function(eventObject) {
-            $(this)
-                .toggleClass('ui-icon-triangle-1-s')
-                .toggleClass('ui-icon-triangle-1-n')
-            $(this).parents('.task-container')
-                .find('.task-collapsible')
-                    .toggle();
-        });
+$.scrollto = function(el) {
+    if (typeof el == 'string') {
+        var el = $(el);
     }
-});
+    var top = el.offset().top;
+    var w = $(window);
+    var t = w.scrollTop();
+    var h = w.height();
+    if (top < t || top > t + h) {
+        var ptop = parseInt($(document.body).css('padding-top'));
+        w.scrollTop(top - ptop);
+    }
+}
 EOF;
-    }
-
-    /**
-     * Call script.
-     *
-     * @param string $id  The element id
-     * @return \NTLAB\JS\Script\JQuery\CollapsiblePanel
-     */
-    public function call($id)
-    {
-        $this->includeScript();
-        $this->useScript(<<<EOF
-$.panel.collapse('$id');
-EOF
-, Repository::POSITION_LAST);
-
-        return $this;
     }
 }

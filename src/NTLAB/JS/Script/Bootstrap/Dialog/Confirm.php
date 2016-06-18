@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery\Dialog;
+namespace NTLAB\JS\Script\Bootstrap\Dialog;
 
-use NTLAB\JS\Script\JQuery\UI as Base;
+use NTLAB\JS\Script\Bootstrap as Base;
 use NTLAB\JS\Repository;
 
 /**
@@ -48,7 +48,7 @@ class Confirm extends Base
 {
     protected function configure()
     {
-        $this->addDependencies('JQuery.NS', 'JQuery.Dialog');
+        $this->addDependencies('JQuery.NS', 'Bootstrap.Dialog');
         $this->setPosition(Repository::POSITION_FIRST);
     }
 
@@ -68,13 +68,13 @@ $.define('ntdlg', {
         var icon = icon || $.ntdlg.ICON_QUESTION;
         $.ntdlg.dialog(id, title, message, true, icon, {
             '$yes': function() {
-                $(this).dialog('close');
+                $(this).modal('hide');
                 if (typeof cb_yes == 'function') {
                     cb_yes();
                 }
             },
             '$no': function() {
-                $(this).dialog('close');
+                $(this).modal('hide');
                 if (typeof cb_no == 'function') {
                     cb_no();
                 }

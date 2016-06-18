@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,13 +24,13 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery\Dialog;
+namespace NTLAB\JS\Script\Bootstrap\Dialog;
 
-use NTLAB\JS\Script\JQuery\UI as Base;
+use NTLAB\JS\Script\Bootstrap as Base;
 use NTLAB\JS\Repository;
 
 /**
- * JQuery UI wait dialog to show a waiting dialog while in progress.
+ * Bootstrap dialog to show a waiting dialog while in progress.
  *
  * Usage:
  * $.wDialog.show('I\'m doing something');
@@ -45,7 +45,7 @@ class Wait extends Base
 {
     protected function configure()
     {
-        $this->addDependencies('JQuery.NS', 'JQuery.Overflow');
+        $this->addDependencies('JQuery.NS');
         $this->setPosition(Repository::POSITION_FIRST);
     }
 
@@ -59,45 +59,46 @@ class Wait extends Base
         return <<<EOF
 $.define('wDialog', {
     d: null,
+    id: 'wdialog',
     active: false,
-    hideOverflow: null,
     create: function() {
-        if (null === this.d) {
-            $(document.body).append('<div id="wdialog" title="$title">$message</div>');
-            this.d = $('#wdialog').dialog({
-                autoOpen: false,
-                modal: true,
-                width: $width,
-                height: $height,
-                button: [],
-                create: function() {
-                    if ($.wDialog.hideOverflow) {
-                        $.overflow.hide();
-                    }
-                },
-                open: function() {
-                    $.wDialog.active = true;
-                },
-                close: function() {
-                    $.wDialog.active = false;
-                    if ($.wDialog.hideOverflow) {
-                        $.overflow.restore();
-                    }
-                }
+        var self = this;
+        if (null === self.d) {
+            var content =
+                '<div id="' + self.id + '" class="modal fade" tabindex="-1" role="dialog">' +
+                '  <div class="modal-dialog" role="document">' +
+                '    <div class="modal-content">' +
+                '      <div class="modal-header">' +
+                '        <h4 class="modal-title">$title</h4>' +
+                '      </div>' +
+                '      <div class="modal-body">$message</div>' +
+                '    </div>' +
+                '  </div>' +
+                '</div>';
+            $(document.body).append(content);
+            self.d = $('#' + self.id);
+            self.d.modal({keyboard: false});
+            self.d.on('shown.bs.modal', function(e) {
+                self.active = true;
+            });
+            self.d.on('hidden.bs.modal', function(e) {
+                self.active = false;
             });
         }
     },
     show: function(msg) {
-        if (this.active) this.close();
-        this.create();
+        var self = this;
+        if (self.active) self.close();
+        self.create();
         if (msg) {
-            $(this.d).text(msg);
+            self.d.find('.modal-body').html(msg);
         }
-        $(this.d).dialog('open');
+        self.d.modal('show');
     },
     close: function() {
-        if (this.d) {
-            $(this.d).dialog('close');
+        var self = this;
+        if (self.d) {
+            self.d.modal('hide');
         }
     }
 });

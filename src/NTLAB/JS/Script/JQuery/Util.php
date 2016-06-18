@@ -50,6 +50,59 @@ class Util extends Base
     {
         return <<<EOF
 $.define('util', {
+    template: function(tmpl, replaces) {
+        for (var n in replaces) {
+            var re = '%' + n + '%';
+            tmpl = tmpl.replace(re, replaces[n]);
+        }
+
+        return tmpl;
+    },
+    copyProp: function(prop, src, dest, remove) {
+        if (typeof src[prop] != 'undefined') {
+            dest[prop] = src[prop];
+            if (remove) {
+                delete src[prop];
+            }
+        }
+    },
+    applyProp: function(props, src, dest, remove) {
+        var self = this;
+        if (src && dest) {
+            if (typeof props == 'object') {
+                if ($.isArray(props)) {
+                    for (var i = 0; i < props.length; i++) {
+                        var prop = props[i];
+                        self.copyProp(prop, src, dest, remove);
+                    }
+                } else {
+                    for (prop in props) {
+                        self.copyProp(prop, src, dest, remove);
+                    }
+                }
+            }
+        }
+    },
+    bindEvent: function(el, event, handlers) {
+        if (typeof handlers[event] == 'function') {
+            el.on(event, handlers[event]);
+        }
+    },
+    applyEvent: function(el, events, handlers) {
+        var self = this;
+        if (typeof events == 'object') {
+            if ($.isArray(events)) {
+                for (var i = 0; i < events.length; i++) {
+                    var event = events[i];
+                    self.bindEvent(el, event, handlers);
+                }
+            } else {
+                for (event in events) {
+                    self.bindEvent(el, event, handlers);
+                }
+            }
+        }
+    },
     dump: function(o, p) {
         if (typeof o == 'object') {
             for (a in o) $.util.dump(o[a], (p != undefined ? p + '.' : '') + a);
@@ -58,7 +111,6 @@ $.define('util', {
         }
     }
 });
-
 EOF;
     }
 }

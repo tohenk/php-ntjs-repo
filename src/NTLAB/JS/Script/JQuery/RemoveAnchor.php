@@ -52,7 +52,6 @@ $.extend({
         el.remove();
     }
 });
-
 EOF;
     }
 }

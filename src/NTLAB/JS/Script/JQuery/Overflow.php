@@ -67,7 +67,6 @@ $.define('overflow', {
         }
     }
 });
-
 EOF;
     }
 }

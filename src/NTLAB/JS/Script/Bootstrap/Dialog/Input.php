@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -23,61 +23,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+namespace NTLAB\JS\Script\Bootstrap\Dialog;
 
-namespace NTLAB\JS\Script\JQuery\Dialog;
-
-use NTLAB\JS\Script\JQuery\UI as Base;
+use NTLAB\JS\Script\Bootstrap as Base;
 use NTLAB\JS\Repository;
 
 /**
- * JQuery UI confirm dialog.
+ * JQuery UI input dialog.
  *
  * Usage:
- * $.ntdlg.confirm('my', 'Confirm', 'Do you want to do something?', $.ntdlg.ICON_QUESTION,
- *     function() {
- *         alert('Okay!');
- *     },
- *     function() {
- *         alert('Nope!');
- *     }
- * );
+ * var myvalue = '';
+ * $.ntdlg.input('my', 'Input something', 'Please input something:', myvalue, function(value) {
+ *     alert('You give me ' + value);
+ * });
  *
  * @author Toha
  */
-class Confirm extends Base
+class Input extends Base
 {
     protected function configure()
     {
-        $this->addDependencies('JQuery.NS', 'JQuery.Dialog');
+        $this->addDependencies('JQuery.NS', 'Bootstrap.Dialog');
         $this->setPosition(Repository::POSITION_FIRST);
     }
 
     public function getScript()
     {
-        $yes = $this->trans('Yes');
-        $no = $this->trans('No');
+        $ok = $this->trans('OK');
+        $cancel = $this->trans('Cancel');
 
         return <<<EOF
 $.define('ntdlg', {
-    confirm: function(id, title, message, icon, cb_yes, cb_no) {
-        if (typeof icon == 'function') {
-            var cb_no = cb_yes;
-            var cb_yes = icon;
-            var icon = undefined;
+    input: function(id, title, message, value, size, icon, callback) {
+        if (typeof size == 'function') {
+            callback = size;
+            size = null;
+        } else if (typeof icon == 'function') {
+            callback = icon;
+            icon = null;
         }
-        var icon = icon || $.ntdlg.ICON_QUESTION;
+        var size = size || 50;
+        var icon = icon || $.ntdlg.ICON_INPUT;
+        var message = '<p>' + message + '</p><input class="form-control" type="text" value="' + value + '" size="' + size + '">'
         $.ntdlg.dialog(id, title, message, true, icon, {
-            '$yes': function() {
-                $(this).dialog('close');
-                if (typeof cb_yes == 'function') {
-                    cb_yes();
+            '$ok': function() {
+                var dlg = $(this);
+                dlg.modal('hide');
+                if (typeof callback == 'function') {
+                    var v = dlg.find('input[type=text]').val();
+                    callback(v);
                 }
             },
-            '$no': function() {
-                $(this).dialog('close');
-                if (typeof cb_no == 'function') {
-                    cb_no();
-                }
+            '$cancel': function() {
+                $(this).modal('hide');
             }
         });
     }

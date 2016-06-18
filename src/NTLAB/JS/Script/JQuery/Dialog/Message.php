@@ -59,7 +59,6 @@ $.define('ntdlg', {
         });
     }
 }, true);
-
 EOF;
     }
 }

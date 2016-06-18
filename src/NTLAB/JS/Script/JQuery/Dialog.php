@@ -47,7 +47,7 @@ class Dialog extends Base
 {
     protected function configure()
     {
-        $this->addDependencies('JQuery.NS', 'JQuery.Overflow');
+        $this->addDependencies('JQuery.NS', 'JQuery.Overflow', 'JQuery.Util');
         $this->setPosition(Repository::POSITION_FIRST);
     }
 
@@ -57,23 +57,21 @@ class Dialog extends Base
 
         return <<<EOF
 $.define('ntdlg', {
+    ICON_INFO: 'info',
+    ICON_ALERT: 'alert',
+    ICON_ERROR: 'circle-close',
+    ICON_SUCCESS: 'circle-check',
+    ICON_QUESTION: 'help',
+    ICON_INPUT: 'pencil',
     hideOverflow: null,
     minWidth: $width,
     dialogTmpl: '<div id="%ID%" class="ntdlg-container" title="%TITLE%">%CONTENT%</div>',
-    iconTmpl: '<span class="ui-icon %ICON%"></span>',
+    iconTmpl: '<span class="ui-icon ui-icon-%ICON%"></span>',
     messageTmpl: '<div class="msg-container"><div class="msg-icon" style="float:left;margin:0 10px 0 0;padding:0 10px 0 10px;">%ICON%</div><div class="msg-content" style="margin-left: 50px;">%MESSAGE%</div></div>',
-    template: function(tmpl, replaces) {
-        for (var n in replaces) {
-            var re = '%' + n + '%';
-            tmpl = tmpl.replace(re, replaces[n]);
-        }
-
-        return tmpl;
-    },
     create: function(id, title, message, params) {
         var self = this;
         var dlg_id = '#' + id;
-        var content = self.template(self.dialogTmpl, {
+        var content = $.util.template(self.dialogTmpl, {
             ID: id,
             TITLE: title,
             CONTENT: message
@@ -89,10 +87,10 @@ $.define('ntdlg', {
     dialog: function(id, title, message, modal, icon, buttons, close_cb) {
         var self = this;
         var modal = modal || true;
-        var icon = icon || 'ui-icon-info';
+        var icon = icon || $.ntdlg.ICON_INFO;
         var buttons = buttons || [];
-        var message = self.template(self.messageTmpl, {
-            ICON: self.template(self.iconTmpl, {ICON: icon}),
+        var message = $.util.template(self.messageTmpl, {
+            ICON: $.util.template(self.iconTmpl, {ICON: icon}),
             MESSAGE: message
         });
         self.create(id, title, message, {
@@ -121,7 +119,6 @@ $.define('ntdlg', {
         });
     }
 }, true);
-
 EOF;
     }
 }

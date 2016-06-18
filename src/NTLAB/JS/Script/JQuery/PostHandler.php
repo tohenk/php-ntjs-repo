@@ -44,7 +44,7 @@ class PostHandler extends Base
 {
     protected function configure()
     {
-        $this->addDependencies('JQuery.Dialog.Message');
+        $this->addDependencies(array('JQuery.PostErrorHelper'));
         $this->setPosition(Repository::POSITION_MIDDLE);
     }
 
@@ -54,36 +54,7 @@ class PostHandler extends Base
 
         return <<<EOF
 $.extend({
-    postErr: null,
-    postErrFocus: true,
-    formatError: function(error, err_class) {
-        var err_class = err_class || 'error_list';
-        var message = '';
-        $.map($.isArray(error) ? error : new Array(error), function(e) {
-            message = message + '<li>' + ($.isArray(e) ? e[1] : e) + '</li>';
-        });
-
-        return '<ul class="' + err_class + '">' + message + '</ul>';
-    },
-    addError: function(el, error, err_class) {
-        $($.formatError(error, err_class)).appendTo(el);
-    },
-    handlePostError: function(data) {
-        if ($.isArray(data)) {
-            var el = $('#' + data[0]);
-            $.addError(el.parent(), data[1]); 
-            el.parent().show();
-            if ($.postErr === null) {
-                $.postErr = el;
-                if ($.postErrFocus) {
-                    $.postErr.focus();
-                }
-            }
-        } else {
-            $.ntdlg.message('dlgerr', '$err', data, true, 'ui-icon-notice');
-        }
-    },
-    handlePostData: function(data, success_cb, error_cb) {
+    handlePostData: function(data, errhelper, success_cb, error_cb) {
         $.postErr = null;
         var json = typeof(data) === 'object' ? data : $.parseJSON(data);
         if (json.success) {
@@ -91,19 +62,19 @@ $.extend({
                 success_cb(json);
             }
         } else {
-            $.map($.isArray(json.error) ? json.error : new Array(json.error), $.handlePostError);
+            $.map($.isArray(json.error) ? json.error : new Array(json.error), errhelper.handleError);
             if (typeof error_cb == 'function') {
                 error_cb(json);
             }
         }
     },
-    urlPost: function(url, callback) {
-        $.post(url, function(data) {
-            $.handlePostData(data, callback);
+    urlPost: function(url, callback, errhelper) {
+        var errhelper = errhelper ? errhelper : $.errhelper();
+        $.post(url).done(function(data) {
+            $.handlePostData(data, errhelper, callback);
         });
     }
 });
-
 EOF;
     }
 }

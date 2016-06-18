@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,29 +24,33 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery\Callback;
+namespace NTLAB\JS\Script;
 
-use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
+use NTLAB\JS\Util\Asset;
 
 /**
- * A callback handler to set the value of an element, such as an input tag.
+ * Bootstrap javascript code repository for PHP.
  *
  * @author Toha
  */
-class SetValue extends Base
+class Bootstrap extends JQuery
 {
+    /**
+     * @var string
+     */
+    protected $repository = 'bootstrap';
+
+    /**
+     * @var \NTLAB\JS\Util\Asset
+     */
+    protected $asset = null;
+
     protected function configure()
     {
-        $this->setPosition(Repository::POSITION_MIDDLE);
-    }
-
-    public function getScript()
-    {
-        return <<<EOF
-$.elSetValue = function(el, data) {
-    $(el).val(data);
-}
-EOF;
+        $this->asset = new Asset($this->repository, array(Asset::ASSET_JAVASCRIPT => 'js', Asset::ASSET_STYLESHEET => 'css'));
+        $this->useJavascript('bootstrap.min', $this->asset);
+        $this->useStylesheet('bootstrap.min', $this->asset);
+        $this->useStylesheet('bootstrap-theme.min', $this->asset);
     }
 }

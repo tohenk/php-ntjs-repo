@@ -28,6 +28,7 @@ namespace NTLAB\JS\Script\JQuery;
 
 use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
+use NTLAB\JS\Util\Escaper;
 
 /**
  * Handling form submission using ajax.
@@ -47,59 +48,168 @@ class FormPost extends Base
 {
     protected function configure()
     {
-        $this->addDependencies('JQuery.PostHandler');
+        $this->addDependencies(array('JQuery.PostHandler', 'JQuery.Util'));
         $this->setPosition(Repository::POSITION_MIDDLE);
+    }
+
+    protected function getErrHelperOptions()
+    {
+        return array();
     }
 
     public function getScript()
     {
         $this->useJavascript('jquery.form');
+        $title = $this->trans('Information');
+        $error = $this->trans('Error');
+        $ok = $this->trans('OK');
+        $message = $this->trans('Please wait while your data being saved.');
+        $options = Escaper::escape($this->getErrHelperOptions(), null, 1);
 
         return <<<EOF
-$.extend({
-    formFailHandler: null,
-    formAlwaysHandler: null,
-    formErrorHandler: null,
-    formResetError: function(form) {
-        form.find('ul.error_list').remove();
-        form.find('.error').removeClass('error');
-        form.find('.form-error').hide();
-    },
-    formPost: function(form, url, success_cb, error_cb) {
-        form.trigger('formPost');
-        var params = form.formToArray();
-        var xtra = form.data('submit');
-        if ($.isArray(xtra) && xtra.length) {
-            for (var i = 0; i < xtra.length; i++) {
-                params.push(xtra[i]);
+$.formpost = function(form, options) {
+    var fp = {
+        errhelper: null,
+        message: '$message',
+        xhr: false,
+        progress: true,
+        url: null,
+        paramName: null,
+        onsubmit: null,
+        onfail: null,
+        onerror: null,
+        onalways: null,
+        formPost: function(form, url, success_cb, error_cb) {
+            form.trigger('formpost');
+            if (fp.paramName) {
+                var params = form.data('submit-params');
+                params = typeof params == 'object' ? params : {};
+                params[fp.paramName] = form.serialize();;
+            } else {
+                var params = form.formToArray();
             }
-        } 
-        $.formResetError(form);
-        $.post(url, params, function(data) {
-            $.handlePostData(data, function(data) {
-                if (typeof(success_cb) == 'function') {
-                    success_cb(data);
+            var xtra = form.data('submit');
+            if ($.isArray(xtra) && xtra.length) {
+                for (var i = 0; i < xtra.length; i++) {
+                    params.push(xtra[i]);
                 }
-            }, function(data) {
-                if (typeof(error_cb) == 'function') {
-                    error_cb(data);
+            }
+            fp.errhelper.resetError();
+            form.trigger('formrequest');
+            if (fp.xhr) {
+                var request = $.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: params,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    xhrFields: {
+                        'withCredentials': true
+                    }
+                });
+            } else {
+                var request = $.post(url, params);
+            }
+            request.done(function(data) {
+                $.handlePostData(data, fp.errhelper, function(data) {
+                    if (typeof(success_cb) == 'function') {
+                        success_cb(data);
+                    }
+                }, function(data) {
+                    if (typeof(error_cb) == 'function') {
+                        error_cb(data);
+                    }
+                    if (typeof($.onerror) == 'function') {
+                        fp.onerror(data);
+                    }
+                });
+            }).fail(function() {
+                if (typeof(fp.onfail) == 'function') {
+                    fp.onfail();
                 }
-                if (typeof($.formErrorHandler) == 'function') {
-                    $.formErrorHandler(data);
+            }).always(function() {
+                if (typeof(fp.onalways) == 'function') {
+                    fp.onalways();
                 }
             });
-        }).fail(function() {
-            if (typeof($.formFailHandler) == 'function') {
-                $.formFailHandler();
+        },
+        bind: function(form) {
+            var self = this;
+            var submitclicker = function(e) {
+                e.preventDefault();
+                var submitter = $(this);
+                var xtra = [];
+                if (submitter.attr('name')) {
+                    xtra.push({name: submitter.attr('name'), value: submitter.val()});
+                }
+                form.data('submit', xtra).submit();
             }
-        }).always(function() {
-            if (typeof($.formAlwaysHandler) == 'function') {
-                $.formAlwaysHandler();
-            }
-        });
+            form.find('input[type=submit]').on('click', submitclicker);
+            form.find('button[type=submit]').on('click', submitclicker);
+            form.on('submit', function(e) {
+                e.preventDefault();
+                if (typeof self.onsubmit == 'function') {
+                    if (!self.onsubmit(form)) return;
+                }
+                var url = self.url || form.attr('action');
+                if (self.progress) {
+                    $.wDialog.show(self.message);
+                }
+                self.formPost(form, url, function(json) {
+                    if (json.notice) {
+                        $.ntdlg.dialog('form_post_success', '$title', json.notice, false, $.ntdlg.ICON_SUCCESS);
+                    }
+                    if (json.redir) {
+                        window.location.href = json.redir;
+                    }
+                    form.trigger('formsaved', [json]);
+                }, function(json) {
+                    self.onalways();
+                    var f = function() {
+                        self.errhelper.focusError();
+                        form.trigger('formerror');
+                        if (typeof $.formErrorHandler == 'function') {
+                            $.formErrorHandler(form);
+                        }
+                    }
+                    if (json.error_msg) {
+                        var err = json.error_msg;
+                        if (json.global && json.global.length) {
+                            if (self.errhelper.errorContainer) {
+                                self.errhelper.errorContainer.removeClass('hidden');
+                                self.errhelper.addError(json.global, self.errhelper.errorContainer, self.errhelper.ERROR_ASLIST);
+                            }
+                            else
+                            {
+                                // concate error as part of error mesage
+                            }
+                        }
+                        $.ntdlg.dialog('form_post_error', '$error', err, true, $.ntdlg.ICON_ERROR, {
+                            '$ok': function() {
+                                $.ntdlg.close($(this).attr('id'));
+                            }
+                        }, f);
+                    } else {
+                        f();
+                    }
+                });
+            });
+        }
     }
-});
+    var props = ['message', 'progress', 'xhr', 'url', 'paramName', 'onsubmit'];
+    $.util.applyProp(props, options, fp, true);
+    fp.bind(form);
+    fp.errhelper = $.errhelper(form, $options);
+    fp.onalways = function() {
+        if (fp.progress) {
+            $.wDialog.close();
+        }
+    }
 
+    return fp;
+}
 EOF;
     }
 
@@ -113,65 +223,15 @@ EOF;
     public function call($selector, $message = null)
     {
         $this->includeScript();
-        $this->includeDepedencies(array('JQuery.Dialog', 'JQuery.Dialog.Wait'));
 
-        if (null === $message) {
-            $message = $this->trans('Please wait while your data being saved.');
+        $options = array();
+        if (null !== $message) {
+            $options['message'] = $this->trans($message);
         }
-        $title = $this->trans('Information');
-        $ok = $this->trans('OK');
+        $options = Escaper::escape($options);
 
         $this->useScript(<<<EOF
-$('$selector').submit(function(e) {
-    var form = $(this);
-    var url = form.attr('action');
-    $.formAlwaysHandler = function() {
-        $.wDialog.close();
-    }
-    var errFocus = function() {
-        if ($.postErr) {
-            $.postErr.focus();
-        }
-    }
-    $.postErrFocus = false;
-    $.ntdlg.hideOverflow = true;
-    $.wDialog.show('$message');
-    $.formPost(form, url, function(json) {
-        if (json.notice) {
-            $.ntdlg.dialog('form_post_success', '$title', json.notice, false, 'ui-icon-check');
-        }
-        if (json.redir) {
-            window.location.href = json.redir;
-        }
-    }, function(json) {
-        if (json.error_msg) {
-            var err = json.error_msg;
-            if (json.global) {
-                err = err + $.formatError(json.global);
-            }
-            $.ntdlg.dialog('form_post_error', '$title', err, true, 'ui-icon-circle-close', {
-                '$ok': function() {
-                    $(this).dialog('close');
-                    errFocus();
-                }
-            });
-        } else {
-            errFocus();
-        }
-    });
-
-    return false;
-}).find('input[type=submit]').click(function(e) {
-    var submitter = $(this);
-    var xtra = [];
-    if (submitter.attr('name')) {
-        xtra.push({name: submitter.attr('name'), value: submitter.val()});
-    }
-    $('$selector').data('submit', xtra).submit();
-
-    return false;
-});
-
+$.formpost($('$selector'), $options);
 EOF
 , Repository::POSITION_LAST);
 

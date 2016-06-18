@@ -30,59 +30,56 @@ use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
- * Create a collapsible panel.
- *
- * Usage:
- * <div id="mypanel" class="task-container ui-widget ui-widget-content ui-corner-all">
- * <div class="task-header ui-widget-header ui-corner-all">My Title</div>
- * <div class="task-content">My Content</div>
- * </div>
- *
- * $.panel.collapse('#mypanel');
+ * Ajax request helper.
  *
  * @author Toha
+ *
  */
-class CollapsiblePanel extends Base
+class AjaxHelper extends Base
 {
     protected function configure()
     {
-        $this->addDependencies('JQuery.NS');
         $this->setPosition(Repository::POSITION_MIDDLE);
     }
 
     public function getScript()
     {
         return <<<EOF
-$.define('panel', {
-    collapse: function(id) {
-        $(id + ' .task-header').prepend('<span class="ui-icon ui-icon-triangle-1-n"></span>');
-        $(id + ' .ui-icon').click(function(eventObject) {
-            $(this)
-                .toggleClass('ui-icon-triangle-1-s')
-                .toggleClass('ui-icon-triangle-1-n')
-            $(this).parents('.task-container')
-                .find('.task-collapsible')
-                    .toggle();
-        });
+$.ajaxhelper = function(el) {
+    var helper = {
+        el: null,
+        dataKey: '_acxhr',
+        load: function(url, params, callback) {
+            var self = this;
+            if (typeof params === 'function') {
+                var callback = params;
+                var params = {};
+            }
+            var oxhr = self.el.data(self.dataKey);
+            if (oxhr && 'pending' === oxhr.state()) {
+                oxhr.abort();
+            }
+            self.el.trigger('xhrstart');
+            var xhr = $.ajax({
+                url: url,
+                dataType: 'json',
+                data: params
+            }).done(function(data) {
+                callback(data);
+            }).always(function() {
+                self.el.trigger('xhrend');
+            });
+            self.el.data(self.dataKey, xhr);
+        }
     }
-});
+    if (typeof el == 'string') {
+        helper.el = $(el);
+    } else {
+        helper.el = el;
+    }
+
+    return helper;
+}
 EOF;
-    }
-
-    /**
-     * Call script.
-     *
-     * @param string $id  The element id
-     * @return \NTLAB\JS\Script\JQuery\CollapsiblePanel
-     */
-    public function call($id)
-    {
-        $this->includeScript();
-        $this->useScript(<<<EOF
-$.panel.collapse('$id');
-EOF
-, Repository::POSITION_LAST);
-
-        return $this;
     }
 }

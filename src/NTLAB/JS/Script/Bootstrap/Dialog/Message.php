@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,29 +24,41 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery\Callback;
+namespace NTLAB\JS\Script\Bootstrap\Dialog;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Script\Bootstrap as Base;
 use NTLAB\JS\Repository;
 
 /**
- * A callback handler to set the value of an element, such as an input tag.
+ * JQuery UI message dialog.
+ *
+ * Usage:
+ * $.ntdlg.message('my', 'Message', 'This is an example', true);
  *
  * @author Toha
  */
-class SetValue extends Base
+class Message extends Base
 {
     protected function configure()
     {
-        $this->setPosition(Repository::POSITION_MIDDLE);
+        $this->addDependencies('JQuery.NS', 'Bootstrap.Dialog');
+        $this->setPosition(Repository::POSITION_FIRST);
     }
 
     public function getScript()
     {
+        $ok = $this->trans('OK');
+
         return <<<EOF
-$.elSetValue = function(el, data) {
-    $(el).val(data);
-}
+$.define('ntdlg', {
+    message: function(id, title, message, modal, icon) {
+        $.ntdlg.dialog(id, title, message, modal, icon, {
+            '$ok': function() {
+                $(this).modal('hide');
+            }
+        });
+    }
+}, true);
 EOF;
     }
 }
