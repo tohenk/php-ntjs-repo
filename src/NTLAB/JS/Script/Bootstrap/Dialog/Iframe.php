@@ -52,7 +52,7 @@ class Iframe extends Base
 
     protected function configure()
     {
-        $this->addDependencies('JQuery.NS', 'Bootstrap.Dialog');
+        $this->addDependencies('JQuery.NS', 'JQuery.Util', 'Bootstrap.Dialog');
         $this->setPosition(Repository::POSITION_FIRST);
         if (null === self::$dlg_rand) {
             self::$dlg_rand = mt_rand();
@@ -82,12 +82,8 @@ $.define('ntdlg', {
                 d.addClass('ui-dialog-iframe-container');
             }
         }
-        if (typeof options.size != 'undefined') {
-            params.size = options.size;
-        }
-        if (typeof options.closable != 'undefined') {
-            params.closable = options.closable;
-        }
+        var opts = ['size', 'closable', 'backdrop', 'keyboard', 'show', 'remote'];
+        $.util.applyProp(opts, options, params);
         $.ntdlg.create(id, title, '', params);
     }
 }, true);
