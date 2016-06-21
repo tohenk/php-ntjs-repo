@@ -165,8 +165,17 @@ $.define('ntdlg', {
         return dlg;
     },
     close: function(id) {
-        var dlg_id = '#' + id;
-        $(dlg_id).modal('hide');
+        $('#' + id).modal('hide');
+    },
+    isVisible: function(id) {
+        var dlg = $('#' + id);
+        if (dlg.length) {
+            if (dlg.hasClass('modal') && dlg.is(':visible')) {
+                return true;
+            }
+        }
+
+        return false;
     },
     dialog: function(id, title, message, modal, icon, buttons, close_cb) {
         var self = this;

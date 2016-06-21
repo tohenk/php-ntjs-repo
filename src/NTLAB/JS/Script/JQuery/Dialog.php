@@ -81,8 +81,10 @@ $.define('ntdlg', {
         $(dlg_id).dialog(params);
     },
     close: function(id) {
-        var dlg_id = '#' + id;
-        $(dlg_id).dialog('close');
+        $('#' + id).dialog('close');
+    },
+    isVisible: function(id) {
+        return $('#' + id).dialog('isOpen');
     },
     dialog: function(id, title, message, modal, icon, buttons, close_cb) {
         var self = this;
