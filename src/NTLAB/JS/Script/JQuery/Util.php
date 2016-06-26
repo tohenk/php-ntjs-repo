@@ -52,7 +52,7 @@ class Util extends Base
 $.define('util', {
     template: function(tmpl, replaces) {
         for (var n in replaces) {
-            var re = '%' + n + '%';
+            var re = new RegExp('%' + n + '%', 'g');
             tmpl = tmpl.replace(re, replaces[n]);
         }
 
