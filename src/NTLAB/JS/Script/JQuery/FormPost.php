@@ -159,7 +159,15 @@ $.formpost = function(form, options) {
                 }
                 self.formPost(form, url, function(json) {
                     if (json.notice) {
-                        $.ntdlg.dialog('form_post_success', '$title', json.notice, false, $.ntdlg.ICON_SUCCESS);
+                        if (json.redir) {
+                            $.ntdlg.dialog('form_post_success', '$title', json.notice, true, $.ntdlg.ICON_SUCCESS);
+                        } else {
+                            $.ntdlg.dialog('form_post_success', '$title', json.notice, true, $.ntdlg.ICON_SUCCESS, {
+                                '$ok': function() {
+                                    $.ntdlg.close($(this));
+                                }
+                            });
+                        }
                     }
                     if (json.redir) {
                         window.location.href = json.redir;
@@ -188,7 +196,7 @@ $.formpost = function(form, options) {
                         }
                         $.ntdlg.dialog('form_post_error', '$error', err, true, $.ntdlg.ICON_ERROR, {
                             '$ok': function() {
-                                $.ntdlg.close($(this).attr('id'));
+                                $.ntdlg.close($(this));
                             }
                         }, f);
                     } else {
