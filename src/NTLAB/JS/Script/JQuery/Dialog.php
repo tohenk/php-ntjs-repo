@@ -80,12 +80,6 @@ $.define('ntdlg', {
         $(document.body).append(content);
         $(dlg_id).dialog(params);
     },
-    close: function(id) {
-        $('#' + id).dialog('close');
-    },
-    isVisible: function(id) {
-        return $('#' + id).dialog('isOpen');
-    },
     dialog: function(id, title, message, modal, icon, buttons, close_cb) {
         var self = this;
         var modal = modal || true;
@@ -119,6 +113,38 @@ $.define('ntdlg', {
             },
             buttons: buttons
         });
+    },
+    show: function(dlg) {
+        if (dlg && !this.isVisible(dlg)) {
+            if (typeof dlg == 'string') {
+                dlg = $('#' + dlg);
+            }
+            dlg.dialog('open');
+        }
+    },
+    close: function(dlg) {
+        if (dlg) {
+            if (typeof dlg == 'string') {
+                dlg = $('#' + dlg);
+            }
+            dlg.dialog('close');
+        }
+    },
+    isVisible: function(dlg) {
+        if (dlg) {
+            if (typeof dlg == 'string') {
+                dlg = $('#' + dlg);
+            }
+            return dlg.dialog('isOpen');
+        }
+    },
+    getBody: function(dlg) {
+        if (dlg) {
+            if (typeof dlg == 'string') {
+                dlg = $('#' + dlg);
+            }
+            return dlg;
+        }
     }
 }, true);
 EOF;

@@ -160,22 +160,15 @@ $.define('ntdlg', {
         var modal_options = {};
         $.util.applyProp(opts, options, modal_options);
         $.util.applyEvent(dlg, events, options);
+        // compatibility with JQuery UI dialog
+        $.each({open: 'shown.bs.modal', close: 'hidden.bs.modal'}, function(prop, event) {
+            if (typeof options[prop] == 'function') {
+                dlg.on(event, options[prop]);
+            }
+        });
         dlg.modal(modal_options);
 
         return dlg;
-    },
-    close: function(id) {
-        $('#' + id).modal('hide');
-    },
-    isVisible: function(id) {
-        var dlg = $('#' + id);
-        if (dlg.length) {
-            if (dlg.hasClass('modal') && dlg.is(':visible')) {
-                return true;
-            }
-        }
-
-        return false;
     },
     dialog: function(id, title, message, modal, icon, buttons, close_cb) {
         var self = this;
@@ -199,6 +192,44 @@ $.define('ntdlg', {
         dlg.modal('show');
 
         return dlg;
+    },
+    show: function(dlg) {
+        if (dlg && !this.isVisible(dlg)) {
+            if (typeof dlg == 'string') {
+                dlg = $('#' + dlg);
+            }
+            dlg.modal('show');
+        }
+    },
+    close: function(dlg) {
+        if (dlg) {
+            if (typeof dlg == 'string') {
+                dlg = $('#' + dlg);
+            }
+            dlg.modal('hide');
+        }
+    },
+    isVisible: function(dlg) {
+        if (dlg) {
+            if (typeof dlg == 'string') {
+                dlg = $('#' + dlg);
+            }
+            if (dlg.length) {
+                if (dlg.hasClass('modal') && dlg.is(':visible')) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    },
+    getBody: function(dlg) {
+        if (dlg) {
+            if (typeof dlg == 'string') {
+                dlg = $('#' + dlg);
+            }
+            return dlg.find('.modal-body:first');
+        }
     }
 }, true);
 EOF;
