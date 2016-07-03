@@ -362,15 +362,15 @@ abstract class Script
     }
 
     /**
-     * Include a jquery javascript.  The javascript name accepted with the following
+     * Include javascript. The javascript name accepted with the following
      * format:
-     * jquery-%name%-%version%.%minified%.js
+     *   %name%-%version%.%minified%.js
      *
-     * @param string $name  The javascript name, e.q. ui
+     * @param string $name  The javascript name, e.q. jquery.form
      * @param string $version  The javascript version
      * @param bool $minified  The minified version used
      * @param \NTLAB\JS\Util\Asset $asset  Asset helper
-     * @return \NTLAB\JS\Script\JQuery
+     * @return \NTLAB\JS\Script
      */
     public function useJavascript($name, $asset = null)
     {
@@ -422,7 +422,7 @@ abstract class Script
     }
 
     /**
-     * Include a jquery stylesheet.
+     * Include stylesheet.
      *
      * @param string $name  The stylesheet name, e.q. ui
      * @param \NTLAB\JS\Util\Asset $asset  Asset helper
