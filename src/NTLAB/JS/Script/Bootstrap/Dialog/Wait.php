@@ -93,12 +93,12 @@ $.define('wDialog', {
         if (msg) {
             self.d.find('.modal-body').html(msg);
         }
-        self.d.modal('show');
+        $.ntdlg.show(self.d);
     },
     close: function() {
         var self = this;
         if (self.d) {
-            self.d.modal('hide');
+            $.ntdlg.close(self.d);
         }
     }
 });

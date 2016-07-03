@@ -68,15 +68,14 @@ $.define('ntdlg', {
         $.ntdlg.dialog(id, title, message, true, icon, {
             '$ok': function() {
                 var dlg = $(this);
-                dlg.dialog('close');
+                $.ntdlg.close(dlg);
                 if (typeof callback == 'function') {
                     var v = dlg.find('input[type=text]').val();
                     callback(v);
                 }
             },
             '$cancel': function() {
-                var dlg = $(this);
-                dlg.dialog('close');
+                $.ntdlg.close($(this));
             }
         });
     }

@@ -68,13 +68,13 @@ $.define('ntdlg', {
         var icon = icon || $.ntdlg.ICON_QUESTION;
         $.ntdlg.dialog(id, title, message, true, icon, {
             '$yes': function() {
-                $(this).modal('hide');
+                $.ntdlg.close($(this));
                 if (typeof cb_yes == 'function') {
                     cb_yes();
                 }
             },
             '$no': function() {
-                $(this).modal('hide');
+                $.ntdlg.close($(this));
                 if (typeof cb_no == 'function') {
                     cb_no();
                 }

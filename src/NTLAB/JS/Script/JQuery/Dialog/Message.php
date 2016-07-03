@@ -54,7 +54,7 @@ $.define('ntdlg', {
     message: function(id, title, message, modal, icon) {
         $.ntdlg.dialog(id, title, message, modal, icon, {
             '$ok': function() {
-                $(this).dialog('close');
+                $.ntdlg.close($(this));
             }
         });
     }

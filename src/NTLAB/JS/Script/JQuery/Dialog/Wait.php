@@ -93,11 +93,11 @@ $.define('wDialog', {
         if (msg) {
             $(this.d).text(msg);
         }
-        $(this.d).dialog('open');
+        $.ntdlg.show(this.d);
     },
     close: function() {
         if (this.d) {
-            $(this.d).dialog('close');
+            $.ntdlg.close(this.d);
         }
     }
 });
