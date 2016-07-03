@@ -86,15 +86,18 @@ class JQuery extends Base
     protected function initRepository(Repository $repo)
     {
         $repo->setWrapper(<<<EOF
-var func = function($) {%s}
-function iamReady() {
+jQuery((function($) {
+(function loader(f) {
     if (document.ntloader && !document.ntloader.isScriptLoaded()) {
-        setTimeout(iamReady, 100);
+        setTimeout(function() {
+            loader(f);
+        }, 100);
     } else {
-        func(jQuery);
+        f($);
     }
-}
-jQuery(iamReady);
+})
+(function($) {%s});
+}(jQuery)));
 EOF
         );
     }
