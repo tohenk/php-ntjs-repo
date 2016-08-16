@@ -53,13 +53,15 @@ $.scrollto = function(el) {
     if (typeof el == 'string') {
         var el = $(el);
     }
-    var top = el.offset().top;
-    var w = $(window);
-    var t = w.scrollTop();
-    var h = w.height();
-    if (top < t || top > t + h) {
-        var ptop = parseInt($(document.body).css('padding-top'));
-        w.scrollTop(top - ptop);
+    if (el.length) {
+        var top = el.offset().top;
+        var w = $(window);
+        var t = w.scrollTop();
+        var h = w.height();
+        if (top < t || top > t + h) {
+            var ptop = parseInt($(document.body).css('padding-top'));
+            w.scrollTop(top - ptop);
+        }
     }
 }
 EOF;
