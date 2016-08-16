@@ -57,6 +57,7 @@ $.errhelper = function(container, options) {
         defaultError: this.ERROR_ASLIST,
         parentClass: 'error',
         listClass: 'error_list',
+        toggleClass: null,
         inplace: null,
         focused: null,
         getError: function(err, fmt, sep) {
@@ -75,6 +76,11 @@ $.errhelper = function(container, options) {
 
             return error;
         },
+        showError: function(el) {
+            var self = this;
+            el.show();
+            if (self.toggleClass) el.removeClass(self.toggleClass);
+        },
         addError: function(err, el, errtype) {
             var self = this;
             var errtype = errtype ? errtype : self.ERROR_REPLACE;
@@ -83,7 +89,7 @@ $.errhelper = function(container, options) {
                     var error = self.getError(err, null, ', ');
                     if (error.length) {
                         el.html(error);
-                        el.show();
+                        self.showError(el);
                     }
                     break;
                 case self.ERROR_INPLACE:
@@ -94,27 +100,41 @@ $.errhelper = function(container, options) {
                     break;
                 case self.ERROR_ASLIST:
                     var error = self.getError(err, '<li>%error%</li>');
-                    $('<ul class="' + self.listClass + '">' + error + '</ul>').appendTo(el.show());
+                    var ul = el.find('ul.' + self.listClass);
+                    if (ul.length) {
+                        ul.append(error);
+                    } else {
+                        $('<ul class="' + self.listClass + '">' + error + '</ul>').appendTo(el);
+                    }
+                    self.showError(el);
                     break;
                 default:
                     break;
             }
         },
         handleError: function(err) {
+            var handled = false;
             // reference self using variable
             if ($.isArray(err)) {
                 var el = $('#' + err[0]);
-                helper.addError(err[1], helper.defaultError == helper.ERROR_ASLIST ? el.parent() : el, helper.defaultError);
-                if (helper.parentClass) {
-                    el.parent().addClass(helper.parentClass).show();
+                // check if error element is exist
+                if (el.length) {
+                    handled = true;
+                    helper.addError(err[1], helper.defaultError == helper.ERROR_ASLIST ? el.parent() : el, helper.defaultError);
+                    if (helper.parentClass) {
+                        el.parent().addClass(helper.parentClass).show();
+                    }
+                    if (helper.focused == null) {
+                        helper.focused = el;
+                    }
+                } else {
+                    var err = err[0] + ': ' + err[1];
                 }
-                if (helper.focused == null) {
-                    helper.focused = el;
-                }
-            } else {
+            }
+            if (!handled) {
                 // error message shown in container
                 if (helper.errorContainer) {
-                    helper.addError(err, helper.errorContainer, helper.ERROR_REPLACE);
+                    helper.addError(err, helper.errorContainer, helper.ERROR_ASLIST);
                 } else {
                     if ($.ntdlg) {
                         $.ntdlg.message('dlgerr', '$err', err, true, $.ntdlg.ICON_ERROR);
@@ -149,7 +169,7 @@ $.errhelper = function(container, options) {
     }
     helper.container = container;
     var options = options ? options : {};
-    $.util.applyProp(['errorContainer', 'defaultError', 'parentClass', 'listClass', 'inplace'], options, helper);
+    $.util.applyProp(['errorContainer', 'defaultError', 'parentClass', 'listClass', 'toggleClass', 'inplace'], options, helper);
     if (typeof helper.errorContainer == 'string' && helper.container) {
         helper.errorContainer = helper.container.find(helper.errorContainer);
     }

@@ -102,7 +102,7 @@ $.define('ntdlg', {
         var cnt = 0;
         if (options.buttons) {
             $.each(options.buttons, function(k, v) {
-                if ($.isArray(v)) {
+                if ($.isArray(v) || $.isPlainObject(v)) {
                     var caption = v.caption ? v.caption : k;
                     var btnType = v.type ? v.type : 'default';
                     var handler = typeof v.handler == 'function' ? v.handler : null;

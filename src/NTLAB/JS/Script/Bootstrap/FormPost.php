@@ -57,6 +57,7 @@ class FormPost extends Base
             'errorContainer' => '.alert-danger',
             'defaultError' => 1,
             'parentClass' => 'has-error',
+            'toggleClass' => 'hidden',
             'inplace' => new Escaper(<<<EOF
 function(el, error) {
             // don't add tooltip on hidden input
