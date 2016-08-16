@@ -62,7 +62,9 @@ $.extend({
                 success_cb(json);
             }
         } else {
-            $.map($.isArray(json.error) ? json.error : new Array(json.error), errhelper.handleError);
+            if (json.error) {
+                $.map($.isArray(json.error) || $.isPlainObject(json.error) ? json.error : new Array(json.error), errhelper.handleError);
+            }
             if (typeof error_cb == 'function') {
                 error_cb(json);
             }
