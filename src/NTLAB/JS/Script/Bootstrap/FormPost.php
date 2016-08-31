@@ -64,7 +64,12 @@ function(el, error) {
             if (el.is('input[type="hidden"]')) {
                 var el = el.siblings('input');
             }
-            el.tooltip({title: error, placement: 'right'});
+            var tooltip = el.data('bs.tooltip');
+            if (tooltip != undefined) {
+                tooltip.options.title = error;
+            } else {
+                el.tooltip({title: error, placement: 'right'});
+            }
         }
 EOF
             ),
