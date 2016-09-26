@@ -26,6 +26,7 @@
 
 namespace NTLAB\JS;
 
+use NTLAB\JS\Util\CDN;
 use NTLAB\JS\Util\Escaper;
 
 /**
@@ -61,6 +62,11 @@ class Manager
      * @var \NTLAB\JS\DependencyResolverInterface[]
      */
     protected $resolvers = array();
+
+    /**
+     * @var \NTLAB\JS\Util\CDN[]
+     */
+    protected $cdns = array();
 
     /**
      * Get the registry instance.
@@ -155,6 +161,34 @@ class Manager
     public function getRepositories()
     {
         return $this->repositories;
+    }
+
+    /**
+     * Add CDN and create one if it doesn't exist.
+     *
+     * @param string $repository  Repository id
+     * @return \NTLAB\JS\Util\CDN
+     */
+    public function addCdn($repository)
+    {
+        if (!isset($this->cdns[$repository])) {
+            $this->cdns[$repository] = new CDN($repository);
+        }
+
+        return $this->cdns[$repository];
+    }
+
+    /**
+     * Get CDN object.
+     *
+     * @param string $repository  Repository id
+     * @return \NTLAB\JS\Util\CDN
+     */
+    public function getCdn($repository)
+    {
+        if (isset($this->cdns[$repository])) {
+            return $this->cdns[$repository];
+        }
     }
 
     /**

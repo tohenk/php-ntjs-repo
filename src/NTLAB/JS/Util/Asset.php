@@ -41,9 +41,14 @@ class Asset
     const ASSET_IMAGE = 'img';
 
     /**
+     * @var \NTLAB\JS\Manager
+     */
+    protected $manager = null;
+
+    /**
      * @var \NTLAB\JS\BackendInterface
      */
-    protected $backed = null;
+    protected $backend = null;
 
     /**
      * @var string
@@ -63,13 +68,24 @@ class Asset
      */
     public function __construct($repository, $options = array())
     {
-        $this->backed = Manager::getInstance()->getBackend();
+        $this->manager = Manager::getInstance();
+        $this->backend = $this->manager->getBackend();
         $this->repository = $repository;
         foreach (array(static::ASSET_JAVASCRIPT, static::ASSET_STYLESHEET, static::ASSET_IMAGE) as $asset) {
             if (isset($options[$asset])) {
                 $this->dirs[$asset] = $options[$asset];
             }
         }
+    }
+
+    /**
+     * Get repository name.
+     *
+     * @return string
+     */
+    public function getRepository()
+    {
+        return $this->repository;
     }
 
     /**
@@ -143,12 +159,28 @@ class Asset
      */
     public function getDir($asset = null, $repository = null)
     {
-        $dir = $this->backed->getAssetDir(null !== $repository ? $repository : $this->repository);
+        $dir = $this->backend->getAssetDir(null !== $repository ? $repository : $this->repository);
         if (strlen($dirName = $this->getDirName($asset))) {
             $dir .= '/'.$dirName;
         }
 
         return $dir;
+    }
+
+    /**
+     * Fix asset extension.
+     *
+     * @param string $asset  Asset type
+     * @param string $name  Asset name
+     * @return string
+     */
+    protected function fixExtension($asset, $name)
+    {
+        if (null !== ($extension = $this->getExtension($asset)) && substr($name, -strlen($extension)) != $extension) {
+            $name .= $extension;
+        }
+
+        return $name;
     }
 
     /**
@@ -160,10 +192,14 @@ class Asset
      */
     public function get($asset, $name)
     {
-        if (null !== ($extension = $this->getExtension($asset)) && substr($name, -strlen($extension)) != $extension) {
-          $name .= $extension;
+        // check cdn if exist
+        if ($cdn = $this->manager->getCdn($this->repository)) {
+            if ($file = $cdn->get($asset, $name, $this->getDirName($asset))) {
+                return $this->fixExtension($asset, $file);
+            }
         }
+        $name = $this->backend->generateAsset($this, $name, $asset);
 
-        return $this->getDir($asset).'/'.$name;
+        return $this->fixExtension($asset, $name);
     }
 }

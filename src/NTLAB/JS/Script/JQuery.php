@@ -75,7 +75,7 @@ class JQuery extends Base
           ->setPath(Asset::ASSET_JAVASCRIPT, 'js')
           ->setPath(Asset::ASSET_STYLESHEET, 'css')
         ;
-        $this->useJavascript('jquery');
+        $this->useJavascript('jquery.min');
     }
 
     protected function getRepositoryName()

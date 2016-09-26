@@ -26,6 +26,8 @@
 
 namespace NTLAB\JS;
 
+use NTLAB\JS\Util\Asset;
+
 interface BackendInterface
 {
     const ASSET_JS = 1;
@@ -83,6 +85,16 @@ interface BackendInterface
      * @return string
      */
     public function getAssetDir($repo);
+
+    /**
+     * Generate full asset path.
+     *
+     * @param Asset $asset  Asset repository
+     * @param string $name  Asset name
+     * @param int $type  Asset type
+     * @return string
+     */
+    public function generateAsset(Asset $asset, $name, $type = self::ASSET_JS);
 
     /**
      * Create HTML tag.
