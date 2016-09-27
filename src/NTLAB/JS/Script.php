@@ -393,7 +393,7 @@ abstract class Script
     {
         $asset = null != $asset ? $asset : $this->getAsset();
         $default = null !== $default ? $default : 'en';
-        $baseDir = $this->getBackend()->getConfig('web-dir').DIRECTORY_SEPARATOR.$asset->getDir();
+        $baseDir = $this->getBackend()->getConfig('base-dir').DIRECTORY_SEPARATOR.$asset->getDir();
         $culture = null === $culture ? $this->getBackend()->getConfig('default-culture') : $culture;
         // change culture delimeter from _ to -
         $culture = str_replace('_', '-', $culture);

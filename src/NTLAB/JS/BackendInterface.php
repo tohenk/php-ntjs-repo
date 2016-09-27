@@ -79,7 +79,7 @@ interface BackendInterface
     public function addAsset($asset, $type = self::ASSET_JS);
 
     /**
-     * Get asset directory for specified repository.
+     * Get local asset directory for specified repository.
      *
      * @param string $repo  Repository name
      * @return string
