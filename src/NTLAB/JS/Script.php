@@ -70,6 +70,16 @@ abstract class Script
     protected $_asset = null;
 
     /**
+     * @var int
+     */
+    protected $priority = null;
+
+    /**
+     * @var array
+     */
+    protected static $priorities = array();
+
+    /**
      * Create script object.
      *
      * @param string $name  The script name
@@ -90,6 +100,32 @@ abstract class Script
         }
 
         return static::$maps[$name]['obj'];
+    }
+
+    /**
+     * Get class alias.
+     *
+     * @param string $class  Class name (full qualified)
+     * @return string
+     */
+    public static function alias($class)
+    {
+        foreach (static::$maps as $name => $map) {
+            if (isset($map['class']) && $class == $map['class']) {
+                return $name;
+            }
+        }
+    }
+
+    /**
+     * Set script prefered priority.
+     *
+     * @param string $name  The script name
+     * @param int $priority  Script priority
+     */
+    public static function setPreferedPriority($name, $priority)
+    {
+        static::$priorities[$name] = $priority;
     }
 
     /**
@@ -339,11 +375,12 @@ abstract class Script
      * Add javascript.
      *
      * @param string $js  Javascript to include
+     * @param int $priority  Javascript priority
      * @return \NTLAB\JS\Script
      */
-    public function addJavascript($js)
+    public function addJavascript($js, $priority = null)
     {
-        $this->getBackend()->addAsset($js, BackendInterface::ASSET_JS);
+        $this->getBackend()->addAsset($js, BackendInterface::ASSET_JS, $priority ?: BackendInterface::ASSET_PRIORITY_DEFAULT);
 
         return $this;
     }
@@ -352,11 +389,12 @@ abstract class Script
      * Add stylesheet.
      *
      * @param string $css  Stylesheet to include
+     * @param int $priority  Stylesheet priority
      * @return \NTLAB\JS\Script
      */
-    public function addStylesheet($css)
+    public function addStylesheet($css, $priority = null)
     {
-        $this->getBackend()->addAsset($css, BackendInterface::ASSET_CSS);
+        $this->getBackend()->addAsset($css, BackendInterface::ASSET_CSS, $priority ?: BackendInterface::ASSET_PRIORITY_DEFAULT);
 
         return $this;
     }
@@ -367,15 +405,14 @@ abstract class Script
      *   %name%-%version%.%minified%.js
      *
      * @param string $name  The javascript name, e.q. jquery.form
-     * @param string $version  The javascript version
-     * @param bool $minified  The minified version used
      * @param \NTLAB\JS\Util\Asset $asset  Asset helper
+     * @param int $priority  Script priority
      * @return \NTLAB\JS\Script
      */
-    public function useJavascript($name, $asset = null)
+    public function useJavascript($name, $asset = null, $priority = null)
     {
         $asset = null != $asset ? $asset : $this->getAsset();
-        $this->addJavascript($asset->get(Asset::ASSET_JAVASCRIPT, $name));
+        $this->addJavascript($asset->get(Asset::ASSET_JAVASCRIPT, $name), $priority);
 
         return $this;
     }
@@ -387,9 +424,10 @@ abstract class Script
      * @param string $culture  The user culture
      * @param string $default  Default culture
      * @param \NTLAB\JS\Util\Asset $asset  Asset helper
+     * @param int $priority  Script priority
      * @return \NTLAB\JS\Script
      */
-    public function useLocaleJavascript($name, $culture = null, $default = 'en', $asset = null)
+    public function useLocaleJavascript($name, $culture = null, $default = 'en', $asset = null, $priority = null)
     {
         $asset = null != $asset ? $asset : $this->getAsset();
         $default = null !== $default ? $default : 'en';
@@ -413,7 +451,7 @@ abstract class Script
             }
             $realJs .= DIRECTORY_SEPARATOR.$localeJs;
             if (is_readable($realJs)) {
-                $this->useJavascript($localeJs, $asset);
+                $this->useJavascript($localeJs, $asset, $priority);
                 break;
             }
         }
@@ -426,12 +464,13 @@ abstract class Script
      *
      * @param string $name  The stylesheet name, e.q. ui
      * @param \NTLAB\JS\Util\Asset $asset  Asset helper
+     * @param int $priority  Stylesheet priority
      * @return \NTLAB\JS\Script
      */
-    public function useStylesheet($name, $asset = null)
+    public function useStylesheet($name, $asset = null, $priority = null)
     {
         $asset = null != $asset ? $asset : $this->getAsset();
-        $this->addStylesheet($asset->get(Asset::ASSET_STYLESHEET, $name));
+        $this->addStylesheet($asset->get(Asset::ASSET_STYLESHEET, $name), $priority ?: ($this->priority ?: $this->getPreferedPriority()));
 
         return $this;
     }
@@ -493,5 +532,40 @@ abstract class Script
         }
 
         return implode(Escaper::getEol(), $result);
+    }
+
+    /**
+     * Set script priority.
+     *
+     * @param int $priority  Script priority
+     * @return \NTLAB\JS\Script
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * Get script priority (limited to stylesheet).
+     *
+     * @return int
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * Get script prefered priority.
+     *
+     * @return int
+     */
+    public function getPreferedPriority()
+    {
+        if ($alias = static::alias(get_class($this))) {
+            return isset(static::$priorities[$alias]) ? static::$priorities[$alias] : null;
+        }
     }
 }

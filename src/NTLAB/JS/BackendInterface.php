@@ -32,6 +32,8 @@ interface BackendInterface
 {
     const ASSET_JS = 1;
     const ASSET_CSS = 2;
+    const ASSET_PRIORITY_DEFAULT = 0;
+    const ASSET_PRIORITY_FIRST = 1;
 
     /**
      * Get various script configuration.
@@ -75,8 +77,9 @@ interface BackendInterface
      *
      * @param string $asset  Asset name
      * @param int $type  Asset type
+     * @param int $priority  Asset priority
      */
-    public function addAsset($asset, $type = self::ASSET_JS);
+    public function addAsset($asset, $type = self::ASSET_JS, $priority = self::ASSET_PRIORITY_DEFAULT);
 
     /**
      * Get local asset directory for specified repository.
