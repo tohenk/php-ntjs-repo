@@ -80,6 +80,11 @@ abstract class Script
     protected static $priorities = array();
 
     /**
+     * @var array
+     */
+    protected static $defaults = array();
+
+    /**
      * Create script object.
      *
      * @param string $name  The script name
@@ -126,6 +131,22 @@ abstract class Script
     public static function setPreferedPriority($name, $priority)
     {
         static::$priorities[$name] = $priority;
+    }
+
+    /**
+     * Register default script.
+     *
+     * @param string $name  The script name
+     * @param int $priority  Stylesheet priority
+     */
+    public static function registerDefault($name, $priority = null)
+    {
+        if (!in_array($name, static::$defaults)) {
+            static::$defaults[] = $name;
+            if (null !== $priority) {
+                static::$priorities[$name] = $priority;
+            }
+        }
     }
 
     /**
@@ -277,6 +298,18 @@ abstract class Script
     }
 
     /**
+     * Include defaults script.
+     *
+     * @return \NTLAB\JS\Script
+     */
+    public function includeDefaults()
+    {
+        $this->includeDepedencies(static::$defaults);
+
+        return $this;
+    }
+
+    /**
      * Include script content if its not already included.
      *
      * @return \NTLAB\JS\Script
@@ -285,6 +318,7 @@ abstract class Script
     {
         if (!$this->isIncluded()) {
             $this->markAsIncluded();
+            $this->includeDefaults();
             $this->includeDepedencies();
             $this->buildScript();
         }
