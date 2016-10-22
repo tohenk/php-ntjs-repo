@@ -55,6 +55,7 @@ $.errhelper = function(container, options) {
         container: null,
         errorContainer: null,
         defaultError: this.ERROR_ASLIST,
+        parentSelector: null,
         parentClass: 'error',
         listClass: 'error_list',
         toggleClass: null,
@@ -122,7 +123,11 @@ $.errhelper = function(container, options) {
                     handled = true;
                     helper.addError(err[1], helper.defaultError == helper.ERROR_ASLIST ? el.parent() : el, helper.defaultError);
                     if (helper.parentClass) {
-                        el.parent().addClass(helper.parentClass).show();
+                        if (helper.parentSelector) {
+                            el.parents(helper.parentSelector).addClass(helper.parentClass).show();
+                        } else {
+                            el.parent().addClass(helper.parentClass).show();
+                        }
                     }
                     if (helper.focused == null) {
                         helper.focused = el;
@@ -159,7 +164,11 @@ $.errhelper = function(container, options) {
                     self.container.find('.' + self.listClass).remove();
                 }
                 if (self.parentClass) {
-                    self.container.find('.' + self.parentClass).removeClass(self.parentClass);
+                    if (self.parentSelector) {
+                        self.container.find(self.parentSelector).removeClass(self.parentClass);
+                    } else {
+                        self.container.find('.' + self.parentClass).removeClass(self.parentClass);
+                    }
                 }
             }
             if (self.errorContainer) {
@@ -169,7 +178,7 @@ $.errhelper = function(container, options) {
     }
     helper.container = container;
     var options = options ? options : {};
-    $.util.applyProp(['errorContainer', 'defaultError', 'parentClass', 'listClass', 'toggleClass', 'inplace'], options, helper);
+    $.util.applyProp(['errorContainer', 'defaultError', 'parentSelector', 'parentClass', 'listClass', 'toggleClass', 'inplace'], options, helper);
     if (typeof helper.errorContainer == 'string' && helper.container) {
         helper.errorContainer = helper.container.find(helper.errorContainer);
     }

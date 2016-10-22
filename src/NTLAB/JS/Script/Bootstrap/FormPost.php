@@ -56,6 +56,7 @@ class FormPost extends Base
         return array(
             'errorContainer' => '.alert-danger',
             'defaultError' => 1,
+            'parentSelector' => '.form-group',
             'parentClass' => 'has-error',
             'toggleClass' => 'hidden',
             'inplace' => new Escaper(<<<EOF
