@@ -24,32 +24,20 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script;
+namespace NTLAB\JS\Script\Bootstrap\Theme;
 
-use NTLAB\JS\Repository;
-use NTLAB\JS\Util\Asset;
+use NTLAB\JS\Script\Bootstrap;
 
 /**
- * Bootstrap javascript code repository for PHP.
+ * Bootstrap default theme.
  *
  * @author Toha
  */
-class Bootstrap extends JQuery
+class DefaultTheme extends Bootstrap
 {
-    /**
-     * @var string
-     */
-    protected $repository = 'bootstrap';
-
-    /**
-     * @var \NTLAB\JS\Util\Asset
-     */
-    protected $asset = null;
-
     protected function configure()
     {
-        $this->asset = new Asset($this->repository, array(Asset::ASSET_JAVASCRIPT => 'js', Asset::ASSET_STYLESHEET => 'css'));
-        $this->useJavascript('bootstrap.min', $this->asset);
-        $this->useStylesheet('bootstrap.min', $this->asset);
+        parent::configure();
+        $this->useStylesheet('bootstrap-theme.min', $this->asset);
     }
 }
