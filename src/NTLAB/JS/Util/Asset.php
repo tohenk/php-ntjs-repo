@@ -176,11 +176,22 @@ class Asset
      */
     protected function fixExtension($asset, $name)
     {
-        if (null !== ($extension = $this->getExtension($asset)) && substr($name, -strlen($extension)) != $extension) {
+        if (false == strpos($name, '?') && null !== ($extension = $this->getExtension($asset)) && substr($name, -strlen($extension)) != $extension) {
             $name .= $extension;
         }
 
         return $name;
+    }
+
+    /**
+     * Check if asset is a local name.
+     *
+     * @param string $name  Asset name
+     * @return bool
+     */
+    protected function isLocal($name)
+    {
+        return preg_match('#(^http(s)*\:)*\/\/(.*)#', $name) ? false : true;
     }
 
     /**
@@ -192,13 +203,15 @@ class Asset
      */
     public function get($asset, $name)
     {
-        // check cdn if exist
-        if ($cdn = $this->manager->getCdn($this->repository)) {
-            if ($file = $cdn->get($asset, $name, $this->getDirName($asset))) {
-                return $this->fixExtension($asset, $file);
+        if ($this->isLocal($name)) {
+            // check cdn if exist
+            if ($cdn = $this->manager->getCdn($this->repository)) {
+                if ($file = $cdn->get($asset, $name, $this->getDirName($asset))) {
+                    return $this->fixExtension($asset, $file);
+                }
             }
+            $name = $this->backend->generateAsset($this, $name, $asset);
         }
-        $name = $this->backend->generateAsset($this, $name, $asset);
 
         return $this->fixExtension($asset, $name);
     }
