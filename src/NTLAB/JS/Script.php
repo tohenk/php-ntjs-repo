@@ -452,6 +452,37 @@ abstract class Script
     }
 
     /**
+     * Get all possible locale variants.
+     *
+     * @param string $culture
+     * @param string $default
+     * @return array
+     */
+    protected function getLocales($culture, $default)
+    {
+        $locales = array();
+        $delimeter = null;
+        if ($culture) {
+            $locales[] = $culture;
+            foreach (array('-', '_') as $delim) {
+                if (false != strpos($culture, $delim)) {
+                    $delimeter = $delim;
+                    break;
+                }
+            }
+            if ($delimeter) {
+                $locales[] = strtr($culture, array('-' => '_', '_' => '-'));
+                $locales[] = substr($culture, 0, strpos($culture, $delimeter));
+            }
+        }
+        if ($default && !in_array($default, $locales)) {
+            $locales[] = $default;
+        }
+
+        return $locales;
+    }
+
+    /**
      * Include locale javascript.
      *
      * @param string $name     Javascript name
@@ -463,22 +494,15 @@ abstract class Script
      */
     public function useLocaleJavascript($name, $culture = null, $default = 'en', $asset = null, $priority = null)
     {
-        $asset = null != $asset ? $asset : $this->getAsset();
-        $default = null !== $default ? $default : 'en';
+        if (false == strpos($name, '%s')) {
+            $name .= '%s';
+        }
+        $asset   = $asset ?: $this->getAsset();
         $baseDir = $this->getBackend()->getConfig('base-dir').DIRECTORY_SEPARATOR.$asset->getDir();
-        $culture = null === $culture ? $this->getBackend()->getConfig('default-culture') : $culture;
-        // change culture delimeter from _ to -
-        $culture = str_replace('_', '-', $culture);
-        $locales = array($culture);
-        if (false!== ($p = strpos($culture, '-'))) {
-            $locales[] = substr($culture, 0, $p);
-        }
-        if (!in_array($default, $locales)) {
-            $locales[] = $default;
-        }
+        $culture = $culture ?: $this->getBackend()->getConfig('default-culture');
         // check file
-        foreach ($locales as $locale) {
-            $localeJs = $name.$locale.$asset->getExtension(Asset::ASSET_JAVASCRIPT);
+        foreach ($this->getLocales($culture, $default ?: 'en') as $locale) {
+            $localeJs = sprintf($name, $locale).$asset->getExtension(Asset::ASSET_JAVASCRIPT);
             $realJs = $baseDir;
             if ($dirName = $asset->getDirName(Asset::ASSET_JAVASCRIPT)) {
                 $realJs .= DIRECTORY_SEPARATOR.$dirName;
