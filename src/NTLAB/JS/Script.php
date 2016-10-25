@@ -67,7 +67,12 @@ abstract class Script
     /**
      * @var \NTLAB\JS\Util\Asset
      */
-    protected $_asset = null;
+    protected $defaultAsset = null;
+
+    /**
+     * @var \NTLAB\JS\Util\Asset
+     */
+    protected $asset = null;
 
     /**
      * @var int
@@ -154,7 +159,7 @@ abstract class Script
      */
     public function __construct()
     {
-        $this->_asset = new Asset($this->getRepositoryName());
+        $this->defaultAsset = new Asset($this->getRepositoryName());
         $this->initialize();
         $this->configure();
     }
@@ -370,6 +375,41 @@ abstract class Script
     }
 
     /**
+     * Set script priority.
+     *
+     * @param int $priority  Script priority
+     * @return \NTLAB\JS\Script
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * Get script priority (limited to stylesheet).
+     *
+     * @return int
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * Get script prefered priority.
+     *
+     * @return int
+     */
+    public function getPreferedPriority()
+    {
+        if ($alias = static::alias(get_class($this))) {
+            return isset(static::$priorities[$alias]) ? static::$priorities[$alias] : null;
+        }
+    }
+
+    /**
      * Add script option.
      *
      * @param string $name  The option name
@@ -396,13 +436,41 @@ abstract class Script
     }
 
     /**
+     * Set script asset.
+     *
+     * @param \NTLAB\JS\Util\Asset  $asset
+     * @return \NTLAB\JS\Script
+     */
+    public function setAsset($asset)
+    {
+        $this->asset = $asset;
+
+        return $this;
+    }
+
+    /**
      * Get asset helper.
      *
      * @return \NTLAB\JS\Util\Asset
      */
     public function getAsset()
     {
-        return $this->_asset;
+        return $this->asset ?: $this->defaultAsset;
+    }
+
+    /**
+     * Generate asset name.
+     *
+     * @param string $name  Asset name
+     * @param int $type  Asset type
+     * @param \NTLAB\JS\Util\Asset $asset  Asset helper
+     * @return string
+     */
+    public function generateAsset($name, $type, $asset = null)
+    {
+        $asset = $asset ?: $this->getAsset();
+
+        return $asset->get($type, $name);
     }
 
     /**
@@ -415,6 +483,19 @@ abstract class Script
     public function addJavascript($js, $priority = null)
     {
         $this->getBackend()->addAsset($js, BackendInterface::ASSET_JS, $priority ?: BackendInterface::ASSET_PRIORITY_DEFAULT);
+
+        return $this;
+    }
+
+    /**
+     * Remove javascript.
+     *
+     * @param string $js  Javascript to remove
+     * @return \NTLAB\JS\Script
+     */
+    public function removeJavascript($js)
+    {
+        $this->getBackend()->removeAsset($css, BackendInterface::ASSET_JS);
 
         return $this;
     }
@@ -434,6 +515,19 @@ abstract class Script
     }
 
     /**
+     * Remove stylesheet.
+     *
+     * @param string $css  Stylesheet to remove
+     * @return \NTLAB\JS\Script
+     */
+    public function removeStylesheet($css)
+    {
+        $this->getBackend()->removeAsset($css, BackendInterface::ASSET_CSS);
+
+        return $this;
+    }
+
+    /**
      * Include javascript. The javascript name accepted with the following
      * format:
      *   %name%-%version%.%minified%.js
@@ -445,8 +539,7 @@ abstract class Script
      */
     public function useJavascript($name, $asset = null, $priority = null)
     {
-        $asset = null != $asset ? $asset : $this->getAsset();
-        $this->addJavascript($asset->get(Asset::ASSET_JAVASCRIPT, $name), $priority);
+        $this->addJavascript($this->generateAsset($name, Asset::ASSET_JAVASCRIPT, $asset), $priority);
 
         return $this;
     }
@@ -527,8 +620,7 @@ abstract class Script
      */
     public function useStylesheet($name, $asset = null, $priority = null)
     {
-        $asset = null != $asset ? $asset : $this->getAsset();
-        $this->addStylesheet($asset->get(Asset::ASSET_STYLESHEET, $name), $priority ?: ($this->priority ?: $this->getPreferedPriority()));
+        $this->addStylesheet($this->generateAsset($name, Asset::ASSET_STYLESHEET, $asset), $priority);
 
         return $this;
     }
@@ -590,40 +682,5 @@ abstract class Script
         }
 
         return implode(Escaper::getEol(), $result);
-    }
-
-    /**
-     * Set script priority.
-     *
-     * @param int $priority  Script priority
-     * @return \NTLAB\JS\Script
-     */
-    public function setPriority($priority)
-    {
-        $this->priority = $priority;
-
-        return $this;
-    }
-
-    /**
-     * Get script priority (limited to stylesheet).
-     *
-     * @return int
-     */
-    public function getPriority()
-    {
-        return $this->priority;
-    }
-
-    /**
-     * Get script prefered priority.
-     *
-     * @return int
-     */
-    public function getPreferedPriority()
-    {
-        if ($alias = static::alias(get_class($this))) {
-            return isset(static::$priorities[$alias]) ? static::$priorities[$alias] : null;
-        }
     }
 }

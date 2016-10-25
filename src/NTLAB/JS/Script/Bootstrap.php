@@ -41,15 +41,10 @@ class Bootstrap extends JQuery
      */
     protected $repository = 'bootstrap';
 
-    /**
-     * @var \NTLAB\JS\Util\Asset
-     */
-    protected $asset = null;
-
     protected function configure()
     {
-        $this->asset = new Asset($this->repository, array(Asset::ASSET_JAVASCRIPT => 'js', Asset::ASSET_STYLESHEET => 'css'));
-        $this->useJavascript('bootstrap.min', $this->asset);
-        $this->useStylesheet('bootstrap.min', $this->asset);
+        $this->setAsset(new Asset($this->repository, array(Asset::ASSET_JAVASCRIPT => 'js', Asset::ASSET_STYLESHEET => 'css')));
+        $this->useJavascript('bootstrap.min');
+        $this->useStylesheet('bootstrap.min');
     }
 }

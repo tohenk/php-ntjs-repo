@@ -38,6 +38,6 @@ class DefaultTheme extends Bootstrap
     protected function configure()
     {
         parent::configure();
-        $this->useStylesheet('bootstrap-theme.min', $this->asset);
+        $this->useStylesheet('bootstrap-theme.min');
     }
 }

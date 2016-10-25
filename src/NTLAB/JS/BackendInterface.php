@@ -82,6 +82,14 @@ interface BackendInterface
     public function addAsset($asset, $type = self::ASSET_JS, $priority = self::ASSET_PRIORITY_DEFAULT);
 
     /**
+     * Remove asset.
+     *
+     * @param string $asset  Asset name
+     * @param int $type  Asset type
+     */
+    public function removeAsset($asset, $type = self::ASSET_JS);
+
+    /**
      * Get local asset directory for specified repository.
      *
      * @param string $repo  Repository name
