@@ -495,7 +495,7 @@ abstract class Script
      */
     public function removeJavascript($js)
     {
-        $this->getBackend()->removeAsset($css, BackendInterface::ASSET_JS);
+        $this->getBackend()->removeAsset($js, BackendInterface::ASSET_JS);
 
         return $this;
     }
