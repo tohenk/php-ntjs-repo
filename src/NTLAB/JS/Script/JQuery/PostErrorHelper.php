@@ -55,6 +55,7 @@ $.errhelper = function(container, options) {
         container: null,
         errorContainer: null,
         defaultError: this.ERROR_ASLIST,
+        requiredSelector: '.required',
         parentSelector: null,
         parentClass: 'error',
         listClass: 'error_list',
@@ -178,7 +179,7 @@ $.errhelper = function(container, options) {
     }
     helper.container = container;
     var options = options ? options : {};
-    $.util.applyProp(['errorContainer', 'defaultError', 'parentSelector', 'parentClass', 'listClass', 'toggleClass', 'inplace'], options, helper);
+    $.util.applyProp(['errorContainer', 'defaultError', 'requiredSelector', 'parentSelector', 'parentClass', 'listClass', 'toggleClass', 'inplace'], options, helper);
     if (typeof helper.errorContainer == 'string' && helper.container) {
         helper.errorContainer = helper.container.find(helper.errorContainer);
     }

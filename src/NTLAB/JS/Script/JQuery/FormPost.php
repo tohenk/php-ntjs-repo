@@ -79,6 +79,25 @@ $.formpost = function(form, options) {
         onfail: null,
         onerror: null,
         onalways: null,
+        hasRequired: function(form) {
+            var self = this;
+            var status = false;
+            if (self.errhelper.requiredSelector) {
+                form.find(self.errhelper.requiredSelector).each(function() {
+                    var el = $(this);
+                    if ((el.is('input') || el.is('select')) && el.is(':visible') && !el.is(':disabled')) {
+                        var value = el.val();
+                        if (!value) {
+                            status = true;
+                            self.errhelper.focused = el;
+                            self.errhelper.focusError();
+                            return false;
+                        }
+                    }
+                });
+            }
+            return status;
+        },
         formPost: function(form, url, success_cb, error_cb) {
             form.trigger('formpost');
             if (fp.paramName) {
@@ -150,8 +169,8 @@ $.formpost = function(form, options) {
             form.find('button[type=submit]').on('click', submitclicker);
             form.on('submit', function(e) {
                 e.preventDefault();
-                if (typeof self.onsubmit == 'function') {
-                    if (!self.onsubmit(form)) return;
+                if (self.hasRequired(form) || (typeof self.onsubmit == 'function' && !self.onsubmit(form))) {
+                    return false;
                 }
                 var url = self.url || form.attr('action');
                 if (self.progress) {

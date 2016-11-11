@@ -296,7 +296,7 @@ abstract class Script
         $dependencies = null === $dependencies ? $this->dependencies : $dependencies;
         foreach ((array) $dependencies as $class) {
             $this->create($class)
-              ->includeScript();
+                ->includeScript();
         }
 
         return $this;
