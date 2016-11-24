@@ -85,7 +85,7 @@ $.formpost = function(form, options) {
             if (self.errhelper.requiredSelector) {
                 form.find(self.errhelper.requiredSelector).each(function() {
                     var el = $(this);
-                    if ((el.is('input') || el.is('select')) && el.is(':visible') && !el.is(':disabled')) {
+                    if ((el.is('input') || el.is('select') || el.is('textarea')) && el.is(':visible') && !el.is(':disabled')) {
                         var value = el.val();
                         if (!value) {
                             status = true;
