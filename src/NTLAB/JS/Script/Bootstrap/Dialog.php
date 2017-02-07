@@ -47,6 +47,7 @@ class Dialog extends Base
 {
     protected function configure()
     {
+        parent::configure();
         $this->addDependencies('JQuery.NS', 'JQuery.Util');
         $this->setPosition(Repository::POSITION_FIRST);
     }
