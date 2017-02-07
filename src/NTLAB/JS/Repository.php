@@ -45,6 +45,11 @@ class Repository
     protected $wrapper = null;
 
     /**
+     * @var int
+     */
+    protected $wrapSize = 1;
+
+    /**
      * @var bool
      */
     protected $useWrapper = true;
@@ -91,6 +96,19 @@ class Repository
         if ($text != $this->wrapper) {
             $this->wrapper = $text;
         }
+
+        return $this;
+    }
+
+    /**
+     * Set wrapper indent size.
+     *
+     * @param int $size
+     * @return \NTLAB\JS\Repository
+     */
+    public function setWrapSize($size)
+    {
+        $this->wrapSize = (int) $size;
 
         return $this;
     }
@@ -195,7 +213,7 @@ class Repository
         }
         if (strlen($script)) {
             if ($this->useWrapper && false != strpos($this->wrapper, '%s')) {
-                $script = sprintf($this->wrapper, Escaper::implodeAndPad(explode(Escaper::getEol(), rtrim($script)), 1, null));
+                $script = sprintf($this->wrapper, Escaper::implodeAndPad(explode(Escaper::getEol(), rtrim($script)), $this->wrapSize, null));
             }
         }
 
