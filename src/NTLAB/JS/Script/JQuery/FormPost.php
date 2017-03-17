@@ -59,7 +59,6 @@ class FormPost extends Base
 
     public function getScript()
     {
-        $this->useJavascript('jquery.form');
         $title = $this->trans('Information');
         $error = $this->trans('Error');
         $ok = $this->trans('OK');
@@ -103,9 +102,9 @@ $.formpost = function(form, options) {
             if (fp.paramName) {
                 var params = form.data('submit-params');
                 params = typeof params == 'object' ? params : {};
-                params[fp.paramName] = form.serialize();;
+                params[fp.paramName] = form.serialize();
             } else {
-                var params = form.formToArray();
+                var params = form.serializeArray();
             }
             var xtra = form.data('submit');
             if ($.isArray(xtra) && xtra.length) {
