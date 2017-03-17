@@ -66,14 +66,14 @@ $.define('wDialog', {
         if (null === self.d) {
             var content =
                 '<div id="' + self.id + '" class="modal fade" tabindex="-1" role="dialog">' +
-                '  <div class="modal-dialog" role="document">' +
-                '    <div class="modal-content">' +
-                '      <div class="modal-header">' +
-                '        <h4 class="modal-title">$title</h4>' +
-                '      </div>' +
-                '      <div class="modal-body">$message</div>' +
-                '    </div>' +
-                '  </div>' +
+                  '<div class="modal-dialog" role="document">' +
+                    '<div class="modal-content">' +
+                      '<div class="modal-header">' +
+                        '<h4 class="modal-title">$title</h4>' +
+                      '</div>' +
+                      '<div class="modal-body">$message</div>' +
+                    '</div>' +
+                  '</div>' +
                 '</div>';
             $(document.body).append(content);
             self.d = $('#' + self.id);
