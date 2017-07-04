@@ -206,7 +206,7 @@ class Escaper
         } else if (is_numeric($value)) {
             $value = (string) $value;
         } else if ($escape) {
-            $value = '\''.str_replace('\'', '\'\'', $value).'\'';
+            $value = '\''.strtr($value, array('\'' => '\\\'', "\r" => '\\r', "\n" => '\\n', "\t" => '\\t', "\b" => '\\b', "\f" => '\\f')).'\'';
         }
 
         return $value;
