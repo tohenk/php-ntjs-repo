@@ -29,11 +29,6 @@ namespace NTLAB\JS;
 abstract class Compressor
 {
     /**
-     * @var string
-     */
-    protected $content = null;
-
-    /**
      * @var array
      */
     protected $options = array();
@@ -46,12 +41,10 @@ abstract class Compressor
     /**
      * Constructor.
      *
-     * @param string $content  The content to compress
      * @param array $options  Compressor options
      */
-    public function __construct($content, $options = array())
+    public function __construct($options = array())
     {
-        $this->content = $content;
         $this->options = $options;
     }
 
@@ -62,19 +55,4 @@ abstract class Compressor
      * @return string
      */
     abstract public function compress($content);
-
-    /**
-     * Get the compressed content.
-     *
-     * @return string
-     */
-    public function output()
-    {
-        if (null === $this->compressed) {
-            $this->compressed = true;
-            $this->content = $this->compress($this->content);
-        }
-
-        return $this->content;
-    }
 }
