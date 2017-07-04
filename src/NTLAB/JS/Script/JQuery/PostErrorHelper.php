@@ -56,6 +56,7 @@ $.errhelper = function(container, options) {
         errorContainer: null,
         defaultError: this.ERROR_ASLIST,
         requiredSelector: '.required',
+        errClass: null,
         parentSelector: null,
         parentClass: 'error',
         listClass: 'error_list',
@@ -91,6 +92,9 @@ $.errhelper = function(container, options) {
                     var error = self.getError(err, null, ', ');
                     if (error.length) {
                         el.html(error);
+                        if (self.errClass) {
+                            el.addClass(self.errClass);
+                        }
                         self.showError(el);
                     }
                     break;
@@ -98,6 +102,9 @@ $.errhelper = function(container, options) {
                     var error = self.getError(err, null, ', ');
                     if (typeof self.inplace == 'function') {
                         self.inplace(el, error);
+                        if (self.errClass) {
+                            el.addClass(self.errClass);
+                        }
                     }
                     break;
                 case self.ERROR_ASLIST:
@@ -107,6 +114,9 @@ $.errhelper = function(container, options) {
                         ul.append(error);
                     } else {
                         $('<ul class="' + self.listClass + '">' + error + '</ul>').appendTo(el);
+                    }
+                    if (self.errClass) {
+                        el.addClass(self.errClass);
                     }
                     self.showError(el);
                     break;
@@ -175,11 +185,15 @@ $.errhelper = function(container, options) {
             if (self.errorContainer) {
                 self.errorContainer.hide();
             }
+            if (typeof self.onErrReset == 'function') {
+                self.onErrReset(self);
+            }
         }
     }
     helper.container = container;
     var options = options ? options : {};
-    $.util.applyProp(['errorContainer', 'defaultError', 'requiredSelector', 'parentSelector', 'parentClass', 'listClass', 'toggleClass', 'inplace'], options, helper);
+    $.util.applyProp(['errorContainer', 'defaultError', 'requiredSelector', 'parentSelector', 'parentClass',
+        'errClass', 'listClass', 'toggleClass', 'inplace', 'onErrReset'], options, helper);
     if (typeof helper.errorContainer == 'string' && helper.container) {
         helper.errorContainer = helper.container.find(helper.errorContainer);
     }

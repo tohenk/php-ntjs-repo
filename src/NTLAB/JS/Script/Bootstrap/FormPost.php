@@ -58,6 +58,7 @@ class FormPost extends Base
             'defaultError' => 1,
             'parentSelector' => '.form-group',
             'parentClass' => 'has-error',
+            'errClass' => 'x-error',
             'toggleClass' => 'hidden',
             'inplace' => new Escaper(<<<EOF
 function(el, error) {
@@ -70,6 +71,21 @@ function(el, error) {
                 tooltip.options.title = error;
             } else {
                 el.tooltip({title: error, placement: 'right'});
+            }
+        }
+EOF
+            ),
+            'onErrReset' => new Escaper(<<<EOF
+function(helper) {
+            if (helper.container) {
+                helper.container.find(helper.parentSelector + ' .' + helper.errClass).each(function() {
+                    var el = $(this);
+                    var tooltip = el.data('bs.tooltip');
+                    if (tooltip != undefined) {
+                        tooltip.options.title = '';
+                    }
+                    el.removeClass(helper.errClass);
+                });
             }
         }
 EOF
