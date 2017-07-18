@@ -78,6 +78,7 @@ $.formpost = function(form, options) {
         onfail: null,
         onerror: null,
         onalways: null,
+        onconfirm: null,
         hasRequired: function(form) {
             var self = this;
             var status = false;
@@ -166,8 +167,7 @@ $.formpost = function(form, options) {
             }
             form.find('input[type=submit]').on('click', submitclicker);
             form.find('button[type=submit]').on('click', submitclicker);
-            form.on('submit', function(e) {
-                e.preventDefault();
+            var doit = function() {
                 if (self.hasRequired(form) || (typeof self.onsubmit == 'function' && !self.onsubmit(form))) {
                     return false;
                 }
@@ -221,10 +221,18 @@ $.formpost = function(form, options) {
                         f();
                     }
                 });
+            }
+            form.on('submit', function(e) {
+                e.preventDefault();
+                if (typeof self.onconfirm == 'function') {
+                    self.onconfirm(form, doit);
+                } else {
+                    doit();
+                }
             });
         }
     }
-    var props = ['message', 'progress', 'xhr', 'url', 'paramName', 'onsubmit'];
+    var props = ['message', 'progress', 'xhr', 'url', 'paramName', 'onsubmit', 'onconfirm'];
     $.util.applyProp(props, options, fp, true);
     fp.bind(form);
     fp.errhelper = $.errhelper(form, $options);
