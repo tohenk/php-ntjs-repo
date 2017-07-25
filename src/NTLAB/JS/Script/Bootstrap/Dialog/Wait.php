@@ -71,7 +71,10 @@ $.define('wDialog', {
                       '<div class="modal-header">' +
                         '<h4 class="modal-title">$title</h4>' +
                       '</div>' +
-                      '<div class="modal-body">$message</div>' +
+                      '<div class="modal-body">' +
+                        '<div class="pull-left"><span class="glyphicon glyphicon-time"></span>&nbsp;</div>' +
+                        '<div class="msg">$message</div>' +
+                      '</div>' +
                     '</div>' +
                   '</div>' +
                 '</div>';
@@ -91,7 +94,7 @@ $.define('wDialog', {
         if (self.active) self.close();
         self.create();
         if (msg) {
-            self.d.find('.modal-body').html(msg);
+            self.d.find('.modal-body .msg').html(msg);
         }
         $.ntdlg.show(self.d);
     },
