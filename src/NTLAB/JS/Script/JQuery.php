@@ -75,7 +75,7 @@ class JQuery extends Base
           ->setPath(Asset::ASSET_JAVASCRIPT, 'js')
           ->setPath(Asset::ASSET_STYLESHEET, 'css')
         ;
-        $this->useJavascript('jquery.min');
+        $this->addAsset(Asset::ASSET_JAVASCRIPT, 'jquery.min');
     }
 
     protected function getRepositoryName()
@@ -104,6 +104,10 @@ EOF
         ;
     }
 
+    /**
+     * {@inheritDoc}
+     * @see \NTLAB\JS\Script::getScript()
+     */
     public function getScript()
     {
     }

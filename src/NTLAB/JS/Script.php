@@ -82,6 +82,11 @@ abstract class Script
     /**
      * @var array
      */
+    protected $assets = array();
+
+    /**
+     * @var array
+     */
     protected static $priorities = array();
 
     /**
@@ -338,6 +343,7 @@ abstract class Script
      */
     protected function buildScript()
     {
+        $this->includeAssets();
         if ($script = $this->getScript()) {
             $this->useScript($script);
         }
@@ -358,6 +364,23 @@ abstract class Script
         $this->getRepository()->add($script, null === $position ? $this->position : $position);
 
         return $this;
+    }
+
+    /**
+     * Include script assets.
+     */
+    protected function includeAssets()
+    {
+        foreach ($this->assets as $asset) {
+            switch ($asset[0]) {
+                case Asset::ASSET_JAVASCRIPT:
+                    $this->useJavascript($asset[1], $asset[2], $asset[3]);
+                    break;
+                case Asset::ASSET_STYLESHEET:
+                    $this->useStylesheet($asset[1], $asset[2], $asset[3]);
+                    break;
+            }
+        }
     }
 
     /**
@@ -621,6 +644,25 @@ abstract class Script
     public function useStylesheet($name, $asset = null, $priority = null)
     {
         $this->addStylesheet($this->generateAsset($name, Asset::ASSET_STYLESHEET, $asset), $priority);
+
+        return $this;
+    }
+
+    /**
+     * Add script asset.
+     *
+     * @param string $type  Asset type
+     * @param string $name  Asset name
+     * @param int $priority  Priority
+     * @return \NTLAB\JS\Script
+     */
+    protected function addAsset($type, $name, $priority = null)
+    {
+        $asset = $this->getAsset();
+        $key = implode(':', array($type, $asset->getRepository(), $name));
+        if (!isset($this->assets[$key])) {
+            $this->assets[$key] = array($type, $name, $asset, $priority);
+        }
 
         return $this;
     }
