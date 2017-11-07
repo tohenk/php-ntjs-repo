@@ -374,7 +374,11 @@ abstract class Script
         foreach ($this->assets as $asset) {
             switch ($asset[0]) {
                 case Asset::ASSET_JAVASCRIPT:
-                    $this->useJavascript($asset[1], $asset[2], $asset[3]);
+                    if (count($asset) > 4) {
+                        $this->useLocaleJavascript($asset[1], $asset[4], null, $asset[2], $asset[3]);
+                    } else {
+                        $this->useJavascript($asset[1], $asset[2], $asset[3]);
+                    }
                     break;
                 case Asset::ASSET_STYLESHEET:
                     $this->useStylesheet($asset[1], $asset[2], $asset[3]);
@@ -662,6 +666,26 @@ abstract class Script
         $key = implode(':', array($type, $asset->getRepository(), $name));
         if (!isset($this->assets[$key])) {
             $this->assets[$key] = array($type, $name, $asset, $priority);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add script locale asset.
+     *
+     * @param string $type
+     * @param string $name
+     * @param string $culture
+     * @param int $priority
+     * @return \NTLAB\JS\Script
+     */
+    protected function addLocaleAsset($type, $name, $culture = null, $priority = null)
+    {
+        $asset = $this->getAsset();
+        $key = implode(':', array($type, $asset->getRepository(), $name, $culture));
+        if (!isset($this->assets[$key])) {
+            $this->assets[$key] = array($type, $name, $asset, $priority, $culture);
         }
 
         return $this;
