@@ -392,7 +392,9 @@ abstract class Script
      *
      * @return string
      */
-    abstract public function getScript();
+    public function getScript()
+    {
+    }
 
     /**
      * Get script initialization code.

@@ -105,14 +105,6 @@ EOF
     }
 
     /**
-     * {@inheritDoc}
-     * @see \NTLAB\JS\Script::getScript()
-     */
-    public function getScript()
-    {
-    }
-
-    /**
      * Create singleton instance.
      *
      * @return \NTLAB\JS\Script\JQuery
