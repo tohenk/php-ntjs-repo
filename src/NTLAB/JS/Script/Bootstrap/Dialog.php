@@ -48,7 +48,7 @@ class Dialog extends Base
     protected function configure()
     {
         parent::configure();
-        $this->addDependencies('JQuery.NS', 'JQuery.Util');
+        $this->addDependencies('JQuery.NS', 'JQuery.Util', 'FontAwesome');
         $this->setPosition(Repository::POSITION_FIRST);
     }
 
@@ -58,19 +58,19 @@ class Dialog extends Base
 
         return <<<EOF
 $.define('ntdlg', {
-    ICON_INFO: 'info-sign',
-    ICON_ALERT: 'exclamation-sign',
-    ICON_ERROR: 'remove-sign',
-    ICON_SUCCESS: 'ok',
-    ICON_QUESTION: 'question-sign',
+    ICON_INFO: 'info',
+    ICON_ALERT: 'exclamation',
+    ICON_ERROR: 'remove',
+    ICON_SUCCESS: 'check',
+    ICON_QUESTION: 'question',
     ICON_INPUT: 'pencil',
     dialogTmpl:
-        '<div id="%ID%" class="modal fade" tabindex="-1" role="dialog">' +
-          '<div class="%MODAL%" role="document">' +
+        '<div id="%ID%" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="%ID%-title">' +
+          '<div class="%MODAL% h-100 d-flex flex-column justify-content-center my-0" role="document">' +
             '<div class="modal-content">' +
               '<div class="modal-header">' +
+                '<h5 id="%ID%-title" class="modal-title">%TITLE%</h5>' +
                 '%CLOSE%' +
-                '<h4 class="modal-title">%TITLE%</h4>' +
               '</div>' +
               '<div class="modal-body">%CONTENT%</div>' +
               '<div class="modal-footer">%BUTTONS%</div>' +
@@ -78,11 +78,11 @@ $.define('ntdlg', {
           '</div>' +
         '</div>',
     iconTmpl:
-        '<span class="dialog-icon glyphicon glyphicon-%ICON%"></span>',
+        '<span class="dialog-icon fa fa-%ICON% fa-fw fa-2x"></span>',
     messageTmpl:
-        '<div class="row">' +
-          '<div class="col-sm-1">%ICON%</div>' +
-          '<div class="col-sm-10">%MESSAGE%</div>' +
+        '<div class="media">' +
+          '<div class="p-2 mr-1">%ICON%</div>' +
+          '<div class="media-body">%MESSAGE%</div>' +
         '</div>',
     buttonTmpl:
         '<button id="%ID%" type="button" class="btn btn-%TYPE%">%CAPTION%</button>',
@@ -105,11 +105,11 @@ $.define('ntdlg', {
             $.each(options.buttons, function(k, v) {
                 if ($.isArray(v) || $.isPlainObject(v)) {
                     var caption = v.caption ? v.caption : k;
-                    var btnType = v.type ? v.type : 'default';
+                    var btnType = v.type ? v.type : 'secondary';
                     var handler = typeof v.handler == 'function' ? v.handler : null;
                 } else {
                     var caption = k;
-                    var btnType = 0 == cnt ? 'primary' : 'default';
+                    var btnType = 0 == cnt ? 'primary' : 'secondary';
                     var handler = typeof v == 'function' ? v : null;
                 }
                 var btnid = id + '_btn_' + caption.replace(/\W+/g, "-").toLowerCase();

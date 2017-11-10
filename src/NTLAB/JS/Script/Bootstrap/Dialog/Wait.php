@@ -45,7 +45,7 @@ class Wait extends Base
 {
     protected function configure()
     {
-        $this->addDependencies('JQuery.NS');
+        $this->addDependencies('JQuery.NS', 'FontAwesome');
         $this->setPosition(Repository::POSITION_FIRST);
     }
 
@@ -66,14 +66,16 @@ $.define('wDialog', {
         if (null === self.d) {
             var content =
                 '<div id="' + self.id + '" class="modal fade" tabindex="-1" role="dialog">' +
-                  '<div class="modal-dialog" role="document">' +
+                  '<div class="modal-dialog h-100 d-flex flex-column justify-content-center my-0" role="document">' +
                     '<div class="modal-content">' +
-                      '<div class="modal-header">' +
-                        '<h4 class="modal-title">$title</h4>' +
-                      '</div>' +
+                      '<div class="modal-header">$title</div>' +
                       '<div class="modal-body">' +
-                        '<div class="pull-left"><span class="glyphicon glyphicon-time"></span>&nbsp;</div>' +
-                        '<div class="msg">$message</div>' +
+                        '<div class="media">' +
+                          '<div class="icon mr-3"><i class="fa fa-spinner fa-pulse fa-fw fa-2x"></i></div>' +
+                          '<div class="media-body">' +
+                            '<div class="msg">$message</div>' +
+                          '</div>' +
+                        '</div>' +
                       '</div>' +
                     '</div>' +
                   '</div>' +

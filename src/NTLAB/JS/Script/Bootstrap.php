@@ -44,6 +44,7 @@ class Bootstrap extends JQuery
     protected function configure()
     {
         $this->setAsset(new Asset($this->repository, array(Asset::ASSET_JAVASCRIPT => 'js', Asset::ASSET_STYLESHEET => 'css')));
+        $this->addDependencies(array('Popper'));
         $this->addAsset(Asset::ASSET_JAVASCRIPT, 'bootstrap.min');
         $this->addAsset(Asset::ASSET_STYLESHEET, 'bootstrap.min');
     }

@@ -58,8 +58,8 @@ class FormPost extends Base
             'defaultError' => 1,
             'parentSelector' => '.form-group',
             'parentClass' => 'has-error',
-            'errClass' => 'x-error',
-            'toggleClass' => 'hidden',
+            'errClass' => 'is-invalid',
+            'toggleClass' => 'd-none',
             'inplace' => new Escaper(<<<EOF
 function(el, error) {
             // don't add tooltip on hidden input
@@ -68,7 +68,7 @@ function(el, error) {
             }
             var tooltip = el.data('bs.tooltip');
             if (tooltip != undefined) {
-                tooltip.options.title = error;
+                tooltip.config.title = error;
             } else {
                 el.tooltip({title: error, placement: 'right'});
             }
