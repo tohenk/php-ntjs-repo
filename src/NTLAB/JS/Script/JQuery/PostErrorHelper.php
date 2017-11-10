@@ -174,6 +174,9 @@ $.errhelper = function(container, options) {
                 if (self.listClass) {
                     self.container.find('.' + self.listClass).remove();
                 }
+                if (self.errClass) {
+                    self.container.find('.' + self.errClass).removeClass(self.errClass);
+                }
                 if (self.parentClass) {
                     if (self.parentSelector) {
                         self.container.find(self.parentSelector).removeClass(self.parentClass);
