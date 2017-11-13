@@ -80,7 +80,7 @@ class Popper extends Base
             case static::ESM:
                 $this->getAsset()->setPath(Asset::ASSET_JAVASCRIPT, static::ESM);
                 break;
-            case static::ESM:
+            case static::ESNext:
                 $this->getAsset()->setPath(Asset::ASSET_JAVASCRIPT, static::ESNext);
                 break;
         }
