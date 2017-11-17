@@ -66,7 +66,7 @@ $.define('wDialog', {
         if (null === self.d) {
             var content =
                 '<div id="' + self.id + '" class="modal fade" tabindex="-1" role="dialog">' +
-                  '<div class="modal-dialog h-100 d-flex flex-column justify-content-center my-0" role="document">' +
+                  '<div class="modal-dialog" role="document">' +
                     '<div class="modal-content">' +
                       '<div class="modal-header">$title</div>' +
                       '<div class="modal-body">' +

@@ -66,7 +66,7 @@ $.define('ntdlg', {
     ICON_INPUT: 'pencil',
     dialogTmpl:
         '<div id="%ID%" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="%ID%-title">' +
-          '<div class="%MODAL% h-100 d-flex flex-column justify-content-center my-0" role="document">' +
+          '<div class="%MODAL%" role="document">' +
             '<div class="modal-content">' +
               '<div class="modal-header">' +
                 '<h5 id="%ID%-title" class="modal-title">%TITLE%</h5>' +
