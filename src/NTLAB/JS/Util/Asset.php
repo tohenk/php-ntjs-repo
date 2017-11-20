@@ -39,6 +39,7 @@ class Asset
     const ASSET_JAVASCRIPT = 'js';
     const ASSET_STYLESHEET = 'css';
     const ASSET_IMAGE = 'img';
+    const ASSET_OTHER = 'other';
 
     /**
      * @var \NTLAB\JS\Manager
