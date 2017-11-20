@@ -57,7 +57,7 @@ $.define('dlgresize', {
         var w = $(parent.window);
         var dlg = self.pIframe.parents('.modal-dialog');
         var maxheight = w.height() - (self.pIframe.parents('.modal-content').height() -
-            self.pIframe.parents('.modal-body').height()) - (16 * 2);
+            self.pIframe.parents('.modal-body').height()) - (30 * 2);
         var h = null;
         if (grow) {
             if (self.bd.height() > self.pIframe.height()) {
