@@ -84,6 +84,15 @@ $.errhelper = function(container, options) {
             el.show();
             if (self.toggleClass) el.removeClass(self.toggleClass);
         },
+        addErrorClass: function(el) {
+            var self = this;
+            if (self.errClass) {
+                if (el.is('input[type="hidden"]')) {
+                    var el = el.siblings('input');
+                }
+                el.addClass(self.errClass);
+            }
+        },
         addError: function(err, el, errtype) {
             var self = this;
             var errtype = errtype ? errtype : self.ERROR_REPLACE;
@@ -92,9 +101,7 @@ $.errhelper = function(container, options) {
                     var error = self.getError(err, null, ', ');
                     if (error.length) {
                         el.html(error);
-                        if (self.errClass) {
-                            el.addClass(self.errClass);
-                        }
+                        self.addErrorClass(el);
                         self.showError(el);
                     }
                     break;
@@ -102,9 +109,7 @@ $.errhelper = function(container, options) {
                     var error = self.getError(err, null, ', ');
                     if (typeof self.inplace == 'function') {
                         self.inplace(el, error);
-                        if (self.errClass) {
-                            el.addClass(self.errClass);
-                        }
+                        self.addErrorClass(el);
                     }
                     break;
                 case self.ERROR_ASLIST:
@@ -115,9 +120,7 @@ $.errhelper = function(container, options) {
                     } else {
                         $('<ul class="' + self.listClass + '">' + error + '</ul>').appendTo(el);
                     }
-                    if (self.errClass) {
-                        el.addClass(self.errClass);
-                    }
+                    self.addErrorClass(el);
                     self.showError(el);
                     break;
                 default:
@@ -141,7 +144,11 @@ $.errhelper = function(container, options) {
                         }
                     }
                     if (helper.focused == null) {
-                        helper.focused = el;
+                        if (el.is('input[type="hidden"]')) {
+                            helper.focused = el.siblings('input');
+                        } else {
+                            helper.focused = el;
+                        }
                     }
                 } else {
                     var err = err[0] + ': ' + err[1];
