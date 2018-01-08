@@ -174,7 +174,7 @@ $.define('ntdlg', {
     dialog: function(id, title, message, modal, icon, buttons, close_cb) {
         var self = this;
         var modal = modal || true;
-        var icon = icon || 'info-sign';
+        var icon = icon || self.ICON_INFO;
         var buttons = buttons || [];
         var message = $.util.template(self.messageTmpl, {
             ICON: $.util.template(self.iconTmpl, {ICON: icon}),
