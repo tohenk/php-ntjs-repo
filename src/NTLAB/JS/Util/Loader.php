@@ -94,7 +94,7 @@ class Loader
             $css[] = $manager->getBackend()->asset($file, BackendInterface::ASSET_CSS);
         }
         if (count($js) || count($css)) {
-            $assets = Escaper::escape(array('js' => $js, 'css' => $css));
+            $assets = JSValue::create(array('js' => $js, 'css' => $css));
             $script = $manager->compress(<<<EOF
 document.ntloader = {
     parent: document.head ? document.head : document.body,

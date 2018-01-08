@@ -28,7 +28,7 @@ namespace NTLAB\JS\Script\JQuery\Dialog;
 
 use NTLAB\JS\Script\JQuery\UI as Base;
 use NTLAB\JS\Repository;
-use NTLAB\JS\Util\Escaper;
+use NTLAB\JS\Util\JSValue;
 
 /**
  * JQuery UI iframe dialog.
@@ -129,8 +129,8 @@ EOF;
     public function call($title, $content, $url, $options = array())
     {
         $dlg = isset($options['dialog_id']) ? $options['dialog_id'] : $this->getDlgId();
-        $height = Escaper::escape(isset($options['height']) ? $options['height'] : 500);
-        $width = Escaper::escape(isset($options['width']) ? $options['width'] : 600);
+        $height = isset($options['height']) ? $options['height'] : 500;
+        $width = isset($options['width']) ? $options['width'] : 600;
         $modal = isset($options['modal']) ? ($options['modal'] ? 'true' : 'false') : 'true';
         $overflow = isset($options['overflow']) ? $options['overflow'] : 'hidden';
         unset($options['dialog_id'], $options['height'], $options['width'], $options['modal'], $options['overflow']);
@@ -141,14 +141,14 @@ EOF;
             unset($options['query_string']);
         }
 
-        $iframeOptions = Escaper::escape(array(
+        $iframeOptions = JSValue::create(array(
             'title'     => $title,
             'modal'     => $modal,
             'h'         => $height,
             'w'         => $width,
             'overflow'  => $overflow,
             'close_cb'  => '$.ntdlg.closeIframe'.$dlg,
-        ), null, 1);
+        ))->setIndent(1);
 
         $this->includeScript();
         $this->useScript(<<<EOF

@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2018 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -37,89 +37,6 @@ class Escaper
      * @var string
      */
     protected static $eol = "\n";
-
-    /**
-     * @var int
-     */
-    protected $indent = 0;
-
-    /**
-     * @var string
-     */
-    protected $content = null;
-
-    /**
-     * @var string
-     */
-    protected $callback = null;
-
-    /**
-     * @var array
-     */
-    protected $args = array();
-
-    /**
-     * Constructor.
-     *
-     * @param string $content  The script content
-     * @param int $indent  The identation size
-     */
-    public function __construct($content = null, $indent = null)
-    {
-        $this->content = $content;
-        if (null !== $indent) {
-            $this->setIndent($indent);
-        }
-    }
-
-    /**
-     * Set the indentation size.
-     *
-     * @param int $indent  The size of indent
-     * @return \NTLAB\JS\Util\Escaper
-     */
-    public function setIndent($indent)
-    {
-        $this->indent = $indent;
-
-        return $this;
-    }
-
-    /**
-     * Get the indentation size.
-     *
-     * @return int The size of indent
-     */
-    public function getIndent()
-    {
-        return $this->indent;
-    }
-
-    /**
-     * Set the callback.
-     *
-     * @param array $callback  The callback
-     * @return \NTLAB\JS\Util\Escaper
-     */
-    public function setCallback($callback)
-    {
-        $this->callback = $callback;
-
-        return $this;
-    }
-
-    /**
-     * Set the callback arguments.
-     *
-     * @param array $args  The arguments
-     * @return \NTLAB\JS\Util\Escaper
-     */
-    public function setArgs($args = array())
-    {
-        $this->args = $args;
-
-        return $this;
-    }
 
     /**
      * Get EOL delimeter.
@@ -170,7 +87,7 @@ class Escaper
                         }
                         $result = $akey.': ';
                     }
-                    $result .= self::escape($v, $k, $indent + 1, $inline);
+                    $result .= self::escape($v, $k, $indent + 1, $v instanceof JSValue && null !== $v->isInline() ? $v->isInline() : $inline);
                     $values[] = $result;
                 }
                 // implode all array values
@@ -178,7 +95,7 @@ class Escaper
                 $value = sprintf($numKeys ? '[%s]' : '{%s}', $value);
             }
         } else {
-            if ($value instanceof self) {
+            if ($value instanceof JSValue) {
                 $value->setIndent($indent);
             } else if (null !== $key && !is_object($value)) {
                 $value = self::escapeValue($value, self::escapeExcept($key, $value));
@@ -252,15 +169,5 @@ class Escaper
     public static function padLeft($size = 0)
     {
         return str_repeat(' ', $size * 4);
-    }
-
-    public function __toString()
-    {
-        if (null !== $this->content) {
-            return $this->content;
-        }
-        if (is_callable($this->callback)) {
-            return call_user_func_array($this->callback, $this->args);
-        }
     }
 }

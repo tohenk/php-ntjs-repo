@@ -3,6 +3,7 @@
 namespace NTLAB\JS\Test;
 
 use NTLAB\JS\Util\Escaper;
+use NTLAB\JS\Util\JSValue;
 
 class EscaperTest extends BaseTest
 {
@@ -29,6 +30,6 @@ class EscaperTest extends BaseTest
     test: function(){}
 }
 EOF
-, Escaper::escape(array('test' => new Escaper('function(){}'))), 'Proper escape nested');
+, Escaper::escape(array('test' => new JSValue('function(){}'))), 'Proper escape nested');
     }
 }

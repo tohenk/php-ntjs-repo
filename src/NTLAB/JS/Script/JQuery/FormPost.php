@@ -28,7 +28,7 @@ namespace NTLAB\JS\Script\JQuery;
 
 use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
-use NTLAB\JS\Util\Escaper;
+use NTLAB\JS\Util\JSValue;
 
 /**
  * Handling form submission using ajax.
@@ -63,7 +63,7 @@ class FormPost extends Base
         $error = $this->trans('Error');
         $ok = $this->trans('OK');
         $message = $this->trans('Please wait while your data being saved.');
-        $options = Escaper::escape($this->getErrHelperOptions(), null, 1);
+        $options = JSValue::create($this->getErrHelperOptions())->setIndent(1);
 
         return <<<EOF
 $.formpost = function(form, options) {
@@ -262,7 +262,7 @@ EOF;
         if (null !== $message) {
             $options['message'] = $this->trans($message);
         }
-        $options = Escaper::escape($options);
+        $options = JSValue::create($options);
 
         $this->useScript(<<<EOF
 $.formpost($('$selector'), $options);

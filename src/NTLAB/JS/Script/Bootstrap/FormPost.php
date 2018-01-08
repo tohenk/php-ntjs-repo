@@ -27,7 +27,7 @@
 namespace NTLAB\JS\Script\Bootstrap;
 
 use NTLAB\JS\Script\JQuery\FormPost as Base;
-use NTLAB\JS\Util\Escaper;
+use NTLAB\JS\Util\JSValue;
 
 /**
  * Handling form submission using ajax.
@@ -60,7 +60,7 @@ class FormPost extends Base
             'parentClass' => 'has-error',
             'errClass' => 'is-invalid',
             'toggleClass' => 'd-none',
-            'inplace' => new Escaper(<<<EOF
+            'inplace' => JSValue::createRaw(<<<EOF
 function(el, error) {
             // don't add tooltip on hidden input
             if (el.is('input[type="hidden"]')) {
@@ -75,7 +75,7 @@ function(el, error) {
         }
 EOF
             ),
-            'onErrReset' => new Escaper(<<<EOF
+            'onErrReset' => JSValue::createRaw(<<<EOF
 function(helper) {
             if (helper.container) {
                 helper.container.find(helper.parentSelector + ' .' + helper.errClass).each(function() {

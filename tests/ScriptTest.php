@@ -5,7 +5,6 @@ namespace NTLAB\JS\Test;
 use NTLAB\JS\Manager;
 use NTLAB\JS\Backend;
 use NTLAB\JS\Script;
-use NTLAB\JS\Util\Escaper;
 
 class ScriptTest extends BaseTest
 {
