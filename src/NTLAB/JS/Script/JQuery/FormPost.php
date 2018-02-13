@@ -192,7 +192,9 @@ $.formpost = function(form, options) {
                     }
                     form.trigger('formsaved', [json]);
                 }, function(json) {
-                    self.onalways();
+                    if (typeof self.onalways == 'function') {
+                        self.onalways();
+                    }
                     var f = function() {
                         self.errhelper.focusError();
                         form.trigger('formerror');
@@ -206,9 +208,7 @@ $.formpost = function(form, options) {
                             if (self.errhelper.errorContainer) {
                                 self.errhelper.errorContainer.removeClass('hidden');
                                 self.errhelper.addError(json.global, self.errhelper.errorContainer, self.errhelper.ERROR_ASLIST);
-                            }
-                            else
-                            {
+                            } else {
                                 // concate error as part of error mesage
                             }
                         }
