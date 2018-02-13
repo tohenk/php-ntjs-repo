@@ -61,6 +61,7 @@ $.define('wDialog', {
     d: null,
     id: 'wdialog',
     active: false,
+    visible: false,
     create: function() {
         var self = this;
         if (null === self.d) {
@@ -82,28 +83,41 @@ $.define('wDialog', {
                 '</div>';
             $(document.body).append(content);
             self.d = $('#' + self.id);
-            self.d.modal({keyboard: false});
-            self.d.on('shown.bs.modal', function(e) {
+            self.d.on('show.bs.modal', function(e) {
                 self.active = true;
             });
-            self.d.on('hidden.bs.modal', function(e) {
+            self.d.on('shown.bs.modal', function(e) {
+                self.visible = true;
+                if (!self.active) {
+                    $.ntdlg.close($(this));
+                }
+            });
+            self.d.on('hide.bs.modal', function(e) {
                 self.active = false;
             });
+            self.d.on('hidden.bs.modal', function(e) {
+                self.visible = false;
+            });
+            self.d.modal({keyboard: false});
         }
     },
-    show: function(msg) {
+    show: function(msg, callback) {
         var self = this;
-        if (self.active) self.close();
+        if (self.visible) self.close();
         self.create();
         if (msg) {
             self.d.find('.modal-body .msg').html(msg);
         }
         $.ntdlg.show(self.d);
     },
-    close: function() {
+    close: function(callback) {
         var self = this;
         if (self.d) {
-            $.ntdlg.close(self.d);
+            if (self.visible) {
+                $.ntdlg.close(self.d);
+            } else {
+                self.active = false;
+            }
         }
     }
 });
