@@ -65,6 +65,11 @@ abstract class Script
     protected static $maps = array();
 
     /**
+     * @var array
+     */
+    protected static $defaultOptions = array();
+
+    /**
      * @var \NTLAB\JS\Util\Asset
      */
     protected $defaultAsset = null;
@@ -111,7 +116,8 @@ abstract class Script
         }
         if (!isset(static::$maps[$name]['obj'])) {
             $class = static::$maps[$name]['class'];
-            static::$maps[$name]['obj'] = new $class();
+            $options = isset(static::$defaultOptions[$name]) ? static::$defaultOptions[$name] : array();
+            static::$maps[$name]['obj'] = new $class($options);
         }
 
         return static::$maps[$name]['obj'];
@@ -160,10 +166,24 @@ abstract class Script
     }
 
     /**
-     * Constructor.
+     * Add script default options.
+     *
+     * @param string $name  The script name
+     * @param array $options  Script options
      */
-    public function __construct()
+    public static function addOptions($name, $options)
     {
+        static::$defaultOptions[$name] = $options;
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param array $options
+     */
+    public function __construct($options = array())
+    {
+        $this->options = $options;
         $this->defaultAsset = new Asset($this->getRepositoryName());
         $this->initialize();
         $this->configure();

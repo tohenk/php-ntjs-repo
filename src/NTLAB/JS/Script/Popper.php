@@ -45,35 +45,9 @@ class Popper extends Base
      */
     protected $repository = 'popper.js';
 
-    /**
-     * @var string
-     */
-    protected $version = self::UMD;
-
     protected function configure()
     {
-        $this->setVersion($this->version);
-        $this->addAsset(Asset::ASSET_JAVASCRIPT, 'popper.min');
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \NTLAB\JS\Script::getRepositoryName()
-     */
-    protected function getRepositoryName()
-    {
-        return $this->repository;
-    }
-
-    /**
-     * Set version type.
-     *
-     * @param string $version Popper version to use
-     * @return \NTLAB\JS\Script\Popper
-     */
-    public function setVersion($version)
-    {
-        switch ($version) {
+        switch ($this->getOption('version', self::UMD)) {
             case static::UMD:
                 $this->getAsset()->setPath(Asset::ASSET_JAVASCRIPT, static::UMD);
                 break;
@@ -84,7 +58,15 @@ class Popper extends Base
                 $this->getAsset()->setPath(Asset::ASSET_JAVASCRIPT, static::ESNext);
                 break;
         }
+        $this->addAsset(Asset::ASSET_JAVASCRIPT, 'popper.min');
+    }
 
-        return $this;
+    /**
+     * {@inheritDoc}
+     * @see \NTLAB\JS\Script::getRepositoryName()
+     */
+    protected function getRepositoryName()
+    {
+        return $this->repository;
     }
 }
