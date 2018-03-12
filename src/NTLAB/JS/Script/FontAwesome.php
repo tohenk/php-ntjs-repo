@@ -38,7 +38,11 @@ class FontAwesome extends Base
 {
     protected function configure()
     {
-        $this->setAsset(new Asset('font-awesome', array(Asset::ASSET_STYLESHEET => 'css')));
-        $this->addAsset(Asset::ASSET_STYLESHEET, 'font-awesome.min');
+        $this->setAsset(new Asset('fontawesome', array(Asset::ASSET_STYLESHEET => 'css', Asset::ASSET_JAVASCRIPT => 'js')));
+        if ($this->getOption('use_svg', true)) {
+            $this->addAsset(Asset::ASSET_JAVASCRIPT, 'fontawesome-all.min');
+        } else {
+            $this->addAsset(Asset::ASSET_STYLESHEET, 'fontawesome-all.min');
+        }
     }
 }

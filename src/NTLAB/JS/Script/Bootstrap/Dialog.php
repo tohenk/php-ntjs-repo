@@ -58,12 +58,12 @@ class Dialog extends Base
 
         return <<<EOF
 $.define('ntdlg', {
-    ICON_INFO: 'info',
-    ICON_ALERT: 'exclamation',
-    ICON_ERROR: 'remove',
-    ICON_SUCCESS: 'check',
-    ICON_QUESTION: 'question',
-    ICON_INPUT: 'pencil',
+    ICON_INFO: 'fas fa-info-circle',
+    ICON_ALERT: 'fas fa-exclamation-circle',
+    ICON_ERROR: 'fas fa-times-circle',
+    ICON_SUCCESS: 'fas fa-check-circle',
+    ICON_QUESTION: 'fas fa-question-circle',
+    ICON_INPUT: 'fas fa-edit',
     dialogTmpl:
         '<div id="%ID%" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="%ID%-title">' +
           '<div class="%MODAL%" role="document">' +
@@ -78,7 +78,7 @@ $.define('ntdlg', {
           '</div>' +
         '</div>',
     iconTmpl:
-        '<span class="dialog-icon fa fa-%ICON% fa-fw fa-2x"></span>',
+        '<span class="dialog-icon %ICON% fa-fw fa-2x"></span>',
     messageTmpl:
         '<div class="media">' +
           '<div class="p-2 mr-1">%ICON%</div>' +
