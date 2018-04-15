@@ -109,7 +109,6 @@ document.ntloader = {
                 if ('link' == tag) {
                     if (!el.hasAttribute('rel') || 'stylesheet' !== el.getAttribute('rel')) continue;
                     if (el.hasAttribute('href') && path == el.getAttribute('href')) {
-                        if (console) console.debug('Stylesheet "' + path + '" already loaded.');
                         return true;
                     }
                 }
@@ -117,7 +116,6 @@ document.ntloader = {
                 if ('script' == tag) {
                     if (!el.hasAttribute('type') || 'text/javascript' !== el.getAttribute('type')) continue;
                     if (el.hasAttribute('src') && path == el.getAttribute('src')) {
-                        if (console) console.debug('Javascript "' + path + '" already loaded.');
                         return true;
                     }
                 }
@@ -143,7 +141,6 @@ document.ntloader = {
         el.type = 'text/css';
         el.href = path;
         self.parent.appendChild(el);
-        if (console) console.debug('Stylesheet "' + path + '" queued.');
     },
     loadStylesheets: function(paths) {
         var self = this;
@@ -173,12 +170,10 @@ document.ntloader = {
             }
         }
         self.parent.appendChild(el);
-        if (console) console.debug('Javascript "' + path + '" queued.');
     },
     removeQueue: function(path) {
         var idx = this.scriptQueue.indexOf(path);
         if (idx >= 0) {
-            if (console) console.debug('Javascript "' + path + '" done.');
             this.scriptQueue.splice(idx, 1);
             this.processJavascriptQueue();
         }
