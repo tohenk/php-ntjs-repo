@@ -60,6 +60,7 @@ class FormPost extends Base
             'parentClass' => 'has-error',
             'errClass' => 'is-invalid',
             'toggleClass' => 'd-none',
+            'listClass' => 'list-unstyled mb-0',
             'inplace' => JSValue::createRaw(<<<EOF
 function(el, error) {
             // don't add tooltip on hidden input
