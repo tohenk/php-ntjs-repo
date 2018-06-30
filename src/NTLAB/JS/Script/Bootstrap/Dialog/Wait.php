@@ -33,11 +33,11 @@ use NTLAB\JS\Repository;
  * Bootstrap dialog to show a waiting dialog while in progress.
  *
  * Usage:
- * $.wDialog.show('I\'m doing something');
+ * $.ntdlg.wait('I\'m doing something');
  * // do something here
- * $.wDialog.show('I\'m doing another thing');
- * // do another thing here
- * $.wDialog.close();
+ * $.ntdlg.wait('I\'m doing another thing');
+ * // close wait dialog
+ * $.ntdlg.wait();
  *
  * @author Toha
  */
@@ -57,70 +57,79 @@ class Wait extends Base
         $height = 150;
 
         return <<<EOF
-$.define('wDialog', {
-    d: null,
-    id: 'wdialog',
-    active: false,
-    visible: false,
-    create: function() {
-        var self = this;
-        if (null === self.d) {
-            var content =
-                '<div id="' + self.id + '" class="modal fade" tabindex="-1" role="dialog">' +
-                  '<div class="modal-dialog" role="document">' +
-                    '<div class="modal-content">' +
-                      '<div class="modal-header">$title</div>' +
-                      '<div class="modal-body">' +
-                        '<div class="media">' +
-                          '<div class="icon mr-3"><i class="fas fa-spinner fa-pulse fa-fw fa-2x"></i></div>' +
-                          '<div class="media-body">' +
-                            '<div class="msg">$message</div>' +
+$.define('ntdlg', {
+    waitdlg: {
+        d: null,
+        id: 'wdialog',
+        active: false,
+        visible: false,
+        create: function() {
+            var self = this;
+            if (null === self.d) {
+                var content =
+                    '<div id="' + self.id + '" class="modal fade" tabindex="-1" role="dialog">' +
+                      '<div class="modal-dialog" role="document">' +
+                        '<div class="modal-content">' +
+                          '<div class="modal-header">$title</div>' +
+                          '<div class="modal-body">' +
+                            '<div class="media">' +
+                              '<div class="icon mr-3"><i class="fas fa-spinner fa-pulse fa-fw fa-2x"></i></div>' +
+                              '<div class="media-body">' +
+                                '<div class="msg">$message</div>' +
+                              '</div>' +
+                            '</div>' +
                           '</div>' +
                         '</div>' +
                       '</div>' +
-                    '</div>' +
-                  '</div>' +
-                '</div>';
-            $(document.body).append(content);
-            self.d = $('#' + self.id);
-            self.d.on('show.bs.modal', function(e) {
-                self.active = true;
-            });
-            self.d.on('shown.bs.modal', function(e) {
-                self.visible = true;
-                if (!self.active) {
-                    $.ntdlg.close($(this));
+                    '</div>';
+                $(document.body).append(content);
+                self.d = $('#' + self.id);
+                self.d.on('show.bs.modal', function(e) {
+                    self.active = true;
+                });
+                self.d.on('shown.bs.modal', function(e) {
+                    self.visible = true;
+                    if (!self.active) {
+                        $.ntdlg.close($(this));
+                    }
+                });
+                self.d.on('hide.bs.modal', function(e) {
+                    self.active = false;
+                });
+                self.d.on('hidden.bs.modal', function(e) {
+                    self.visible = false;
+                });
+                self.d.modal({keyboard: false});
+            }
+        },
+        show: function(msg) {
+            var self = this;
+            if (self.visible) self.close();
+            self.create();
+            if (msg) {
+                self.d.find('.modal-body .msg').html(msg);
+            }
+            $.ntdlg.show(self.d);
+        },
+        close: function() {
+            var self = this;
+            if (self.d) {
+                if (self.visible) {
+                    $.ntdlg.close(self.d);
+                } else {
+                    self.active = false;
                 }
-            });
-            self.d.on('hide.bs.modal', function(e) {
-                self.active = false;
-            });
-            self.d.on('hidden.bs.modal', function(e) {
-                self.visible = false;
-            });
-            self.d.modal({keyboard: false});
-        }
-    },
-    show: function(msg, callback) {
-        var self = this;
-        if (self.visible) self.close();
-        self.create();
-        if (msg) {
-            self.d.find('.modal-body .msg').html(msg);
-        }
-        $.ntdlg.show(self.d);
-    },
-    close: function(callback) {
-        var self = this;
-        if (self.d) {
-            if (self.visible) {
-                $.ntdlg.close(self.d);
-            } else {
-                self.active = false;
             }
         }
+    },
+    wait: function(message) {
+        if (message) {
+            $.ntdlg.waitdlg.show(message);
+        } else {
+            $.ntdlg.waitdlg.close();
+        }
     }
-});
+}, true);
 EOF;
     }
 }

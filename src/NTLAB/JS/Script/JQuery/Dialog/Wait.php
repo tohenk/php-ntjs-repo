@@ -33,11 +33,11 @@ use NTLAB\JS\Repository;
  * JQuery UI wait dialog to show a waiting dialog while in progress.
  *
  * Usage:
- * $.wDialog.show('I\'m doing something');
+ * $.ntdlg.wait('I\'m doing something');
  * // do something here
- * $.wDialog.show('I\'m doing another thing');
- * // do another thing here
- * $.wDialog.close();
+ * $.ntdlg.wait('I\'m doing another thing');
+ * // close wait dialog
+ * $.ntdlg.wait();
  *
  * @author Toha
  */
@@ -57,50 +57,58 @@ class Wait extends Base
         $height = 150;
 
         return <<<EOF
-$.define('wDialog', {
-    d: null,
-    active: false,
-    hideOverflow: null,
-    create: function() {
-        if (null === this.d) {
-            $(document.body).append('<div id="wdialog" title="$title">$message</div>');
-            this.d = $('#wdialog').dialog({
-                autoOpen: false,
-                modal: true,
-                width: $width,
-                height: $height,
-                button: [],
-                create: function() {
-                    if ($.wDialog.hideOverflow) {
-                        $.overflow.hide();
+$.define('ntdlg', {
+    waitdlg: {
+        d: null,
+        active: false,
+        create: function() {
+            if (null === this.d) {
+                $(document.body).append('<div id="wdialog" title="$title">$message</div>');
+                this.d = $('#wdialog').dialog({
+                    autoOpen: false,
+                    modal: true,
+                    width: $width,
+                    height: $height,
+                    button: [],
+                    create: function() {
+                        if ($.ntdlg.hideOverflow) {
+                            $.overflow.hide();
+                        }
+                    },
+                    open: function() {
+                        $.ntdlg.waitdlg.active = true;
+                    },
+                    close: function() {
+                        $.ntdlg.waitdlg.active = false;
+                        if ($.ntdlg.hideOverflow) {
+                            $.overflow.restore();
+                        }
                     }
-                },
-                open: function() {
-                    $.wDialog.active = true;
-                },
-                close: function() {
-                    $.wDialog.active = false;
-                    if ($.wDialog.hideOverflow) {
-                        $.overflow.restore();
-                    }
-                }
-            });
+                });
+            }
+        },
+        show: function(msg) {
+            if (this.active) this.close();
+            this.create();
+            if (msg) {
+                $(this.d).text(msg);
+            }
+            $.ntdlg.show(this.d);
+        },
+        close: function() {
+            if (this.d) {
+                $.ntdlg.close(this.d);
+            }
         }
     },
-    show: function(msg) {
-        if (this.active) this.close();
-        this.create();
-        if (msg) {
-            $(this.d).text(msg);
-        }
-        $.ntdlg.show(this.d);
-    },
-    close: function() {
-        if (this.d) {
-            $.ntdlg.close(this.d);
+    wait: function(message) {
+        if (message) {
+            $.ntdlg.waitdlg.show(message);
+        } else {
+            $.ntdlg.waitdlg.close();
         }
     }
-});
+}, true);
 EOF;
     }
 }

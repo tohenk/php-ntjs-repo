@@ -173,12 +173,17 @@ $.formpost = function(form, options) {
                 }
                 var url = self.url || form.attr('action');
                 if (self.progress) {
-                    $.wDialog.show(self.message);
+                    $.ntdlg.wait(self.message);
                 }
                 self.formPost(form, url, function(json) {
                     if (json.notice) {
                         if (json.redir) {
-                            $.ntdlg.dialog('form_post_success', '$title', json.notice, true, $.ntdlg.ICON_SUCCESS);
+                            var dlg = $.ntdlg.dialog('form_post_success', '$title', json.notice, true, $.ntdlg.ICON_SUCCESS);
+                            if (typeof $.fpRedir == 'function') {
+                                dlg.on('shown.bs.modal',  function() {
+                                    $.ntdlg.close($(this));
+                                });
+                            }
                         } else {
                             $.ntdlg.dialog('form_post_success', '$title', json.notice, true, $.ntdlg.ICON_SUCCESS, {
                                 '$ok': function() {
@@ -188,7 +193,11 @@ $.formpost = function(form, options) {
                         }
                     }
                     if (json.redir) {
-                        window.location.href = json.redir;
+                        if (typeof $.fpRedir == 'function') {
+                            $.fpRedir(json.redir);
+                        } else {
+                            window.location.href = json.redir;
+                        }
                     }
                     form.trigger('formsaved', [json]);
                 }, function(json) {
@@ -238,7 +247,7 @@ $.formpost = function(form, options) {
     fp.errhelper = $.errhelper(form, $options);
     fp.onalways = function() {
         if (fp.progress) {
-            $.wDialog.close();
+            $.ntdlg.wait();
         }
     }
 
