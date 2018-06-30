@@ -40,9 +40,9 @@ class FontAwesome extends Base
     {
         $this->setAsset(new Asset('fontawesome', array(Asset::ASSET_STYLESHEET => 'css', Asset::ASSET_JAVASCRIPT => 'js')));
         if ($this->getOption('use_svg', true)) {
-            $this->addAsset(Asset::ASSET_JAVASCRIPT, 'fontawesome-all.min');
+            $this->addAsset(Asset::ASSET_JAVASCRIPT, 'all');
         } else {
-            $this->addAsset(Asset::ASSET_STYLESHEET, 'fontawesome-all.min');
+            $this->addAsset(Asset::ASSET_STYLESHEET, 'all');
         }
     }
 }
