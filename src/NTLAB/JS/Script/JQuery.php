@@ -71,10 +71,6 @@ class JQuery extends Base
 {
     protected function initialize()
     {
-        $this->getAsset()
-          ->setPath(Asset::ASSET_JAVASCRIPT, 'js')
-          ->setPath(Asset::ASSET_STYLESHEET, 'css')
-        ;
         $this->addAsset(Asset::ASSET_JAVASCRIPT, 'jquery.min');
     }
 
