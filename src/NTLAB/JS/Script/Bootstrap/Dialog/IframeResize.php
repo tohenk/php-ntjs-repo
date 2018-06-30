@@ -49,45 +49,53 @@ class IframeResize extends Base
     {
         return <<<EOF
 $.define('dlgresize', {
-    bd: $(document.body),
-    pIframe: $(parent.document.body).find('div.ui-dialog-iframe-container iframe'),
-    oHeight: null,
+    pIframe: null,
     resize: function(grow) {
         var self = this;
-        var w = $(parent.window);
-        var dlg = self.pIframe.parents('.modal-dialog');
-        var maxheight = w.height() - (self.pIframe.parents('.modal-content').height() -
-            self.pIframe.parents('.modal-body').height()) - (30 * 2);
-        var h = null;
-        if (grow) {
-            if (self.bd.height() > self.pIframe.height()) {
-                if (self.bd.height() <= maxheight) {
-                    h = self.bd.height();
-                } else {
-                    h = maxheight;
-                }
-            }
-        } else {
-            if (self.bd.height() < maxheight) {
-                h = self.bd.height();
+        var dlg = parent.$(self.pIframe.parents('div.modal.show'));
+        if (!dlg.length) return;
+        var maxheight = dlg.height() - 60;
+        var mc = dlg.find('.modal-content');
+        var header = mc.find('.modal-header');
+        if (header.length) maxheight -= header.outerHeight(true);
+        var footer = mc.find('.modal-footer');
+        if (footer.length) maxheight -= footer.outerHeight(true);
+        var bd = mc.find('.modal-body');
+        if (bd.length) maxheight -= (bd.outerHeight(true) - bd.height());
+        var isIframe = self.pIframe[0].nodeName == 'IFRAME';
+        var bd = isIframe ? $(document.body) : mc.find('.modal-body');
+        var h;
+        if (grow || grow == undefined) {
+            if (isIframe) {
+                h = Math.min(maxheight, bd.height());
+            } else if (bd.height() > maxheight) {
+                h = maxheight;
             }
         }
-        if (h != null) {
-            self.pIframe.height(h);
+        if (!grow) {
+            if (isIframe && bd.height() < maxheight) h = bd.height();
+        }
+        if (h) {
+            if (!isIframe && bd.height() > h) {
+                self.pIframe.css({'max-height': h, 'overflow-y': 'auto'});
+            }
+            self.pIframe.css({'height': h});
         }
     },
     init: function() {
         // bootstrap modal always resized to its content
         var self = this;
-        self.resize(false);
-        self.resize(true);
+        self.pIframe = $(parent.document.body).find('div.ui-dialog-iframe-container iframe');
+        if (!self.pIframe.length) {
+            self.pIframe = $('div.modal.show div.ui-dialog-iframe-container:last');
+        }
+        self.resize();
         $.formErrorHandler = function() {
             self.resize(true);
         }
     }
 });
-EOF
-;
+EOF;
     }
 
     public function getInitScript()

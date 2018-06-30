@@ -52,7 +52,7 @@ class Iframe extends Base
 
     protected function configure()
     {
-        $this->addDependencies('JQuery.NS', 'JQuery.Util', 'Bootstrap.Dialog');
+        $this->addDependencies('JQuery.NS', 'JQuery.Util', 'Bootstrap.Dialog', 'Bootstrap.Dialog.IframeLoader');
         $this->setPosition(Repository::POSITION_FIRST);
         if (null === self::$dlg_rand) {
             self::$dlg_rand = mt_rand();
@@ -67,19 +67,16 @@ $.define('ntdlg', {
         var self = this;
         var options = options || {};
         var title = options.title || '';
-        var w = options.w || 600;
-        var h = options.h || 500;
         var modal = options.modal || true;
         var overflow = options.overflow || 'hidden';
         var close_cb = options.close_cb || null;
+        var ajax = options.ajax || true;
+        url += (url.indexOf('?') > -1 ? '&' : '?') + '&closecb=' + (close_cb ? close_cb : '') + '&_dialog=1';
         var params = {
             modal: modal ? true : false,
             buttons: [],
             'shown.bs.modal': function() {
-                var d = $(this).find('.modal-body');
-                url += (url.indexOf('?') > -1 ? '&' : '?') + 'w=' + w + '&h=' + h + '&closecb=' + (close_cb ? close_cb : '') + '&_dialog=1';
-                d.html('<iframe src="' + url + '" frameborder="0" hspace="0" width="100%" height="' + h + '" style="overflow: ' + overflow + ';"></iframe>');
-                d.addClass('ui-dialog-iframe-container');
+                $.ntdlg.iframeLoader($(this), {ajax: ajax, url: url});
             }
         }
         var opts = ['size', 'closable', 'backdrop', 'keyboard', 'show', 'remote'];
@@ -112,8 +109,6 @@ EOF;
     public function call($title, $content, $url, $options = array())
     {
         $dlg = isset($options['dialog_id']) ? $options['dialog_id'] : $this->getDlgId();
-        $height = isset($options['height']) ? $options['height'] : 350;
-        $width = isset($options['width']) ? $options['width'] : 600;
         $modal = isset($options['modal']) ? ($options['modal'] ? true : false) : true;
         $overflow = isset($options['overflow']) ? $options['overflow'] : 'hidden';
         $size = isset($options['size']) ? $options['size'] : null;
@@ -129,8 +124,6 @@ EOF;
         $iframeOptions = JSValue::create(array(
             'title'     => $title,
             'modal'     => $modal,
-            'h'         => $height,
-            'w'         => $width,
             'overflow'  => $overflow,
             'size'      => $size,
             'close_cb'  => '$.ntdlg.closeIframe'.$dlg,
