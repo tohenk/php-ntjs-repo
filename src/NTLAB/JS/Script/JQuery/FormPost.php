@@ -206,7 +206,7 @@ $.formpost = function(form, options) {
                     }
                     var f = function() {
                         self.errhelper.focusError();
-                        form.trigger('formerror');
+                        form.trigger('formerror', [json]);
                         if (typeof $.formErrorHandler == 'function') {
                             $.formErrorHandler(form);
                         }
@@ -215,7 +215,6 @@ $.formpost = function(form, options) {
                         var err = json.error_msg;
                         if (json.global && json.global.length) {
                             if (self.errhelper.errorContainer) {
-                                self.errhelper.errorContainer.removeClass('hidden');
                                 self.errhelper.addError(json.global, self.errhelper.errorContainer, self.errhelper.ERROR_ASLIST);
                             } else {
                                 // concate error as part of error mesage
