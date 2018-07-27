@@ -83,7 +83,7 @@ class JQuery extends Base
     {
         $repo
             ->setWrapper(<<<EOF
-jQuery((function($) {
+(function($) {
     (function loader(f) {
         if (document.ntloader && !document.ntloader.isScriptLoaded()) {
             setTimeout(function() {
@@ -93,7 +93,7 @@ jQuery((function($) {
             f($);
         }
     })(function($) {%s});
-}(jQuery)));
+})(jQuery);
 EOF
             )
             ->setWrapSize(2)
