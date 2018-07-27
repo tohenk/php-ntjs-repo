@@ -55,7 +55,6 @@ $.define('util', {
             var re = new RegExp('%' + n + '%', 'g');
             tmpl = tmpl.replace(re, replaces[n]);
         }
-
         return tmpl;
     },
     copyProp: function(prop, src, dest, remove) {

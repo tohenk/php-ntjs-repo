@@ -55,7 +55,7 @@ class FormPost extends Base
     {
         return array(
             'errorContainer' => '.alert-danger',
-            'defaultError' => 1,
+            'errorFormat' => JSValue::createRaw('$.errformat.INPLACE'),
             'parentSelector' => '.form-group',
             'parentClass' => 'has-error',
             'errClass' => 'is-invalid',
