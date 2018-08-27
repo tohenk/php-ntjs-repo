@@ -63,15 +63,19 @@ class FormPost extends Base
             'listClass' => 'list-unstyled mb-0',
             'inplace' => JSValue::createRaw(<<<EOF
 function(el, error) {
-            // don't add tooltip on hidden input
-            if (el.is('input[type="hidden"]')) {
-                var el = el.siblings('input');
-            }
-            var tooltip = el.data('bs.tooltip');
-            if (tooltip != undefined) {
-                tooltip.config.title = error;
+            if (el.hasClass('alert-danger')) {
+                el.html(error);
             } else {
-                el.tooltip({title: error, placement: 'right'});
+                // don't add tooltip on hidden input
+                if (el.is('input[type="hidden"]')) {
+                    var el = el.siblings('input');
+                }
+                var tooltip = el.data('bs.tooltip');
+                if (tooltip != undefined) {
+                    tooltip.config.title = error;
+                } else {
+                    el.tooltip({title: error, placement: 'right'});
+                }
             }
         }
 EOF
