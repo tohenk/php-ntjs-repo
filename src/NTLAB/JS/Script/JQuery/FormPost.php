@@ -176,6 +176,7 @@ $.formpost = function(form, options) {
                     $.ntdlg.wait(self.message);
                 }
                 self.formPost(form, url, function(json) {
+                    form.trigger('formsaved', [json]);
                     if (json.notice) {
                         if (json.redir) {
                             var dlg = $.ntdlg.dialog('form_post_success', '$title', json.notice, true, $.ntdlg.ICON_SUCCESS);
@@ -199,7 +200,6 @@ $.formpost = function(form, options) {
                             window.location.href = json.redir;
                         }
                     }
-                    form.trigger('formsaved', [json]);
                 }, function(json) {
                     if (typeof self.onalways == 'function') {
                         self.onalways();
