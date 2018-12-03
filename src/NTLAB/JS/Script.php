@@ -682,7 +682,7 @@ abstract class Script
      * @param int $priority  Priority
      * @return \NTLAB\JS\Script
      */
-    protected function addAsset($type, $name, $priority = null)
+    public function addAsset($type, $name, $priority = null)
     {
         $asset = $this->getAsset();
         $key = implode(':', array($type, $asset->getRepository(), $name));
@@ -702,12 +702,30 @@ abstract class Script
      * @param int $priority
      * @return \NTLAB\JS\Script
      */
-    protected function addLocaleAsset($type, $name, $culture = null, $priority = null)
+    public function addLocaleAsset($type, $name, $culture = null, $priority = null)
     {
         $asset = $this->getAsset();
         $key = implode(':', array($type, $asset->getRepository(), $name, $culture));
         if (!isset($this->assets[$key])) {
             $this->assets[$key] = array($type, $name, $asset, $priority, $culture);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove asset.
+     *
+     * @param string $type
+     * @param string $name
+     * @return \NTLAB\JS\Script
+     */
+    public function removeAsset($type, $name)
+    {
+        $asset = $this->getAsset();
+        $key = implode(':', array($type, $asset->getRepository(), $name));
+        if (isset($this->assets[$key])) {
+            unset($this->assets[$key]);
         }
 
         return $this;
