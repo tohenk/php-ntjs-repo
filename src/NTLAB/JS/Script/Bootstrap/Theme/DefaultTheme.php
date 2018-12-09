@@ -35,8 +35,4 @@ use NTLAB\JS\Script\Bootstrap;
  */
 class DefaultTheme extends Bootstrap
 {
-    protected function configure()
-    {
-        parent::configure();
-    }
 }
