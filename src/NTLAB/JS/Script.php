@@ -92,6 +92,11 @@ abstract class Script
     /**
      * @var array
      */
+    protected $props = array();
+
+    /**
+     * @var array
+     */
     protected static $priorities = array();
 
     /**
@@ -767,6 +772,32 @@ abstract class Script
     protected function url($url, $options = array())
     {
         return $this->getBackend()->url($url, $options);
+    }
+
+    /**
+     * Get property value.
+     *
+     * @param string $name  Property name
+     * @param mixed $default  Default values if property doesn't already set
+     * @return mixed
+     */
+    public function getProp($name, $default = null)
+    {
+        return isset($this->props[$name]) ? $this->props[$name] : $default;
+    }
+
+    /**
+     * Set property value.
+     *
+     * @param string $name  Property name
+     * @param mixed $value  Property value
+     * @return \NTLAB\JS\Script
+     */
+    public function setProp($name, $value)
+    {
+        $this->props[$name] = $value;
+
+        return $this;
     }
 
     /**
