@@ -73,7 +73,7 @@ $.define('ntdlg', {
                           '<div class="modal-header">$title</div>' +
                           '<div class="modal-body">' +
                             '<div class="media">' +
-                              '<div class="icon mr-3"><i class="fas fa-spinner fa-pulse fa-fw fa-2x"></i></div>' +
+                              '<div class="icon mr-3"><i class="fas fa-circle-notch fa-spin fa-fw fa-2x"></i></div>' +
                               '<div class="media-body">' +
                                 '<div class="msg">$message</div>' +
                               '</div>' +
