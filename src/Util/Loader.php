@@ -96,116 +96,118 @@ class Loader
         if (count($js) || count($css)) {
             $assets = JSValue::create(array('js' => $js, 'css' => $css));
             $script = $manager->compress(<<<EOF
-document.ntloader = {
-    parent: document.head ? document.head : document.body,
-    scriptQueue: [],
-    scriptLoaded: [],
-    hasAsset: function(parent, tag, path) {
-        if (parent) {
-            var elems = parent.getElementsByTagName(tag);
-            for (var i = 0; i < elems.length; i++) {
-                var el = elems[i];
-                // stylesheet
-                if ('link' == tag) {
-                    if (!el.hasAttribute('rel') || 'stylesheet' !== el.getAttribute('rel')) continue;
-                    if (el.hasAttribute('href') && path == el.getAttribute('href')) {
-                        return true;
+if (!document.ntloader) {
+    document.ntloader = {
+        parent: document.head ? document.head : document.body,
+        scriptQueue: [],
+        scriptLoaded: [],
+        hasAsset: function(parent, tag, path) {
+            if (parent) {
+                var elems = parent.getElementsByTagName(tag);
+                for (var i = 0; i < elems.length; i++) {
+                    var el = elems[i];
+                    // stylesheet
+                    if ('link' == tag) {
+                        if (!el.hasAttribute('rel') || 'stylesheet' !== el.getAttribute('rel')) continue;
+                        if (el.hasAttribute('href') && path == el.getAttribute('href')) {
+                            return true;
+                        }
                     }
-                }
-                // javascript
-                if ('script' == tag) {
-                    if (!el.hasAttribute('type') || 'text/javascript' !== el.getAttribute('type')) continue;
-                    if (el.hasAttribute('src') && path == el.getAttribute('src')) {
-                        return true;
+                    // javascript
+                    if ('script' == tag) {
+                        if (!el.hasAttribute('type') || 'text/javascript' !== el.getAttribute('type')) continue;
+                        if (el.hasAttribute('src') && path == el.getAttribute('src')) {
+                            return true;
+                        }
                     }
                 }
             }
-        }
-        return false;
-    },
-    isAssetExist: function(tag, path) {
-        if (document.head && this.hasAsset(document.head, tag, path)) {
-            return true;
-        } else if (document.body && this.hasAsset(document.body, tag, path)) {
-            return true;
-        }
-        return false;
-    },
-    isStylesheetLoaded: function(path) {
-        return this.isAssetExist('link', path);
-    },
-    queueStylesheet: function(path) {
-        var self = this;
-        var el = document.createElement('link');
-        el.rel = 'stylesheet';
-        el.type = 'text/css';
-        el.href = path;
-        self.parent.appendChild(el);
-    },
-    loadStylesheets: function(paths) {
-        var self = this;
-        var items = [];
-        for (var i = 0; i < paths.length; i++) {
-            if (!self.isStylesheetLoaded(paths[i])) {
-                items.push(paths[i]);
+            return false;
+        },
+        isAssetExist: function(tag, path) {
+            if (document.head && this.hasAsset(document.head, tag, path)) {
+                return true;
+            } else if (document.body && this.hasAsset(document.body, tag, path)) {
+                return true;
             }
-        }
-        return items;
-    },
-    isJavascriptLoaded: function(path) {
-        return this.isAssetExist('script', path);
-    },
-    queueJavascript: function(path) {
-        var self = this;
-        var el = document.createElement('script');
-        el.type = 'text/javascript';
-        el.src = path;
-        // http://stackoverflow.com/questions/1293367/how-to-detect-if-javascript-files-are-loaded
-        el.onload = function() {
-            self.removeQueue(path);
-        }
-        el.onreadystatechange = function() {
-            if (this.readyState == 'complete') {
+            return false;
+        },
+        isStylesheetLoaded: function(path) {
+            return this.isAssetExist('link', path);
+        },
+        queueStylesheet: function(path) {
+            var self = this;
+            var el = document.createElement('link');
+            el.rel = 'stylesheet';
+            el.type = 'text/css';
+            el.href = path;
+            self.parent.appendChild(el);
+        },
+        loadStylesheets: function(paths) {
+            var self = this;
+            var items = [];
+            for (var i = 0; i < paths.length; i++) {
+                if (!self.isStylesheetLoaded(paths[i])) {
+                    items.push(paths[i]);
+                }
+            }
+            return items;
+        },
+        isJavascriptLoaded: function(path) {
+            return this.isAssetExist('script', path);
+        },
+        queueJavascript: function(path) {
+            var self = this;
+            var el = document.createElement('script');
+            el.type = 'text/javascript';
+            el.src = path;
+            // http://stackoverflow.com/questions/1293367/how-to-detect-if-javascript-files-are-loaded
+            el.onload = function() {
                 self.removeQueue(path);
             }
-        }
-        self.parent.appendChild(el);
-    },
-    removeQueue: function(path) {
-        var idx = this.scriptQueue.indexOf(path);
-        if (idx >= 0) {
-            this.scriptQueue.splice(idx, 1);
-            this.processJavascriptQueue();
-        }
-    },
-    processJavascriptQueue: function() {
-        if (0 == this.scriptQueue.length) return;
-        this.queueJavascript(this.scriptQueue[0]);
-    },
-    loadJavascripts: function(paths) {
-        var self = this;
-        var items = [];
-        for (var i = 0; i < paths.length; i++) {
-            if (!self.isJavascriptLoaded(paths[i])) {
-                items.push(paths[i]);
+            el.onreadystatechange = function() {
+                if (this.readyState == 'complete') {
+                    self.removeQueue(path);
+                }
             }
-        }
-        return items;
-    },
-    isScriptLoaded: function() {
-        return this.scriptQueue.length == 0 ? true : false;
-    },
-    load: function(assets) {
-        if (assets.css) {
-            var css = this.loadStylesheets(assets.css);
-            for (var i = 0; i < css.length; i++) {
-                this.queueStylesheet(css[i]);
-            }
-        }
-        if (assets.js) {
-            this.scriptQueue = this.loadJavascripts(assets.js);
-            if (this.scriptQueue.length) {
+            self.parent.appendChild(el);
+        },
+        removeQueue: function(path) {
+            var idx = this.scriptQueue.indexOf(path);
+            if (idx >= 0) {
+                this.scriptQueue.splice(idx, 1);
                 this.processJavascriptQueue();
+            }
+        },
+        processJavascriptQueue: function() {
+            if (0 == this.scriptQueue.length) return;
+            this.queueJavascript(this.scriptQueue[0]);
+        },
+        loadJavascripts: function(paths) {
+            var self = this;
+            var items = [];
+            for (var i = 0; i < paths.length; i++) {
+                if (!self.isJavascriptLoaded(paths[i])) {
+                    items.push(paths[i]);
+                }
+            }
+            return items;
+        },
+        isScriptLoaded: function() {
+            return this.scriptQueue.length == 0 ? true : false;
+        },
+        load: function(assets) {
+            if (assets.css) {
+                var css = this.loadStylesheets(assets.css);
+                for (var i = 0; i < css.length; i++) {
+                    this.queueStylesheet(css[i]);
+                }
+            }
+            if (assets.js) {
+                this.scriptQueue = this.loadJavascripts(assets.js);
+                if (this.scriptQueue.length) {
+                    this.processJavascriptQueue();
+                }
             }
         }
     }
