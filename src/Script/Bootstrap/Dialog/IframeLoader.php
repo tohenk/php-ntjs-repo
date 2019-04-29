@@ -56,7 +56,7 @@ $.define('ntdlg', {
         }
         if (options.ajax) {
             bd.css({'max-height': '', 'height': ''});
-            bd.html('<span class="fas fa-sync-alt fa-spin fa-fw"></span>');
+            bd.html('<span class="fas fa-circle-notch fa-spin fa-fw"></span>');
             $.get(options.url).then(function(html) {
                 bd.html(html);
             });
