@@ -211,8 +211,8 @@ $.formpost = function(form, options) {
                             $.formErrorHandler(form);
                         }
                     }
-                    if (json.error_msg) {
-                        var err = json.error_msg;
+                    // handle global error
+                    if (json.global || json.error_msg) {
                         if (json.global && json.global.length) {
                             if (self.errhelper.errorContainer) {
                                 self.errhelper.addError(json.global, self.errhelper.errorContainer, self.errhelper.ERROR_ASLIST);
@@ -220,11 +220,15 @@ $.formpost = function(form, options) {
                                 // concate error as part of error mesage
                             }
                         }
-                        $.ntdlg.dialog('form_post_error', '$error', err, true, $.ntdlg.ICON_ERROR, {
-                            '$ok': function() {
-                                $.ntdlg.close($(this));
-                            }
-                        }, f);
+                        if (json.error_msg) {
+                            $.ntdlg.dialog('form_post_error', '$error', json.error_msg, true, $.ntdlg.ICON_ERROR, {
+                                '$ok': function() {
+                                    $.ntdlg.close($(this));
+                                }
+                            }, f);
+                        } else {
+                            f();
+                        }
                     } else {
                         f();
                     }
