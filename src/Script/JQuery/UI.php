@@ -27,6 +27,7 @@ namespace NTLAB\JS\Script\JQuery;
 
 use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
+use NTLAB\JS\Util\Asset;
 
 /**
  * JQuery UI base class for script that is depends on JQuery UI.
@@ -43,8 +44,8 @@ class UI extends Base
         parent::initialize();
 
         $theme = $this->getOption('theme', $this->getTheme());
-        $this->useJavascript('jquery-ui');
-        $this->useStylesheet($theme.'/jquery-ui');
+        $this->addAsset(Asset::ASSET_JAVASCRIPT, 'jquery-ui');
+        $this->addAsset(Asset::ASSET_STYLESHEET, $theme.'/jquery-ui');
     }
 
     /**
