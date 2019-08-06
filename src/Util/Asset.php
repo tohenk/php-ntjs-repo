@@ -101,7 +101,10 @@ class Asset
         if (null === $dir) {
             unset($this->dirs[$asset]);
         } else {
-            $this->dirs[$asset] = $dir;
+            $assets = null === $asset ? array(self::ASSET_JAVASCRIPT, self::ASSET_STYLESHEET, self::ASSET_OTHER) : array($asset);
+            foreach ($assets as $type) {
+                $this->dirs[$type] = $dir;
+            }
         }
 
         return $this;
