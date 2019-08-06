@@ -399,14 +399,17 @@ abstract class Script
         foreach ($this->assets as $asset) {
             switch ($asset[0]) {
                 case Asset::ASSET_JAVASCRIPT:
-                    if (count($asset) > 4) {
-                        $this->useLocaleJavascript($asset[1], $asset[4], null, $asset[2], $asset[3]);
+                    if (count($asset) > 5) {
+                        $this->useLocaleJavascript($asset[1], $asset[4], null, $asset[2], $asset[3], $asset[5]);
                     } else {
-                        $this->useJavascript($asset[1], $asset[2], $asset[3]);
+                        $this->useJavascript($asset[1], $asset[2], $asset[3], $asset[4]);
                     }
                     break;
                 case Asset::ASSET_STYLESHEET:
-                    $this->useStylesheet($asset[1], $asset[2], $asset[3]);
+                    $this->useStylesheet($asset[1], $asset[2], $asset[3], $asset[4]);
+                    break;
+                case Asset::ASSET_OTHER:
+                    $this->useOther($asset[1], $asset[2], $asset[3], $asset[4]);
                     break;
             }
         }
@@ -532,11 +535,12 @@ abstract class Script
      *
      * @param string $js  Javascript to include
      * @param int $priority  Javascript priority
+     * @param array $attributes  Javascript extra attributes
      * @return \NTLAB\JS\Script
      */
-    public function addJavascript($js, $priority = null)
+    public function addJavascript($js, $priority = null, $attributes = null)
     {
-        $this->getBackend()->addAsset($js, BackendInterface::ASSET_JS, $priority ?: BackendInterface::ASSET_PRIORITY_DEFAULT);
+        $this->getBackend()->addAsset($js, BackendInterface::ASSET_JS, $priority ?: BackendInterface::ASSET_PRIORITY_DEFAULT, $attributes);
 
         return $this;
     }
@@ -559,11 +563,12 @@ abstract class Script
      *
      * @param string $css  Stylesheet to include
      * @param int $priority  Stylesheet priority
+     * @param array $attributes  Stylesheet extra attributes
      * @return \NTLAB\JS\Script
      */
-    public function addStylesheet($css, $priority = null)
+    public function addStylesheet($css, $priority = null, $attributes = null)
     {
-        $this->getBackend()->addAsset($css, BackendInterface::ASSET_CSS, $priority ?: BackendInterface::ASSET_PRIORITY_DEFAULT);
+        $this->getBackend()->addAsset($css, BackendInterface::ASSET_CSS, $priority ?: BackendInterface::ASSET_PRIORITY_DEFAULT, $attributes);
 
         return $this;
     }
@@ -582,6 +587,34 @@ abstract class Script
     }
 
     /**
+     * Add other asset.
+     *
+     * @param string $src  Source
+     * @param int $priority  Priority
+     * @param array $attributes  Extra attributes
+     * @return \NTLAB\JS\Script
+     */
+    public function addOther($src, $priority = null, $attributes = null)
+    {
+        $this->getBackend()->addAsset($src, BackendInterface::ASSET_OTHER, $priority ?: BackendInterface::ASSET_PRIORITY_DEFAULT, $attributes);
+
+        return $this;
+    }
+
+    /**
+     * Remove other asset.
+     *
+     * @param string $src  Source to remove
+     * @return \NTLAB\JS\Script
+     */
+    public function removeOther($src)
+    {
+        $this->getBackend()->removeAsset($src, BackendInterface::ASSET_OTHER);
+
+        return $this;
+    }
+
+    /**
      * Include javascript. The javascript name accepted with the following
      * format:
      *   %name%-%version%.%minified%.js
@@ -589,11 +622,12 @@ abstract class Script
      * @param string $name  The javascript name, e.q. jquery.form
      * @param \NTLAB\JS\Util\Asset $asset  Asset helper
      * @param int $priority  Script priority
+     * @param array $attributes  Javascript extra attributes
      * @return \NTLAB\JS\Script
      */
-    public function useJavascript($name, $asset = null, $priority = null)
+    public function useJavascript($name, $asset = null, $priority = null, $attributes = null)
     {
-        $this->addJavascript($this->generateAsset($name, Asset::ASSET_JAVASCRIPT, $asset), $priority);
+        $this->addJavascript($this->generateAsset($name, Asset::ASSET_JAVASCRIPT, $asset), $priority, $attributes);
 
         return $this;
     }
@@ -637,9 +671,10 @@ abstract class Script
      * @param string $default  Default culture
      * @param \NTLAB\JS\Util\Asset $asset  Asset helper
      * @param int $priority  Script priority
+     * @param array $attributes  Javascript extra attributes
      * @return \NTLAB\JS\Script
      */
-    public function useLocaleJavascript($name, $culture = null, $default = 'en', $asset = null, $priority = null)
+    public function useLocaleJavascript($name, $culture = null, $default = 'en', $asset = null, $priority = null, $attributes = null)
     {
         if (false == strpos($name, '%s')) {
             $name .= '%s';
@@ -656,7 +691,7 @@ abstract class Script
             }
             $realJs .= DIRECTORY_SEPARATOR.$localeJs;
             if (is_readable($realJs)) {
-                $this->useJavascript($localeJs, $asset, $priority);
+                $this->useJavascript($localeJs, $asset, $priority, $attributes);
                 break;
             }
         }
@@ -670,11 +705,28 @@ abstract class Script
      * @param string $name  The stylesheet name, e.q. ui
      * @param \NTLAB\JS\Util\Asset $asset  Asset helper
      * @param int $priority  Stylesheet priority
+     * @param array $attributes  Stylesheet extra attributes
      * @return \NTLAB\JS\Script
      */
-    public function useStylesheet($name, $asset = null, $priority = null)
+    public function useStylesheet($name, $asset = null, $priority = null, $attributes = null)
     {
-        $this->addStylesheet($this->generateAsset($name, Asset::ASSET_STYLESHEET, $asset), $priority);
+        $this->addStylesheet($this->generateAsset($name, Asset::ASSET_STYLESHEET, $asset), $priority, $attributes);
+
+        return $this;
+    }
+
+    /**
+     * Include other asset.
+     *
+     * @param string $name  The asset source
+     * @param \NTLAB\JS\Util\Asset $asset  Asset helper
+     * @param int $priority  Priority
+     * @param array $attributes  Extra attributes
+     * @return \NTLAB\JS\Script
+     */
+    public function useOther($name, $asset = null, $priority = null, $attributes = null)
+    {
+        $this->addOther($this->generateAsset($name, Asset::ASSET_OTHER, $asset), $priority, $attributes);
 
         return $this;
     }
@@ -685,14 +737,15 @@ abstract class Script
      * @param string $type  Asset type
      * @param string $name  Asset name
      * @param int $priority  Priority
+     * @param array $attributes  Attributes
      * @return \NTLAB\JS\Script
      */
-    public function addAsset($type, $name, $priority = null)
+    public function addAsset($type, $name, $priority = null, $attributes = null)
     {
         $asset = $this->getAsset();
         $key = implode(':', array($type, $asset->getRepository(), $name));
         if (!isset($this->assets[$key])) {
-            $this->assets[$key] = array($type, $name, $asset, $priority);
+            $this->assets[$key] = array($type, $name, $asset, $priority, $attributes);
         }
 
         return $this;
@@ -705,14 +758,15 @@ abstract class Script
      * @param string $name
      * @param string $culture
      * @param int $priority
+     * @param array $attributes
      * @return \NTLAB\JS\Script
      */
-    public function addLocaleAsset($type, $name, $culture = null, $priority = null)
+    public function addLocaleAsset($type, $name, $culture = null, $priority = null, $attributes = null)
     {
         $asset = $this->getAsset();
         $key = implode(':', array($type, $asset->getRepository(), $name, $culture));
         if (!isset($this->assets[$key])) {
-            $this->assets[$key] = array($type, $name, $asset, $priority, $culture);
+            $this->assets[$key] = array($type, $name, $asset, $priority, $culture, $attributes);
         }
 
         return $this;
@@ -744,7 +798,12 @@ abstract class Script
      */
     public function includeDependency($dependencies)
     {
-        $this->addDependencies(is_array($dependencies) ? $dependencies : array($dependencies));
+        $dependencies = is_array($dependencies) ? $dependencies : array($dependencies);
+        if (!$this->isIncluded()) {
+            $this->addDependencies($dependencies);
+        } else {
+            $this->includeDepedencies($dependencies);
+        }
 
         return $this;
     }
