@@ -32,6 +32,7 @@ interface BackendInterface
 {
     const ASSET_JS = 1;
     const ASSET_CSS = 2;
+    const ASSET_OTHER = 3;
     const ASSET_PRIORITY_DEFAULT = 0;
     const ASSET_PRIORITY_FIRST = 1;
 
@@ -78,8 +79,9 @@ interface BackendInterface
      * @param string $asset  Asset name
      * @param int $type  Asset type
      * @param int $priority  Asset priority
+     * @param array $attributes  Extra attributes
      */
-    public function addAsset($asset, $type = self::ASSET_JS, $priority = self::ASSET_PRIORITY_DEFAULT);
+    public function addAsset($asset, $type = self::ASSET_JS, $priority = self::ASSET_PRIORITY_DEFAULT, $attributes = null);
 
     /**
      * Remove asset.
