@@ -59,65 +59,59 @@ class Wait extends Base
         return <<<EOF
 $.define('ntdlg', {
     waitdlg: {
-        d: null,
         id: 'wdialog',
         active: false,
-        visible: false,
-        create: function() {
+        getDlg: function(create) {
             var self = this;
-            if (null === self.d) {
-                var content =
-                    '<div id="' + self.id + '" class="modal fade" tabindex="-1" role="dialog">' +
-                      '<div class="modal-dialog" role="document">' +
-                        '<div class="modal-content">' +
-                          '<div class="modal-header">$title</div>' +
-                          '<div class="modal-body">' +
-                            '<div class="media">' +
-                              '<div class="icon mr-3"><i class="fas fa-circle-notch fa-spin fa-fw fa-2x"></i></div>' +
-                              '<div class="media-body">' +
-                                '<div class="msg">$message</div>' +
+            var dlg = $('#' + self.id);
+            if (dlg.length) {
+                self.dlg = dlg;
+            } else {
+                if (create) {
+                    var content =
+                        '<div id="' + self.id + '" class="modal fade" tabindex="-1" role="dialog">' +
+                          '<div class="modal-dialog" role="document">' +
+                            '<div class="modal-content">' +
+                              '<div class="modal-header">$title</div>' +
+                              '<div class="modal-body">' +
+                                '<div class="media">' +
+                                  '<div class="icon mr-3"><i class="fas fa-circle-notch fa-spin fa-fw fa-2x"></i></div>' +
+                                  '<div class="media-body">' +
+                                    '<div class="msg">$message</div>' +
+                                  '</div>' +
+                                '</div>' +
                               '</div>' +
                             '</div>' +
                           '</div>' +
-                        '</div>' +
-                      '</div>' +
-                    '</div>';
-                $(document.body).append(content);
-                self.d = $('#' + self.id);
-                self.d.on('show.bs.modal', function(e) {
-                    self.active = true;
-                });
-                self.d.on('shown.bs.modal', function(e) {
-                    self.visible = true;
-                    if (!self.active) {
-                        $.ntdlg.close($(this));
-                    }
-                });
-                self.d.on('hide.bs.modal', function(e) {
-                    self.active = false;
-                });
-                self.d.on('hidden.bs.modal', function(e) {
-                    self.visible = false;
-                });
-                self.d.modal({keyboard: false});
+                        '</div>';
+                    $(document.body).append(content);
+                    dlg = $('#' + self.id);
+                    dlg.on('shown.bs.modal', function(e) {
+                        self.active = true;
+                    });
+                    dlg.on('hidden.bs.modal', function(e) {
+                        self.active = false;
+                    });
+                    dlg.modal({keyboard: false});
+                    self.dlg = dlg;
+                }
             }
         },
         show: function(msg) {
             var self = this;
-            if (self.visible) self.close();
-            self.create();
+            self.close();
+            self.getDlg(true);
             if (msg) {
-                self.d.find('.modal-body .msg').html(msg);
+                self.dlg.find('.modal-body .msg').html(msg);
             }
-            $.ntdlg.show(self.d);
+            $.ntdlg.show(self.dlg);
         },
         close: function() {
             var self = this;
-            if (self.d) {
-                if (self.visible) {
-                    $.ntdlg.close(self.d);
-                } else {
-                    self.active = false;
+            self.getDlg();
+            if (self.dlg) {
+                if (self.dlg.hasClass('show')) {
+                    $.ntdlg.close(self.dlg);
                 }
             }
         }
