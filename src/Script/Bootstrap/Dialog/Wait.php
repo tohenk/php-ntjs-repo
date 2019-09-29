@@ -61,6 +61,7 @@ $.define('ntdlg', {
     waitdlg: {
         id: 'wdialog',
         active: false,
+        closed: false,
         getDlg: function(create) {
             var self = this;
             var dlg = $('#' + self.id);
@@ -88,6 +89,12 @@ $.define('ntdlg', {
                     dlg = $('#' + self.id);
                     dlg.on('shown.bs.modal', function(e) {
                         self.active = true;
+                        if (self.closed) {
+                            var dlg = $(this);
+                            setTimeout(function() {
+                                $.ntdlg.close(dlg);
+                            }, 500);
+                        }
                     });
                     dlg.on('hidden.bs.modal', function(e) {
                         self.active = false;
@@ -104,14 +111,17 @@ $.define('ntdlg', {
             if (msg) {
                 self.dlg.find('.modal-body .msg').html(msg);
             }
+            self.closed = false;
             $.ntdlg.show(self.dlg);
         },
         close: function() {
             var self = this;
             self.getDlg();
             if (self.dlg) {
-                if (self.dlg.hasClass('show')) {
+                if (self.active && self.dlg.hasClass('show')) {
                     $.ntdlg.close(self.dlg);
+                } else {
+                    self.closed = true;
                 }
             }
         }
