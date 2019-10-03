@@ -60,8 +60,6 @@ class Wait extends Base
 $.define('ntdlg', {
     waitdlg: {
         id: 'wdialog',
-        active: false,
-        closed: false,
         getDlg: function(create) {
             var self = this;
             var dlg = $('#' + self.id);
@@ -88,20 +86,28 @@ $.define('ntdlg', {
                     $(document.body).append(content);
                     dlg = $('#' + self.id);
                     dlg.on('shown.bs.modal', function(e) {
-                        self.active = true;
-                        if (self.closed) {
-                            var dlg = $(this);
+                        var dlg = $(this);
+                        dlg.addClass('active');
+                        if (dlg.hasClass('dismiss')) {
                             setTimeout(function() {
                                 $.ntdlg.close(dlg);
                             }, 500);
                         }
                     });
                     dlg.on('hidden.bs.modal', function(e) {
-                        self.active = false;
+                        var dlg = $(this);
+                        dlg.removeClass('active');
                     });
                     dlg.modal({keyboard: false});
                     self.dlg = dlg;
                 }
+            }
+        },
+        isActive: function() {
+            var self = this;
+            self.getDlg();
+            if (self.dlg) {
+                return self.dlg.hasClass('show') ? true : false;
             }
         },
         show: function(msg) {
@@ -111,17 +117,17 @@ $.define('ntdlg', {
             if (msg) {
                 self.dlg.find('.modal-body .msg').html(msg);
             }
-            self.closed = false;
+            self.dlg.removeClass('dismiss');
             $.ntdlg.show(self.dlg);
         },
         close: function() {
             var self = this;
             self.getDlg();
             if (self.dlg) {
-                if (self.active && self.dlg.hasClass('show')) {
+                if (self.dlg.hasClass('active')) {
                     $.ntdlg.close(self.dlg);
                 } else {
-                    self.closed = true;
+                    self.dlg.addClass('dismiss');
                 }
             }
         }
