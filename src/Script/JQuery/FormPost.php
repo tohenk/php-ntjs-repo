@@ -276,10 +276,10 @@ EOF;
         }
         $options = JSValue::create($options);
 
-        $this->useScript(<<<EOF
+        $this->add(<<<EOF
 $.formpost($('$selector'), $options);
 EOF
-, Repository::POSITION_LAST);
+        );
 
         return $this;
     }

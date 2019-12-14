@@ -370,6 +370,11 @@ abstract class Script
     {
         $this->includeAssets();
         if ($script = $this->getScript()) {
+            $source = get_class($this);
+            $script  = <<<EOF
+/* $source */
+$script
+EOF;
             $this->useScript($script);
         }
         $this->getInitScript();
@@ -855,6 +860,32 @@ abstract class Script
     public function setProp($name, $value)
     {
         $this->props[$name] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Add script.
+     *
+     * @param string $script  The javascript
+     * @param string $position  The position script will be added
+     * @return \NTLAB\JS\Script
+     */
+    public function add($script, $position = Repository::POSITION_LAST)
+    {
+        if (strlen($script)) {
+            $traces = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+            $trace = array_shift($traces);
+            if (isset($trace['file']) && isset($trace['line'])) {
+                $sourceFile = $trace['file'];
+                $sourceLine = $trace['line'];
+                $script = <<<EOF
+/* $sourceFile:$sourceLine */
+$script
+EOF;
+            }
+        }
+        $this->useScript($script, $position);
 
         return $this;
     }

@@ -151,7 +151,7 @@ EOF;
         ))->setIndent(1);
 
         $this->includeScript();
-        $this->useScript(<<<EOF
+        $this->add(<<<EOF
 $.ntdlg.closeIframe$dlg = function() {
     $.ntdlg.close('dlg$dlg');
 }
@@ -160,7 +160,7 @@ $('#ref-dlg$dlg').click(function(e) {
     $.ntdlg.iframe('dlg$dlg', $(this).attr('href'), $iframeOptions);
 });
 EOF
-, Repository::POSITION_LAST);
+        );
 
         return $this->getBackend()->ctag('a', $content, array_merge(array('href' => $url, 'class' => 'dialog', 'id' => 'ref-dlg'.$dlg), $options));
     }

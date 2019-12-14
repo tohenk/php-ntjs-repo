@@ -26,10 +26,12 @@
 
 namespace NTLAB\JS;
 
+use NTLAB\JS\Util\Asset;
+
 class Backend implements BackendInterface
 {
     /**
-     * (non-PHPdoc)
+     * {@inheritDoc}
      * @see \NTLAB\JS\BackendInterface::getConfig()
      */
     public function getConfig($name, $default = null)
@@ -38,7 +40,7 @@ class Backend implements BackendInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * {@inheritDoc}
      * @see \NTLAB\JS\BackendInterface::trans()
      */
     public function trans($text, $vars = array(), $domain = null)
@@ -47,7 +49,7 @@ class Backend implements BackendInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * {@inheritDoc}
      * @see \NTLAB\JS\BackendInterface::url()
      */
     public function url($url, $options = array())
@@ -56,7 +58,7 @@ class Backend implements BackendInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * {@inheritDoc}
      * @see \NTLAB\JS\BackendInterface::asset()
      */
     public function asset($asset, $type = self::ASSET_JS)
@@ -65,7 +67,7 @@ class Backend implements BackendInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * {@inheritDoc}
      * @see \NTLAB\JS\BackendInterface::addAsset()
      */
     public function addAsset($asset, $type = self::ASSET_JS)
@@ -73,7 +75,15 @@ class Backend implements BackendInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * {@inheritDoc}
+     * @see \NTLAB\JS\BackendInterface::removeAsset()
+     */
+    public function removeAsset($asset, $type = self::ASSET_JS)
+    {
+    }
+
+    /**
+     * {@inheritDoc}
      * @see \NTLAB\JS\BackendInterface::getAssetDir()
      */
     public function getAssetDir($repo)
@@ -81,7 +91,15 @@ class Backend implements BackendInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * {@inheritDoc}
+     * @see \NTLAB\JS\BackendInterface::generateAsset()
+     */
+    public function generateAsset(Asset $asset, $name, $type = self::ASSET_JS)
+    {
+    }
+
+    /**
+     * {@inheritDoc}
      * @see \NTLAB\JS\BackendInterface::tag()
      */
     public function tag($name, $options = array())
@@ -89,7 +107,7 @@ class Backend implements BackendInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * {@inheritDoc}
      * @see \NTLAB\JS\BackendInterface::ctag()
      */
     public function ctag($name, $content, $options = array())

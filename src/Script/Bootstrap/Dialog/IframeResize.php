@@ -100,9 +100,9 @@ EOF;
 
     public function getInitScript()
     {
-        $this->useScript(<<<EOF
+        $this->add(<<<EOF
 $.dlgresize.init();
 EOF
-, Repository::POSITION_LAST);
+        );
     }
 }

@@ -99,30 +99,4 @@ EOF
             ->setWrapSize(2)
         ;
     }
-
-    /**
-     * Create singleton instance.
-     *
-     * @return \NTLAB\JS\Script\JQuery
-     */
-    protected static function createInstance()
-    {
-        static $instance = null;
-        if (null === $instance) {
-            $instance = new self();
-        }
-
-        return $instance;
-    }
-
-    /**
-     * Add script.
-     *
-     * @param string $script  The javascript
-     * @param string $position  The position script will be added
-     */
-    public static function add($script, $position = Repository::POSITION_LAST)
-    {
-        self::createInstance()->useScript($script, $position);
-    }
 }

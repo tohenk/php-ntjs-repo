@@ -252,14 +252,13 @@ class Manager
      */
     public function scriptTag($content)
     {
-        return sprintf(<<<EOF
+        return <<<EOF
 <script type="text/javascript">
-//<![CDATA[
-%s
-//]]>
+// <![CDATA[
+$content
+// ]]>
 </script>
-EOF
-, $content);
+EOF;
     }
 
     /**
