@@ -47,7 +47,8 @@ class FormPost extends Base
 {
     protected function configure()
     {
-        $this->addDependencies(array('JQuery.FormPost', 'Bootstrap.Dialog', 'Bootstrap.Dialog.Wait'));
+        parent::configure();
+        $this->addDependencies(array('Bootstrap.Dialog', 'Bootstrap.Dialog.Wait'));
     }
 
     protected function getErrHelperOptions()
