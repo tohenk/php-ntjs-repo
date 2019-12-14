@@ -57,12 +57,12 @@ class Dialog extends Base
 
         return <<<EOF
 $.define('ntdlg', {
-    ICON_INFO: 'fas fa-info-circle',
-    ICON_ALERT: 'fas fa-exclamation-circle',
-    ICON_ERROR: 'fas fa-times-circle',
-    ICON_SUCCESS: 'fas fa-check-circle',
-    ICON_QUESTION: 'fas fa-question-circle',
-    ICON_INPUT: 'fas fa-edit',
+    ICON_INFO: 'fas fa-info-circle text-info',
+    ICON_ALERT: 'fas fa-exclamation-circle text-warning',
+    ICON_ERROR: 'fas fa-times-circle text-danger',
+    ICON_SUCCESS: 'fas fa-check-circle text-success',
+    ICON_QUESTION: 'fas fa-question-circle text-primary',
+    ICON_INPUT: 'fas fa-edit text-primary',
     dialogTmpl:
         '<div id="%ID%" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="%ID%-title">' +
           '<div class="%MODAL%" role="document">' +
@@ -79,12 +79,14 @@ $.define('ntdlg', {
     iconTmpl:
         '<span class="dialog-icon %ICON% fa-fw fa-2x"></span>',
     messageTmpl:
-        '<div class="media">' +
+        '<div class="media d-flex align-items-center">' +
           '<div class="p-2 mr-1">%ICON%</div>' +
           '<div class="media-body">%MESSAGE%</div>' +
         '</div>',
+    buttonClass:
+        'btn btn-outline-%TYPE%',
     buttonTmpl:
-        '<button id="%ID%" type="button" class="btn btn-%TYPE%">%CAPTION%</button>',
+        '<button id="%ID%" type="button" class="%BTNCLASS%">%CAPTION%</button>',
     closeTmpl:
         '<button type="button" class="close" data-dismiss="modal" aria-label="$close"><span aria-hidden="true">&times;</span></button>',
     create: function(id, title, message, options) {
@@ -112,9 +114,10 @@ $.define('ntdlg', {
                     var handler = typeof v == 'function' ? v : null;
                 }
                 var btnid = id + '_btn_' + caption.replace(/\W+/g, "-").toLowerCase();
+                var btnclass = $.util.template(self.buttonClass, {TYPE: btnType});
                 buttons.push($.util.template(self.buttonTmpl, {
                     ID: btnid,
-                    TYPE: btnType,
+                    BTNCLASS: btnclass,
                     CAPTION: caption
                 }));
                 if (typeof handler == 'function') {
