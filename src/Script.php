@@ -39,6 +39,10 @@ use NTLAB\JS\Util\Escaper;
  */
 abstract class Script
 {
+    const DBG_LINE = 1;
+
+    const DBG_CLASS = 2;
+
     /**
      * @var string
      */
@@ -103,6 +107,11 @@ abstract class Script
      * @var array
      */
     protected static $defaults = array();
+
+    /**
+     * @var bool
+     */
+    protected static $debug = false;
 
     /**
      * Create script object.
@@ -179,6 +188,16 @@ abstract class Script
     public static function addOptions($name, $options)
     {
         static::$defaultOptions[$name] = $options;
+    }
+
+    /**
+     * Set debug.
+     *
+     * @param bool $debug
+     */
+    public static function setDebug($debug)
+    {
+        static::$debug = $debug;
     }
 
     /**
@@ -370,12 +389,7 @@ abstract class Script
     {
         $this->includeAssets();
         if ($script = $this->getScript()) {
-            $source = get_class($this);
-            $script  = <<<EOF
-/* $source */
-$script
-EOF;
-            $this->useScript($script);
+            $this->useScript($this->addDebugInfo($script, static::DBG_CLASS));
         }
         $this->getInitScript();
 
@@ -873,21 +887,50 @@ EOF;
      */
     public function add($script, $position = Repository::POSITION_LAST)
     {
-        if (strlen($script)) {
-            $traces = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
-            $trace = array_shift($traces);
-            if (isset($trace['file']) && isset($trace['line'])) {
-                $sourceFile = $trace['file'];
-                $sourceLine = $trace['line'];
+        $this->useScript($this->addDebugInfo($script), $position);
+
+        return $this;
+    }
+
+    /**
+     * Add debug information.
+     *
+     * @param string $script
+     * @param int $info
+     * @param array $trace
+     * @param int $size
+     * @return string
+     */
+    protected function addDebugInfo($script, $info = null, $trace = null, $size = null)
+    {
+        if (strlen($script) && static::$debug) {
+            if (null == $info) {
+                $info = static::DBG_LINE;
+            }
+            if (($info & static::DBG_CLASS) == static::DBG_CLASS) {
+                $class = get_class($this);
                 $script = <<<EOF
-/* $sourceFile:$sourceLine */
+/* $class */
 $script
 EOF;
             }
+            if (($info & static::DBG_LINE) == static::DBG_LINE) {
+                if (null == $trace) {
+                    $traces = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, $size ?: 2);
+                    $trace = array_pop($traces);
+                }
+                if (isset($trace['file']) && isset($trace['line']) && $trace['file'] != __FILE__) {
+                    $sourceFile = $trace['file'];
+                    $sourceLine = $trace['line'];
+                    $script = <<<EOF
+/* $sourceFile:$sourceLine */
+$script
+EOF;
+                }
+            }
         }
-        $this->useScript($script, $position);
 
-        return $this;
+        return $script;
     }
 
     /**
