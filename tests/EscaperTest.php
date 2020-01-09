@@ -12,7 +12,7 @@ class EscaperTest extends BaseTest
         $this->assertEquals('null', Escaper::escapeValue(null, true), 'Proper escape value of null');
         $this->assertEquals('true', Escaper::escapeValue(true, true), 'Proper escape value of boolean');
         $this->assertEquals('49', Escaper::escapeValue(49, true), 'Proper escape value of numeric');
-        $this->assertEquals("'It''s me'", Escaper::escapeValue('It\'s me', true), 'Proper escape value of string');
+        $this->assertEquals("'It\'s me'", Escaper::escapeValue('It\'s me', true), 'Proper escape value of string');
     }
 
     public function testEscape()
@@ -30,6 +30,6 @@ class EscaperTest extends BaseTest
     test: function(){}
 }
 EOF
-, Escaper::escape(array('test' => new JSValue('function(){}'))), 'Proper escape nested');
+, Escaper::escape(array('test' => JSValue::createRaw('function(){}'))), 'Proper escape nested');
     }
 }

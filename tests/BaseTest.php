@@ -2,7 +2,9 @@
 
 namespace NTLAB\JS\Test;
 
-abstract class BaseTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+abstract class BaseTest extends TestCase
 {
     protected function getFixtureDir()
     {

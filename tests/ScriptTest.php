@@ -10,10 +10,17 @@ class ScriptTest extends BaseTest
 {
     protected $script;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         Manager::getInstance()->setBackend(new Backend());
         $this->script = Script::create('JQuery');
+        $this->script->getRepository()
+          ->setWrapper(<<<EOF
+(function($) {%s})(jQuery);
+EOF
+          )
+          ->setWrapSize(1)
+        ;
     }
 
     public function testCreate()
