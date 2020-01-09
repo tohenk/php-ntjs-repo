@@ -70,7 +70,7 @@ class Backend implements BackendInterface
      * {@inheritDoc}
      * @see \NTLAB\JS\BackendInterface::addAsset()
      */
-    public function addAsset($asset, $type = self::ASSET_JS)
+    public function addAsset($asset, $type = self::ASSET_JS, $priority = self::ASSET_PRIORITY_DEFAULT, $attributes = null)
     {
     }
 

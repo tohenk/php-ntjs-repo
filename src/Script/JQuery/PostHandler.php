@@ -50,8 +50,6 @@ class PostHandler extends Base
 
     public function getScript()
     {
-        $err = $this->trans('Error');
-
         return <<<EOF
 $.extend({
     handlePostData: function(data, errhelper, success_cb, error_cb) {

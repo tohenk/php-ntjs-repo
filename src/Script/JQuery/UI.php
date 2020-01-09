@@ -26,7 +26,6 @@
 namespace NTLAB\JS\Script\JQuery;
 
 use NTLAB\JS\Script\JQuery as Base;
-use NTLAB\JS\Repository;
 use NTLAB\JS\Util\Asset;
 
 /**

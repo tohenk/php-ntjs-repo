@@ -53,8 +53,6 @@ class Wait extends Base
     {
         $message = $this->trans('Loading...');
         $title = $this->trans('Please wait');
-        $width = 400;
-        $height = 150;
 
         return <<<EOF
 $.define('ntdlg', {

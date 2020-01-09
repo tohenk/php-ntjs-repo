@@ -26,7 +26,6 @@
 
 namespace NTLAB\JS\Script;
 
-use NTLAB\JS\Repository;
 use NTLAB\JS\Util\Asset;
 
 /**

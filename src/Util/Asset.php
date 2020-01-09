@@ -27,7 +27,6 @@
 namespace NTLAB\JS\Util;
 
 use NTLAB\JS\Manager;
-use NTLAB\JS\BackendInterface;
 
 /**
  * Javascript assets helper.

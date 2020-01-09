@@ -34,7 +34,12 @@ use NTLAB\JS\Util\JSValue;
  * JQuery UI iframe dialog.
  *
  * Usage:
- * $.ntdlg.iframe('/path/to/url', 'my', 'My Iframe Dialog', true, 500, 400);
+ * $.ntdlg.iframe('my', '/path/to/url', {
+ *     title: 'My Iframe Dialog',
+ *     modal: true,
+ *     width: 500,
+ *     height: 400
+ * });
  *
  * @author Toha
  */
@@ -113,7 +118,8 @@ EOF;
         $overflow = isset($options['overflow']) ? $options['overflow'] : 'hidden';
         $size = isset($options['size']) ? $options['size'] : null;
         $clicker_class = isset($options['clicker_class']) ? $options['clicker_class'] : null;
-        unset($options['dialog_id'], $options['height'], $options['width'], $options['modal'], $options['overflow'], $options['clicker_class']);
+        unset($options['dialog_id'], $options['modal'], $options['overflow'], $options['size'],
+            $options['clicker_class'], $options['height'], $options['width']);
 
         $url = $this->getBackend()->url($url);
         if (isset($options['query_string'])) {
