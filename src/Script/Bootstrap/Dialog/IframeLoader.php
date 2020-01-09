@@ -59,6 +59,7 @@ $.define('ntdlg', {
             bd.html('<span class="fas fa-circle-notch fa-spin fa-fw"></span>');
             $.get(options.url).then(function(html) {
                 bd.html(html);
+                $(document).trigger('iframeContentLoaded', bd);
             });
         } else {
             var height = dlg.height();
