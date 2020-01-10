@@ -56,6 +56,11 @@ class Asset
     protected $repository = null;
 
     /**
+     * @var string
+     */
+    protected $alias = null;
+
+    /**
      * @var array
      */
     protected $dirs = array();
@@ -71,7 +76,7 @@ class Asset
         $this->manager = Manager::getInstance();
         $this->backend = $this->manager->getBackend();
         $this->repository = $repository;
-        foreach (array(static::ASSET_JAVASCRIPT, static::ASSET_STYLESHEET, static::ASSET_IMAGE) as $asset) {
+        foreach (array(static::ASSET_JAVASCRIPT, static::ASSET_STYLESHEET, static::ASSET_IMAGE, static::ASSET_OTHER) as $asset) {
             if (isset($options[$asset])) {
                 $this->dirs[$asset] = $options[$asset];
             }
@@ -86,6 +91,29 @@ class Asset
     public function getRepository()
     {
         return $this->repository;
+    }
+
+    /**
+     * Get asset alias.
+     *
+     * @return string
+     */
+    public function getAlias()
+    {
+        return $this->alias;
+    }
+
+    /**
+     * Set asset alias.
+     *
+     * @param string $alias
+     * @return \NTLAB\JS\Util\Asset
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+
+        return $this;
     }
 
     /**
@@ -208,7 +236,7 @@ class Asset
     {
         if ($this->isLocal($name)) {
             // check cdn if exist
-            if ($cdn = $this->manager->getCdn($this->repository)) {
+            if ($cdn = $this->manager->getCdn($this->alias ? $this->alias : $this->repository)) {
                 if ($file = $cdn->get($asset, $name, $this->getDirName($asset))) {
                     return $this->fixExtension($asset, $file);
                 }
