@@ -208,7 +208,7 @@ class CDN
      */
     protected function replaceVersion($str)
     {
-        return str_replace('%VER%', $this->version, $str);
+        return str_replace('%VER%'.(null === $this->version ? '/' : ''), $this->version, $str);
     }
 
     /**
@@ -223,7 +223,7 @@ class CDN
     {
         $type = isset($this->paths[$asset]) ? $this->paths[$asset] : $default;
 
-        return str_replace('%TYPE%', $type, $str);
+        return str_replace('%TYPE%'.(!strlen($type) ? '/' : ''), $type, $str);
     }
 
     /**

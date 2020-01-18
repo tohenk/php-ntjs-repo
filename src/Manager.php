@@ -26,6 +26,7 @@
 
 namespace NTLAB\JS;
 
+use NTLAB\JS\Util\Asset;
 use NTLAB\JS\Util\CDN;
 use NTLAB\JS\Util\Escaper;
 
@@ -80,6 +81,16 @@ class Manager
         }
 
         return static::$instance;
+    }
+
+    /**
+     * Get CDN info file.
+     *
+     * @return string
+     */
+    public static function getCdnInfoFile()
+    {
+        return realpath(__DIR__.'/../cdn.json');
     }
 
     /**
@@ -189,6 +200,51 @@ class Manager
         if (isset($this->cdns[$repository])) {
             return $this->cdns[$repository];
         }
+    }
+
+    /**
+     * Parse CDN array.
+     *
+     * @param array $cdns  CDN definitions.
+     * @return \NTLAB\JS\Manager
+     */
+    public function parseCdn($cdns)
+    {
+        foreach ($cdns as $repository => $parameters) {
+            if (isset($parameters['disabled']) && $parameters['disabled']) {
+                continue;
+            }
+            $cdn = $this->addCdn($repository);
+            if (isset($parameters['url'])) {
+                $cdn->setUrl($parameters['url']);
+            }
+            if (isset($parameters['version'])) {
+                $cdn->setVersion($parameters['version']);
+            }
+            if (isset($parameters['paths'])) {
+                foreach (array(Asset::ASSET_JAVASCRIPT, Asset::ASSET_STYLESHEET) as $asset) {
+                    if (isset($parameters['paths'][$asset])) {
+                        $cdn->setPath($asset, $parameters['paths'][$asset]);
+                    }
+                }
+            }
+            foreach (array(Asset::ASSET_JAVASCRIPT, Asset::ASSET_STYLESHEET) as $asset) {
+                if (isset($parameters[$asset])) {
+                    foreach ($parameters[$asset] as $name => $path) {
+                        switch ($asset) {
+                            case Asset::ASSET_JAVASCRIPT:
+                                $cdn->addJs($name, $path);
+                                break;
+                            case Asset::ASSET_STYLESHEET:
+                                $cdn->addCss($name, $path);
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $this;
     }
 
     /**

@@ -1,0 +1,22 @@
+{
+    "bootstrap": {
+        "version": "4.4.1",
+        "url": "https://stackpath.bootstrapcdn.com/bootstrap/%VER%/%TYPE%/%NAME%"
+    },
+    "fontawesome": {
+        "version": "5.11.2",
+        "url": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/%VER%/%TYPE%/%NAME%"
+    },
+    "jquery": {
+        "version": "3.4.1",
+        "url": "https://code.jquery.com/%NAME%",
+        "js": {
+            "jquery": "jquery-%VER%",
+            "jquery.min": "jquery-%VER%.min"
+        }
+    },
+    "popper.js": {
+        "version": "1.16.0",
+        "url": "https://cdnjs.cloudflare.com/ajax/libs/popper.js/%VER%/%TYPE%/%NAME%"
+    }
+}
