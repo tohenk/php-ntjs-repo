@@ -76,7 +76,7 @@ $.define('ntdlg', {
         var overflow = options.overflow || 'hidden';
         var close_cb = options.close_cb || null;
         var ajax = options.ajax || true;
-        url += (url.indexOf('?') > -1 ? '&' : '?') + '&closecb=' + (close_cb ? close_cb : '') + '&_dialog=1';
+        url += (url.indexOf('?') > -1 ? '&' : '?') + 'closecb=' + (close_cb ? close_cb : '') + '&_dialog=1';
         var params = {
             modal: modal ? true : false,
             buttons: [],
