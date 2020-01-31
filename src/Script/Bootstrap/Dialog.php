@@ -233,8 +233,46 @@ $.define('ntdlg', {
             }
             return dlg.find('.modal-body:first');
         }
+    },
+    fixModal: function() {
+        // https://stackoverflow.com/questions/19305821/multiple-modals-overlay
+        // fix z-index
+        if (typeof $.fn.modal.Constructor.prototype.__showElement == 'undefined') {
+            $.fn.modal.Constructor.prototype.__showElement = $.fn.modal.Constructor.prototype._showElement;
+            $.fn.modal.Constructor.prototype._showElement = function(relatedTarget) {
+                this.__showElement(relatedTarget);
+                var zIdx = parseInt($(this._element).css('z-index'));
+                var modalCount = $('.modal:visible').length;
+                if (modalCount > 1) {
+                    zIdx += 10 * (modalCount - 1);
+                    $(this._element).css('z-index', zIdx);
+                    $(this._backdrop).css('z-index', zIdx - 1);
+                }
+            }
+        }
+        // re-add modal-open class if there're still opened modal
+        if (typeof $.fn.modal.Constructor.prototype.__resetAdjustments == 'undefined') {
+            $.fn.modal.Constructor.prototype.__resetAdjustments = $.fn.modal.Constructor.prototype._resetAdjustments;
+            $.fn.modal.Constructor.prototype._resetAdjustments = function() {
+                this.__resetAdjustments();
+                if ($('.modal:visible').length > 0) {
+                    $(document.body).addClass('modal-open');
+                }
+            }
+        }
     }
 }, true);
 EOF;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \NTLAB\JS\Script::getInitScript()
+     */
+    public function getInitScript()
+    {
+        $this->add(<<<EOF
+$.ntdlg.fixModal();
+EOF);
     }
 }
