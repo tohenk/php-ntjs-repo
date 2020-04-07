@@ -67,16 +67,22 @@ $.define('ntdlg', {
         }
         var icon = icon || $.ntdlg.ICON_QUESTION;
         $.ntdlg.dialog(id, title, message, true, icon, {
-            '$yes': function() {
-                $.ntdlg.close($(this));
-                if (typeof cb_yes == 'function') {
-                    cb_yes();
+            '$yes': {
+                icon: $.ntdlg.BTN_ICON_OK,
+                handler: function() {
+                    $.ntdlg.close($(this));
+                    if (typeof cb_yes == 'function') {
+                        cb_yes();
+                    }
                 }
             },
-            '$no': function() {
-                $.ntdlg.close($(this));
-                if (typeof cb_no == 'function') {
-                    cb_no();
+            '$no': {
+                icon: $.ntdlg.BTN_ICON_CANCEL,
+                handler: function() {
+                    $.ntdlg.close($(this));
+                    if (typeof cb_no == 'function') {
+                        cb_no();
+                    }
                 }
             }
         });

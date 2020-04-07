@@ -63,6 +63,9 @@ $.define('ntdlg', {
     ICON_SUCCESS: 'fas fa-check-circle text-success',
     ICON_QUESTION: 'fas fa-question-circle text-primary',
     ICON_INPUT: 'fas fa-edit text-primary',
+    BTN_ICON_OK: 'fas fa-check',
+    BTN_ICON_CANCEL: 'fas fa-ban',
+    BTN_ICON_CLOSE: 'fas fa-times',
     dialogTmpl:
         '<div id="%ID%" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="%ID%-title">' +
           '<div class="%MODAL%" role="document">' +
@@ -85,6 +88,8 @@ $.define('ntdlg', {
         '</div>',
     buttonClass:
         'btn btn-outline-%TYPE%',
+    buttonIconTmpl:
+        '<span class="%ICON%"></span> %CAPTION%',
     buttonTmpl:
         '<button id="%ID%" type="button" class="%BTNCLASS%">%CAPTION%</button>',
     closeTmpl:
@@ -104,17 +109,22 @@ $.define('ntdlg', {
         var cnt = 0;
         if (options.buttons) {
             $.each(options.buttons, function(k, v) {
+                var caption, btnType, btnIcon, handler;
                 if ($.isArray(v) || $.isPlainObject(v)) {
-                    var caption = v.caption ? v.caption : k;
-                    var btnType = v.type ? v.type : 'secondary';
-                    var handler = typeof v.handler == 'function' ? v.handler : null;
+                    caption = v.caption ? v.caption : k;
+                    btnType = v.type ? v.type : (0 == cnt ? 'primary' : 'secondary');
+                    if (v.icon) btnIcon = v.icon;
+                    handler = typeof v.handler == 'function' ? v.handler : null;
                 } else {
-                    var caption = k;
-                    var btnType = 0 == cnt ? 'primary' : 'secondary';
-                    var handler = typeof v == 'function' ? v : null;
+                    caption = k;
+                    btnType = 0 == cnt ? 'primary' : 'secondary';
+                    handler = typeof v == 'function' ? v : null;
                 }
                 var btnid = id + '_btn_' + caption.replace(/\W+/g, "-").toLowerCase();
                 var btnclass = $.util.template(self.buttonClass, {TYPE: btnType});
+                if (btnIcon) {
+                    caption = $.util.template(self.buttonIconTmpl, {CAPTION: caption, ICON: btnIcon});
+                }
                 buttons.push($.util.template(self.buttonTmpl, {
                     ID: btnid,
                     BTNCLASS: btnclass,

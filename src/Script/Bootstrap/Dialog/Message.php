@@ -53,8 +53,11 @@ class Message extends Base
 $.define('ntdlg', {
     message: function(id, title, message, modal, icon) {
         $.ntdlg.dialog(id, title, message, modal, icon, {
-            '$ok': function() {
-                $.ntdlg.close($(this));
+            '$ok': {
+                icon: $.ntdlg.BTN_ICON_OK,
+                handler: function() {
+                    $.ntdlg.close($(this));
+                }
             }
         });
     }
