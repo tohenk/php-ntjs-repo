@@ -52,6 +52,11 @@ class FormPost extends Base
         $this->setPosition(Repository::POSITION_MIDDLE);
     }
 
+    protected function getOverrides()
+    {
+      return array();
+    }
+
     protected function getErrHelperOptions()
     {
         return array();
@@ -63,7 +68,8 @@ class FormPost extends Base
         $error = $this->trans('Error');
         $ok = $this->trans('OK');
         $message = $this->trans('Please wait while your data being saved.');
-        $options = JSValue::create($this->getErrHelperOptions())->setIndent(1);
+        $overrides = JSValue::create($this->getOverrides())->setIndent(1);
+        $erroptions = JSValue::create($this->getErrHelperOptions())->setIndent(1);
 
         return <<<EOF
 $.formpost = function(form, options) {
@@ -178,20 +184,10 @@ $.formpost = function(form, options) {
                 self.formPost(form, url, function(json) {
                     form.trigger('formsaved', [json]);
                     if (json.notice) {
-                        if (json.redir) {
-                            var dlg = $.ntdlg.dialog('form_post_success', '$title', json.notice, true, $.ntdlg.ICON_SUCCESS);
-                            if (typeof $.fpRedir == 'function') {
-                                dlg.on('shown.bs.modal',  function() {
-                                    $.ntdlg.close($(this));
-                                });
-                            }
-                        } else {
-                            $.ntdlg.dialog('form_post_success', '$title', json.notice, true, $.ntdlg.ICON_SUCCESS, {
-                                '$ok': function() {
-                                    $.ntdlg.close($(this));
-                                }
-                            });
-                        }
+                        self.showSuccessMessage('$title', json.notice, {
+                            withOkay: !json.redir,
+                            autoClose: typeof $.fpRedir == 'function'
+                        });
                     }
                     if (json.redir) {
                         if (typeof $.fpRedir == 'function') {
@@ -221,11 +217,7 @@ $.formpost = function(form, options) {
                             }
                         }
                         if (json.error_msg) {
-                            $.ntdlg.dialog('form_post_error', '$error', json.error_msg, true, $.ntdlg.ICON_ERROR, {
-                                '$ok': function() {
-                                    $.ntdlg.close($(this));
-                                }
-                            }, f);
+                            self.showErrorMessage('$error', json.error_msg, f);
                         } else {
                             f();
                         }
@@ -242,12 +234,36 @@ $.formpost = function(form, options) {
                     doit();
                 }
             });
+        },
+        showSuccessMessage: function(title, message, opts) {
+            var autoclose = opts.autoClose || false;
+            var withokay = opts.withOkay || true;
+            var buttons = {};
+            if (withokay && !autoclose) {
+                buttons['$ok'] = function() {
+                    $.ntdlg.close($(this));
+                }
+            }
+            var dlg = $.ntdlg.dialog('form_post_success', title, message, true, $.ntdlg.ICON_SUCCESS, buttons);
+            if (autoclose) {
+                dlg.on('dialogopen', function() {
+                    $.ntdlg.close($(this));
+                });
+            }
+        },
+        showErrorMessage: function(title, message, callback) {
+            $.ntdlg.dialog('form_post_error', title, message, true, $.ntdlg.ICON_ERROR, {
+                '$ok': function() {
+                    $.ntdlg.close($(this));
+                }
+            }, callback);
         }
     }
+    $.extend(fp, $overrides);
     var props = ['message', 'progress', 'xhr', 'url', 'paramName', 'onsubmit', 'onconfirm'];
     $.util.applyProp(props, options, fp, true);
     fp.bind(form);
-    fp.errhelper = $.errhelper(form, $options);
+    fp.errhelper = $.errhelper(form, $erroptions);
     fp.onalways = function() {
         if (fp.progress) {
             $.ntdlg.wait();

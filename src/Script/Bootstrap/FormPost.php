@@ -51,6 +51,49 @@ class FormPost extends Base
         $this->addDependencies(array('Bootstrap.Dialog', 'Bootstrap.Dialog.Wait'));
     }
 
+    protected function getOverrides()
+    {
+        $ok = $this->trans('OK');
+
+        return array(
+            'showSuccessMessage' => JSValue::createRaw(<<<EOF
+function(title, message, opts) {
+            var autoclose = opts.autoClose || false;
+            var withokay = opts.withOkay || true;
+            var buttons = {};
+            if (withokay && !autoclose) {
+                buttons['$ok'] = {
+                    icon: $.ntdlg.BTN_ICON_OK,
+                    handler: function() {
+                        $.ntdlg.close($(this));
+                    }
+                }
+            }
+            var dlg = $.ntdlg.dialog('form_post_success', title, message, true, $.ntdlg.ICON_SUCCESS, buttons);
+            if (autoclose) {
+                dlg.on('shown.bs.modal', function() {
+                    $.ntdlg.close($(this));
+                });
+            }
+        }
+EOF
+            ),
+            'showErrorMessage' => JSValue::createRaw(<<<EOF
+function(title, message, callback) {
+            $.ntdlg.dialog('form_post_error', title, message, true, $.ntdlg.ICON_ERROR, {
+                '$ok': {
+                    icon: $.ntdlg.BTN_ICON_OK,
+                    handler: function() {
+                        $.ntdlg.close($(this));
+                    }
+                }
+            }, callback);
+        }
+EOF
+            ),
+        );
+    }
+
     protected function getErrHelperOptions()
     {
         return array(
