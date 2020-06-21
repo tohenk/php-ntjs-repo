@@ -1,6 +1,6 @@
 {
     "bootstrap": {
-        "version": "4.4.1",
+        "version": "4.5.0",
         "url": "https://stackpath.bootstrapcdn.com/bootstrap/%VER%/%TYPE%/%NAME%"
     },
     "fontawesome": {
