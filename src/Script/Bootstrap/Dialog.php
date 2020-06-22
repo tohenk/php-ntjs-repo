@@ -251,9 +251,12 @@ $.define('ntdlg', {
             $.fn.modal.Constructor.prototype.__showElement = $.fn.modal.Constructor.prototype._showElement;
             $.fn.modal.Constructor.prototype._showElement = function(relatedTarget) {
                 this.__showElement(relatedTarget);
-                var zIdx = parseInt($(this._element).css('z-index'));
+                var cIdx = zIdx = parseInt($(this._element).css('z-index'));
+                if ($.ntdlg.zIndex) {
+                    zIdx = Math.max(zIdx, $.ntdlg.zIndex);
+                }
                 var modalCount = $('.modal:visible').length;
-                if (modalCount > 1) {
+                if (modalCount > 1 || zIdx > cIdx) {
                     zIdx += 10 * (modalCount - 1);
                     $(this._element).css('z-index', zIdx);
                     $(this._backdrop).css('z-index', zIdx - 1);
