@@ -8,7 +8,7 @@
         "url": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/%VER%/%TYPE%/%NAME%"
     },
     "jquery": {
-        "version": "3.4.1",
+        "version": "3.5.1",
         "url": "https://code.jquery.com/%NAME%",
         "js": {
             "jquery": "jquery-%VER%",
