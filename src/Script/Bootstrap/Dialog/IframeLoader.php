@@ -62,6 +62,7 @@ $.define('ntdlg', {
                 $(document).trigger('iframeContentLoaded', bd);
             });
         } else {
+            var overflow = options.overflow || 'hidden';
             var height = dlg.height();
             var header = dlg.find('.modal-header');
             if (header.length) height -= (2 * header.outerHeight(true));

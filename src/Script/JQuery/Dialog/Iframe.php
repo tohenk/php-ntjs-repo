@@ -69,11 +69,9 @@ $.define('ntdlg', {
         var title = options.title || '';
         var w = options.w || 600;
         var h = options.h || 500;
-        var modal = options.modal || true;
         var overflow = options.overflow || 'hidden';
         var close_cb = options.close_cb || null;
         var params = {
-            modal: modal ? true : false,
             resizable: false,
             buttons: [],
             create: function(event, ui) {
@@ -131,36 +129,28 @@ EOF;
         $dlg = isset($options['dialog_id']) ? $options['dialog_id'] : $this->getDlgId();
         $height = isset($options['height']) ? $options['height'] : 500;
         $width = isset($options['width']) ? $options['width'] : 600;
-        $modal = isset($options['modal']) ? ($options['modal'] ? 'true' : 'false') : 'true';
-        $overflow = isset($options['overflow']) ? $options['overflow'] : 'hidden';
-        unset($options['dialog_id'], $options['height'], $options['width'], $options['modal'], $options['overflow']);
-
-        $url = $this->getBackend()->url($url);
-        if (isset($options['query_string'])) {
-            $url .= (false !== strpos($url, '?') ? '&' : '?').$options['query_string'];
-            unset($options['query_string']);
+        $iframeOptions = array('title' => $title, 'h' => $height, 'w' => $width);
+        if (isset($options['overflow'])) {
+            $iframeOptions['overflow'] = $options['overflow'];
         }
-
-        $iframeOptions = JSValue::create(array(
-            'title'     => $title,
-            'modal'     => $modal,
-            'h'         => $height,
-            'w'         => $width,
-            'overflow'  => $overflow,
-            'close_cb'  => '$.ntdlg.closeIframe'.$dlg,
-        ))->setIndent(1);
-
+        $iframeOptions['close_cb'] = '$.ntdlg.closeIframe'.$dlg;
+        $iframeOptions = JSValue::create($iframeOptions)->setIndent(1);
         $this->includeScript();
         $this->add(<<<EOF
 $.ntdlg.closeIframe$dlg = function() {
     $.ntdlg.close('dlg$dlg');
 }
-$('#ref-dlg$dlg').click(function(e) {
+$('#ref-dlg$dlg').on('click', function(e) {
     e.preventDefault();
     $.ntdlg.iframe('dlg$dlg', $(this).attr('href'), $iframeOptions);
 });
 EOF
         );
+        $url = $this->getBackend()->url($url);
+        if (isset($options['query_string'])) {
+            $url .= (false !== strpos($url, '?') ? '&' : '?').$options['query_string'];
+        }
+        unset($options['dialog_id'], $options['height'], $options['width'], $options['overflow'], $options['query_string']);
 
         return $this->getBackend()->ctag('a', $content, array_merge(array('href' => $url, 'class' => 'dialog', 'id' => 'ref-dlg'.$dlg), $options));
     }

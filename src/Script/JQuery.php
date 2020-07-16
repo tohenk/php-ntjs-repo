@@ -46,9 +46,9 @@ use NTLAB\JS\Util\Asset;
  * $jq->add(<<<EOF
  * $.post('/path/to/url', { data: mydata }, function(json) {
  *     if (json.success) {
- *         $.ntdlg.message('mysuccess', 'Success', 'Your changes has been saved.', true);
+ *         $.ntdlg.message('mysuccess', 'Success', 'Your changes has been saved.');
  *     } else {
- *         $.ntdlg.message('myerror', 'Error', 'Your changes can not be saved due to errors.', true);
+ *         $.ntdlg.message('myerror', 'Error', 'Your changes can not be saved due to errors.');
  *     }
  * });
  * 

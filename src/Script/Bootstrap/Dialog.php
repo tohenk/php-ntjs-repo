@@ -102,7 +102,6 @@ $.define('ntdlg', {
             $('div.' + $.ntdlg.moved.refs[id]).remove();
             delete $.ntdlg.moved.refs[id];
         }
-        var modal = typeof options.modal != 'undefined' ? options.modal : true;
         var closable = typeof options.closable != 'undefined' ? options.closable : true;
         var buttons = [];
         var handlers = [];
@@ -183,9 +182,8 @@ $.define('ntdlg', {
 
         return dlg;
     },
-    dialog: function(id, title, message, modal, icon, buttons, close_cb) {
+    dialog: function(id, title, message, icon, buttons, close_cb) {
         var self = this;
-        var modal = modal || true;
         var icon = icon || self.ICON_INFO;
         var buttons = buttons || [];
         var message = $.util.template(self.messageTmpl, {
@@ -193,7 +191,6 @@ $.define('ntdlg', {
             MESSAGE: message
         });
         var dlg = self.create(id, title, message, {
-            modal: modal,
             'hidden.bs.modal': function(e) {
                 e.preventDefault();
                 if (typeof close_cb == 'function') {

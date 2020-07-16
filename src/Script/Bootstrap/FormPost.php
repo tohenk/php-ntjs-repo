@@ -69,7 +69,7 @@ function(title, message, opts) {
                     }
                 }
             }
-            var dlg = $.ntdlg.dialog('form_post_success', title, message, true, $.ntdlg.ICON_SUCCESS, buttons);
+            var dlg = $.ntdlg.dialog('form_post_success', title, message, $.ntdlg.ICON_SUCCESS, buttons);
             if (autoclose) {
                 dlg.on('shown.bs.modal', function() {
                     $.ntdlg.close($(this));
@@ -80,7 +80,7 @@ EOF
             ),
             'showErrorMessage' => JSValue::createRaw(<<<EOF
 function(title, message, callback) {
-            $.ntdlg.dialog('form_post_error', title, message, true, $.ntdlg.ICON_ERROR, {
+            $.ntdlg.dialog('form_post_error', title, message, $.ntdlg.ICON_ERROR, {
                 '$ok': {
                     icon: $.ntdlg.BTN_ICON_OK,
                     handler: function() {

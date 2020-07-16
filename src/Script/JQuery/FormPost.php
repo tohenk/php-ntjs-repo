@@ -244,7 +244,7 @@ $.formpost = function(form, options) {
                     $.ntdlg.close($(this));
                 }
             }
-            var dlg = $.ntdlg.dialog('form_post_success', title, message, true, $.ntdlg.ICON_SUCCESS, buttons);
+            var dlg = $.ntdlg.dialog('form_post_success', title, message, $.ntdlg.ICON_SUCCESS, buttons);
             if (autoclose) {
                 dlg.on('dialogopen', function() {
                     $.ntdlg.close($(this));
@@ -252,7 +252,7 @@ $.formpost = function(form, options) {
             }
         },
         showErrorMessage: function(title, message, callback) {
-            $.ntdlg.dialog('form_post_error', title, message, true, $.ntdlg.ICON_ERROR, {
+            $.ntdlg.dialog('form_post_error', title, message, $.ntdlg.ICON_ERROR, {
                 '$ok': function() {
                     $.ntdlg.close($(this));
                 }

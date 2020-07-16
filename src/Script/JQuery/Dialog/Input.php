@@ -65,7 +65,7 @@ $.define('ntdlg', {
         var size = size || 50;
         var icon = icon || $.ntdlg.ICON_INPUT;
         var message = message + '<br/><input type="text" value="' + value + '" size="' + size + '">'
-        $.ntdlg.dialog(id, title, message, true, icon, {
+        $.ntdlg.dialog(id, title, message, icon, {
             '$ok': function() {
                 var dlg = $(this);
                 $.ntdlg.close(dlg);

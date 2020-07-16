@@ -159,7 +159,7 @@ $.errhelper = function(container, options) {
                     helper.addError(err, helper.errorContainer, helper.errorFormat);
                 } else {
                     if ($.ntdlg) {
-                        $.ntdlg.message('dlgerr', '$err', err, true, $.ntdlg.ICON_ERROR);
+                        $.ntdlg.message('dlgerr', '$err', err, $.ntdlg.ICON_ERROR);
                     } else {
                         alert(err);
                     }

@@ -76,13 +76,13 @@ $.define('ntdlg', {
             TITLE: title,
             CONTENT: message
         });
+        if (!params.modal) params.modal = true;
         $(dlg_id).remove();
         $(document.body).append(content);
         $(dlg_id).dialog(params);
     },
-    dialog: function(id, title, message, modal, icon, buttons, close_cb) {
+    dialog: function(id, title, message, icon, buttons, close_cb) {
         var self = this;
-        var modal = modal || true;
         var icon = icon || $.ntdlg.ICON_INFO;
         var buttons = buttons || [];
         var message = $.util.template(self.messageTmpl, {
@@ -90,7 +90,6 @@ $.define('ntdlg', {
             MESSAGE: message
         });
         self.create(id, title, message, {
-            modal: modal,
             width: 'auto',
             create: function() {
                 if ($.ntdlg.hideOverflow) {

@@ -72,16 +72,14 @@ $.define('ntdlg', {
         var self = this;
         var options = options || {};
         var title = options.title || '';
-        var modal = options.modal || true;
         var overflow = options.overflow || 'hidden';
         var close_cb = options.close_cb || null;
         var ajax = options.ajax || true;
         url += (url.indexOf('?') > -1 ? '&' : '?') + 'closecb=' + (close_cb ? close_cb : '') + '&_dialog=1';
         var params = {
-            modal: modal ? true : false,
             buttons: [],
             'shown.bs.modal': function() {
-                $.ntdlg.iframeLoader($(this), {ajax: ajax, url: url});
+                $.ntdlg.iframeLoader($(this), {ajax: ajax, url: url, overflow: overflow});
             }
         }
         var opts = ['size', 'closable', 'backdrop', 'keyboard', 'show', 'remote'];
@@ -114,38 +112,33 @@ EOF;
     public function call($title, $content, $url, $options = array())
     {
         $dlg = isset($options['dialog_id']) ? $options['dialog_id'] : $this->getDlgId();
-        $modal = isset($options['modal']) ? ($options['modal'] ? true : false) : true;
-        $overflow = isset($options['overflow']) ? $options['overflow'] : 'hidden';
-        $size = isset($options['size']) ? $options['size'] : null;
-        $clicker_class = isset($options['clicker_class']) ? $options['clicker_class'] : null;
-        unset($options['dialog_id'], $options['modal'], $options['overflow'], $options['size'],
-            $options['clicker_class'], $options['height'], $options['width']);
-
-        $url = $this->getBackend()->url($url);
-        if (isset($options['query_string'])) {
-            $url .= (false !== strpos($url, '?') ? '&' : '?').$options['query_string'];
-            unset($options['query_string']);
+        $iframeOptions = array('title' => $title);
+        if (isset($options['size'])) {
+            $iframeOptions['size'] = $options['size'];
         }
-
-        $iframeOptions = JSValue::create(array(
-            'title'     => $title,
-            'modal'     => $modal,
-            'overflow'  => $overflow,
-            'size'      => $size,
-            'close_cb'  => '$.ntdlg.closeIframe'.$dlg,
-        ))->setIndent(1);
-
+        if (isset($options['overflow'])) {
+            $iframeOptions['overflow'] = $options['overflow'];
+        }
+        $iframeOptions['close_cb'] = '$.ntdlg.closeIframe'.$dlg;
+        $iframeOptions = JSValue::create($iframeOptions)->setIndent(1);
         $this->includeScript();
         $this->add(<<<EOF
 $.ntdlg.closeIframe$dlg = function() {
     $.ntdlg.close('dlg$dlg');
 }
-$('#ref-dlg$dlg').click(function(e) {
+$('#ref-dlg$dlg').on('click', function(e) {
     e.preventDefault();
     $.ntdlg.iframe('dlg$dlg', $(this).attr('href'), $iframeOptions);
 });
 EOF
         );
+        $clicker_class = isset($options['clicker_class']) ? $options['clicker_class'] : null;
+        $url = $this->getBackend()->url($url);
+        if (isset($options['query_string'])) {
+            $url .= (false !== strpos($url, '?') ? '&' : '?').$options['query_string'];
+        }
+        unset($options['dialog_id'], $options['overflow'], $options['size'], $options['clicker_class'],
+            $options['height'], $options['width'], $options['query_string']);
 
         return $this->getBackend()->ctag('a', $content, array_merge(array('href' => $url, 'class' => 'dialog'.(null !== $clicker_class ? ' '.$clicker_class : ''), 'id' => 'ref-dlg'.$dlg), $options));
     }

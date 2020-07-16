@@ -33,7 +33,7 @@ use NTLAB\JS\Repository;
  * JQuery UI message dialog.
  *
  * Usage:
- * $.ntdlg.message('my', 'Message', 'This is an example', true);
+ * $.ntdlg.message('my', 'Message', 'This is an example');
  *
  * @author Toha
  */
@@ -51,8 +51,8 @@ class Message extends Base
 
         return <<<EOF
 $.define('ntdlg', {
-    message: function(id, title, message, modal, icon) {
-        $.ntdlg.dialog(id, title, message, modal, icon, {
+    message: function(id, title, message, icon) {
+        $.ntdlg.dialog(id, title, message, icon, {
             '$ok': function() {
                 $.ntdlg.close($(this));
             }

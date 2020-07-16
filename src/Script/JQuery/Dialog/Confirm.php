@@ -66,7 +66,7 @@ $.define('ntdlg', {
             var icon = undefined;
         }
         var icon = icon || $.ntdlg.ICON_QUESTION;
-        $.ntdlg.dialog(id, title, message, true, icon, {
+        $.ntdlg.dialog(id, title, message, icon, {
             '$yes': function() {
                 $.ntdlg.close($(this));
                 if (typeof cb_yes == 'function') {
