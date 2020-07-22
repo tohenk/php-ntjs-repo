@@ -31,26 +31,26 @@ support in your project.
 
 * Add PHP-NTJS repository.
 
-```
+```shell
 php composer.phar config repositories.php-ntjs vcs https://github.com/tohenk/php-ntjs.git
 ```
 
 * Set minimum-stability to dev to allow PHP-NTJS to be installed.
 
-```
+```shell
 php composer.phar config minimum-stability dev
 ```
 
 * Require ntlab/ntjs and install dependencies.
 
-```
+```shell
 php composer.phar require ntlab/ntjs
 php composer.phar install
 ```
 
 * Clone the assets somewhere in your public web folder.
 
-```
+```shell
 git clone https://github.com/tohenk/ntjs-web-assets /path/to/www/cdn
 ```
 
@@ -64,7 +64,7 @@ git clone https://github.com/tohenk/ntjs-web-assets /path/to/www/cdn
 
 * Connect it together, see [example](https://github.com/tohenk/php-ntjs-demo/blob/master/src/Demo.php).
 
-```
+```php
 use NTLAB\JS\Compressos\JSMin;
 use NTLAB\JS\Manager;
 use NTLAB\JS\Script;
@@ -98,7 +98,7 @@ class MyClass
 
 * Start write your javascript code, see [example](https://github.com/tohenk/php-ntjs-demo/blob/master/src/Script/MyDemo.php).
 
-```
+```php
 use NTLAB\JS\Script;
 
 class MyDemoClass
