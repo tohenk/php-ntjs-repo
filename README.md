@@ -29,26 +29,26 @@ Integrate With Your Code
 To integrate PHP-NTJS with your code, you need to enable [Composer](https://getcomposer.org)
 support in your project.
 
-* Add PHP-NTJS repository
+* Add PHP-NTJS repository.
 
 ```
 php composer.phar config repositories.php-ntjs vcs https://github.com/tohenk/php-ntjs.git
 ```
 
-* Set minimum-stability to dev to allow PHP-NTJS to be installed
+* Set minimum-stability to dev to allow PHP-NTJS to be installed.
 
 ```
 php composer.phar config minimum-stability dev
 ```
 
-* Require ntlab/ntjs and install dependencies
+* Require ntlab/ntjs and install dependencies.
 
 ```
 php composer.phar require ntlab/ntjs
 php composer.phar install
 ```
 
-* Clone the assets somewhere in your public web folder
+* Clone the assets somewhere in your public web folder.
 
 ```
 git clone https://github.com/tohenk/ntjs-web-assets /path/to/www/cdn
@@ -62,7 +62,7 @@ git clone https://github.com/tohenk/ntjs-web-assets /path/to/www/cdn
   when the script referenced. It must be implements `NTLAB\JS\DependencyResolverInterface`.
   An example of resolver is available [here](https://github.com/tohenk/php-ntjs-demo/blob/master/src/Backend.php).
 
-* Connect it together, see [example](https://github.com/tohenk/php-ntjs-demo/blob/master/src/Demo.php)
+* Connect it together, see [example](https://github.com/tohenk/php-ntjs-demo/blob/master/src/Demo.php).
 
 ```
 use NTLAB\JS\Compressos\JSMin;
@@ -96,7 +96,7 @@ class MyClass
 }
 ```
 
-* Start write your javascript code, see [example](https://github.com/tohenk/php-ntjs-demo/blob/master/src/Script/MyDemo.php)
+* Start write your javascript code, see [example](https://github.com/tohenk/php-ntjs-demo/blob/master/src/Script/MyDemo.php).
 
 ```
 use NTLAB\JS\Script;
@@ -116,7 +116,7 @@ EOF
 
 * Add a helper to include stylesheets, javascripts and script to the HTML response,
   see this [example](https://github.com/tohenk/php-ntjs-demo/blob/master/src/Helper.php) and
-  this [example](https://github.com/tohenk/php-ntjs-demo/blob/master/view/layout.php)
+  this [example](https://github.com/tohenk/php-ntjs-demo/blob/master/view/layout.php).
 
 Live Demo
 ---------
