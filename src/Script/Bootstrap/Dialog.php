@@ -191,6 +191,13 @@ $.define('ntdlg', {
             MESSAGE: message
         });
         var dlg = self.create(id, title, message, {
+            'shown.bs.modal': function(e) {
+                e.preventDefault();
+                var focused = dlg.find('input.focused');
+                if (focused.length) {
+                    focused.focus();
+                }
+            },
             'hidden.bs.modal': function(e) {
                 e.preventDefault();
                 if (typeof close_cb == 'function') {
