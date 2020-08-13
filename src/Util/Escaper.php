@@ -78,7 +78,7 @@ class Escaper
                 $values = array();
                 foreach ($value as $k => $v) {
                     $result = '';
-                    if (!is_numeric($k)) {
+                    if (!is_int($k) || !$numKeys) {
                         $numKeys = false;
                         $akey = $k;
                         // quote key if contain special characters
