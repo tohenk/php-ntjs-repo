@@ -54,7 +54,7 @@ class Loader
      */
     public function addJavascript($js)
     {
-        if (! in_array($js, $this->javascripts)) {
+        if (!in_array($js, $this->javascripts)) {
             $this->javascripts[] = $js;
         }
 
@@ -69,11 +69,43 @@ class Loader
      */
     public function addStylesheet($css)
     {
-        if (! in_array($css, $this->stylesheets)) {
+        if (!in_array($css, $this->stylesheets)) {
             $this->stylesheets[] = $css;
         }
 
         return $this;
+    }
+
+    /**
+     * Get javascripts.
+     *
+     * @return array
+     */
+    public function getJavascripts()
+    {
+        $manager = Manager::getInstance();
+        $js = array();
+        foreach ($this->javascripts as $file) {
+            $js[] = $manager->getBackend()->asset($file, BackendInterface::ASSET_JS);
+        }
+
+        return $js;
+    }
+
+    /**
+     * Get stylesheets.
+     *
+     * @return array
+     */
+    public function getStylesheets()
+    {
+        $manager = Manager::getInstance();
+        $css = array();
+        foreach ($this->stylesheets as $file) {
+            $css[] = $manager->getBackend()->asset($file, BackendInterface::ASSET_CSS);
+        }
+
+        return $css;
     }
 
     /**
@@ -85,14 +117,8 @@ class Loader
     public function autoload()
     {
         $manager = Manager::getInstance();
-        $js = array();
-        foreach ($this->javascripts as $file) {
-            $js[] = $manager->getBackend()->asset($file, BackendInterface::ASSET_JS);
-        }
-        $css = array();
-        foreach ($this->stylesheets as $file) {
-            $css[] = $manager->getBackend()->asset($file, BackendInterface::ASSET_CSS);
-        }
+        $js = $this->getJavascripts();
+        $css = $this->getStylesheets();
         if (count($js) || count($css)) {
             $assets = JSValue::create(array('js' => $js, 'css' => $css));
             $script = $manager->compress(<<<EOF
