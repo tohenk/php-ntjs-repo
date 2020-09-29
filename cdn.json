@@ -1,10 +1,10 @@
 {
     "bootstrap": {
-        "version": "4.5.0",
+        "version": "4.5.2",
         "url": "https://stackpath.bootstrapcdn.com/bootstrap/%VER%/%TYPE%/%NAME%"
     },
     "fontawesome": {
-        "version": "5.11.2",
+        "version": "5.14.0",
         "url": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/%VER%/%TYPE%/%NAME%"
     },
     "jquery": {
