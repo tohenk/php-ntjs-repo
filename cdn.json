@@ -1,10 +1,10 @@
 {
     "bootstrap": {
-        "version": "4.5.2",
-        "url": "https://stackpath.bootstrapcdn.com/bootstrap/%VER%/%TYPE%/%NAME%"
+        "version": "4.6.0",
+        "url": "https://cdn.jsdelivr.net/npm/bootstrap@%VER%/dist/%TYPE%/%NAME%"
     },
     "fontawesome": {
-        "version": "5.14.0",
+        "version": "5.15.2",
         "url": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/%VER%/%TYPE%/%NAME%"
     },
     "jquery": {
@@ -16,7 +16,7 @@
         }
     },
     "popper.js": {
-        "version": "1.16.0",
+        "version": "2.6.0",
         "url": "https://cdnjs.cloudflare.com/ajax/libs/popper.js/%VER%/%TYPE%/%NAME%"
     }
 }
