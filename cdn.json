@@ -16,7 +16,7 @@
         }
     },
     "popper.js": {
-        "version": "2.6.0",
-        "url": "https://cdnjs.cloudflare.com/ajax/libs/popper.js/%VER%/%TYPE%/%NAME%"
+        "version": "1.16.1",
+        "url": "https://cdn.jsdelivr.net/npm/popper.js@%VER%/dist/%TYPE%/%NAME%"
     }
 }
