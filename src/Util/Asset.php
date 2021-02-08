@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -63,7 +63,7 @@ class Asset
     /**
      * @var array
      */
-    protected $dirs = array();
+    protected $dirs = [];
 
     /**
      * Constructor.
@@ -71,12 +71,12 @@ class Asset
      * @param string $repository
      * @param array $options
      */
-    public function __construct($repository, $options = array())
+    public function __construct($repository, $options = [])
     {
         $this->manager = Manager::getInstance();
         $this->backend = $this->manager->getBackend();
         $this->repository = $repository;
-        foreach (array(static::ASSET_JAVASCRIPT, static::ASSET_STYLESHEET, static::ASSET_IMAGE, static::ASSET_OTHER) as $asset) {
+        foreach ([static::ASSET_JAVASCRIPT, static::ASSET_STYLESHEET, static::ASSET_IMAGE, static::ASSET_OTHER] as $asset) {
             if (isset($options[$asset])) {
                 $this->dirs[$asset] = $options[$asset];
             }
@@ -112,7 +112,6 @@ class Asset
     public function setAlias($alias)
     {
         $this->alias = $alias;
-
         return $this;
     }
 
@@ -128,12 +127,11 @@ class Asset
         if (null === $dir) {
             unset($this->dirs[$asset]);
         } else {
-            $assets = null === $asset ? array(self::ASSET_JAVASCRIPT, self::ASSET_STYLESHEET, self::ASSET_OTHER) : array($asset);
+            $assets = null === $asset ? [self::ASSET_JAVASCRIPT, self::ASSET_STYLESHEET, self::ASSET_OTHER] : [$asset];
             foreach ($assets as $type) {
                 $this->dirs[$type] = $dir;
             }
         }
-
         return $this;
     }
 
@@ -148,7 +146,6 @@ class Asset
     public function generate($name, $version = null, $minified = null)
     {
         $assetName = $name.($version ? '-'.$version : '').($minified ? '.min' : '');
-
         return $assetName;
     }
 
@@ -194,7 +191,6 @@ class Asset
         if (strlen($dirName = $this->getDirName($asset))) {
             $dir .= '/'.$dirName;
         }
-
         return $dir;
     }
 
@@ -210,7 +206,6 @@ class Asset
         if (false == strpos($name, '?') && null !== ($extension = $this->getExtension($asset)) && substr($name, -strlen($extension)) != $extension) {
             $name .= $extension;
         }
-
         return $name;
     }
 
@@ -243,7 +238,6 @@ class Asset
             }
             $name = $this->backend->generateAsset($this, $name, $asset);
         }
-
         return $this->fixExtension($asset, $name);
     }
 }

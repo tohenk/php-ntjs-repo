@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -109,10 +109,10 @@ EOF;
      * @param array $options  The dialog options
      * @return string
      */
-    public function call($title, $content, $url, $options = array())
+    public function call($title, $content, $url, $options = [])
     {
         $dlg = isset($options['dialog_id']) ? $options['dialog_id'] : $this->getDlgId();
-        $iframeOptions = array('title' => $title);
+        $iframeOptions = ['title' => $title];
         if (isset($options['size'])) {
             $iframeOptions['size'] = $options['size'];
         }
@@ -139,7 +139,6 @@ EOF
         }
         unset($options['dialog_id'], $options['overflow'], $options['size'], $options['clicker_class'],
             $options['height'], $options['width'], $options['query_string']);
-
-        return $this->getBackend()->ctag('a', $content, array_merge(array('href' => $url, 'class' => 'dialog'.(null !== $clicker_class ? ' '.$clicker_class : ''), 'id' => 'ref-dlg'.$dlg), $options));
+        return $this->getBackend()->ctag('a', $content, array_merge(['href' => $url, 'class' => 'dialog'.(null !== $clicker_class ? ' '.$clicker_class : ''), 'id' => 'ref-dlg'.$dlg], $options));
     }
 }

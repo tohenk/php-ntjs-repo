@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -56,12 +56,12 @@ class CDN
     /**
      * @var array
      */
-    protected $js = array();
+    protected $js = [];
 
     /**
      * @var array
      */
-    protected $css = array();
+    protected $css = [];
 
     /**
      * Constructor.
@@ -82,7 +82,6 @@ class CDN
     public function setUrl($url)
     {
         $this->url = $url;
-
         return $this;
     }
 
@@ -105,7 +104,6 @@ class CDN
     public function setVersion($version)
     {
         $this->version = $version;
-
         return $this;
     }
 
@@ -129,7 +127,6 @@ class CDN
     public function setPath($asset, $path)
     {
         $this->paths[$asset] = $path;
-
         return $this;
     }
 
@@ -156,7 +153,6 @@ class CDN
     public function addJs($name, $path)
     {
         $this->js[$name] = $path;
-
         return $this;
     }
 
@@ -183,7 +179,6 @@ class CDN
     public function addCss($name, $path)
     {
         $this->css[$name] = $path;
-
         return $this;
     }
 
@@ -222,7 +217,6 @@ class CDN
     protected function replacePath($asset, $str, $default = null)
     {
         $type = isset($this->paths[$asset]) ? $this->paths[$asset] : $default;
-
         return str_replace('%TYPE%'.(!strlen($type) ? '/' : ''), $type, $str);
     }
 
@@ -265,7 +259,6 @@ class CDN
             $cdn = $this->replaceVersion($cdn);
             $cdn = $this->replaceName($file, $cdn);
         }
-
         return $cdn;
     }
 }

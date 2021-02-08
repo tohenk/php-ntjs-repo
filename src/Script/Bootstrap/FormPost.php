@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -48,14 +48,14 @@ class FormPost extends Base
     protected function configure()
     {
         parent::configure();
-        $this->addDependencies(array('Bootstrap.Dialog', 'Bootstrap.Dialog.Wait'));
+        $this->addDependencies(['Bootstrap.Dialog', 'Bootstrap.Dialog.Wait']);
     }
 
     protected function getOverrides()
     {
         $ok = $this->trans('OK');
 
-        return array(
+        return [
             'showSuccessMessage' => JSValue::createRaw(<<<EOF
 function(title, message, opts) {
             var autoclose = opts.autoClose || false;
@@ -91,12 +91,12 @@ function(title, message, callback) {
         }
 EOF
             ),
-        );
+        ];
     }
 
     protected function getErrHelperOptions()
     {
-        return array(
+        return [
             'errorContainer' => '.alert-danger',
             'errorFormat' => JSValue::createRaw('$.errformat.INPLACE'),
             'parentSelector' => '.form-group',
@@ -138,6 +138,6 @@ function(helper) {
         }
 EOF
             ),
-        );
+        ];
     }
 }

@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -43,7 +43,7 @@ class Backend implements BackendInterface
      * {@inheritDoc}
      * @see \NTLAB\JS\BackendInterface::trans()
      */
-    public function trans($text, $vars = array(), $domain = null)
+    public function trans($text, $vars = [], $domain = null)
     {
         return $text;
     }
@@ -52,7 +52,7 @@ class Backend implements BackendInterface
      * {@inheritDoc}
      * @see \NTLAB\JS\BackendInterface::url()
      */
-    public function url($url, $options = array())
+    public function url($url, $options = [])
     {
         return $url;
     }
@@ -102,7 +102,7 @@ class Backend implements BackendInterface
      * {@inheritDoc}
      * @see \NTLAB\JS\BackendInterface::tag()
      */
-    public function tag($name, $options = array())
+    public function tag($name, $options = [])
     {
     }
 
@@ -110,7 +110,7 @@ class Backend implements BackendInterface
      * {@inheritDoc}
      * @see \NTLAB\JS\BackendInterface::ctag()
      */
-    public function ctag($name, $content, $options = array())
+    public function ctag($name, $content, $options = [])
     {
     }
 }

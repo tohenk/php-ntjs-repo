@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -48,18 +48,18 @@ class FormPost extends Base
 {
     protected function configure()
     {
-        $this->addDependencies(array('JQuery.PostHandler', 'JQuery.Util'));
+        $this->addDependencies(['JQuery.PostHandler', 'JQuery.Util']);
         $this->setPosition(Repository::POSITION_MIDDLE);
     }
 
     protected function getOverrides()
     {
-      return array();
+      return [];
     }
 
     protected function getErrHelperOptions()
     {
-        return array();
+        return [];
     }
 
     public function getScript()
@@ -269,7 +269,6 @@ $.formpost = function(form, options) {
             $.ntdlg.wait();
         }
     }
-
     return fp;
 }
 EOF;
@@ -285,18 +284,15 @@ EOF;
     public function call($selector, $message = null)
     {
         $this->includeScript();
-
-        $options = array();
+        $options = [];
         if (null !== $message) {
             $options['message'] = $this->trans($message);
         }
         $options = JSValue::create($options);
-
         $this->add(<<<EOF
 $.formpost($('$selector'), $options);
 EOF
         );
-
         return $this;
     }
 }

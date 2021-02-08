@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -39,12 +39,12 @@ class Loader
     /**
      * @var array
      */
-    protected $javascripts = array();
+    protected $javascripts = [];
 
     /**
      * @var array
      */
-    protected $stylesheets = array();
+    protected $stylesheets = [];
 
     /**
      * Add on demand javascript.
@@ -57,7 +57,6 @@ class Loader
         if (!in_array($js, $this->javascripts)) {
             $this->javascripts[] = $js;
         }
-
         return $this;
     }
 
@@ -72,7 +71,6 @@ class Loader
         if (!in_array($css, $this->stylesheets)) {
             $this->stylesheets[] = $css;
         }
-
         return $this;
     }
 
@@ -84,11 +82,10 @@ class Loader
     public function getJavascripts()
     {
         $manager = Manager::getInstance();
-        $js = array();
+        $js = [];
         foreach ($this->javascripts as $file) {
             $js[] = $manager->getBackend()->asset($file, BackendInterface::ASSET_JS);
         }
-
         return $js;
     }
 
@@ -100,11 +97,10 @@ class Loader
     public function getStylesheets()
     {
         $manager = Manager::getInstance();
-        $css = array();
+        $css = [];
         foreach ($this->stylesheets as $file) {
             $css[] = $manager->getBackend()->asset($file, BackendInterface::ASSET_CSS);
         }
-
         return $css;
     }
 
@@ -120,7 +116,7 @@ class Loader
         $js = $this->getJavascripts();
         $css = $this->getStylesheets();
         if (count($js) || count($css)) {
-            $assets = JSValue::create(array('js' => $js, 'css' => $css));
+            $assets = JSValue::create(['js' => $js, 'css' => $css]);
             $script = $manager->compress(<<<EOF
 if (!document.ntloader) {
     document.ntloader = {
@@ -247,7 +243,6 @@ if (!document.ntloader) {
 document.ntloader.load($assets);
 EOF
             );
-
             return $manager->scriptTag($script);
         }
     }

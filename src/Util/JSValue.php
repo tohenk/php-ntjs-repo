@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2018 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -41,7 +41,7 @@ class JSValue
     /**
      * @var array
      */
-    protected $data = array();
+    protected $data = [];
 
     /**
      * @var bool
@@ -110,7 +110,6 @@ class JSValue
     public function setData($value)
     {
         $this->data = $value;
-
         return $this;
     }
 
@@ -133,7 +132,6 @@ class JSValue
     public function setInline($value)
     {
         $this->inline = $value;
-
         return $this;
     }
 
@@ -156,7 +154,6 @@ class JSValue
     public function setRaw($value)
     {
         $this->raw = $value;
-
         return $this;
     }
 
@@ -179,7 +176,6 @@ class JSValue
     public function setIndent($value)
     {
         $this->indent = $value;
-
         return $this;
     }
 
@@ -207,7 +203,6 @@ class JSValue
             }
             $value = Escaper::escape($value, null, $this->indent, $this->inline);
         }
-
         return (string) $value;
     }
 

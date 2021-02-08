@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -51,27 +51,27 @@ abstract class Script
     /**
      * @var array
      */
-    protected $dependencies = array();
+    protected $dependencies = [];
 
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * @var array
      */
-    protected static $included = array();
+    protected static $included = [];
 
     /**
      * @var array
      */
-    protected static $maps = array();
+    protected static $maps = [];
 
     /**
      * @var array
      */
-    protected static $defaultOptions = array();
+    protected static $defaultOptions = [];
 
     /**
      * @var \NTLAB\JS\Util\Asset
@@ -91,22 +91,22 @@ abstract class Script
     /**
      * @var array
      */
-    protected $assets = array();
+    protected $assets = [];
 
     /**
      * @var array
      */
-    protected $props = array();
+    protected $props = [];
 
     /**
      * @var array
      */
-    protected static $priorities = array();
+    protected static $priorities = [];
 
     /**
      * @var array
      */
-    protected static $defaults = array();
+    protected static $defaults = [];
 
     /**
      * @var bool
@@ -126,14 +126,13 @@ abstract class Script
             if (null == $class = Manager::getInstance()->resolveDependency($name)) {
                 throw new \RuntimeException(sprintf('Can\'t resolve script "%s".', $name));
             }
-            static::$maps[$name] = array('class' => $class);
+            static::$maps[$name] = ['class' => $class];
         }
         if (!isset(static::$maps[$name]['obj'])) {
             $class = static::$maps[$name]['class'];
-            $options = isset(static::$defaultOptions[$name]) ? static::$defaultOptions[$name] : array();
+            $options = isset(static::$defaultOptions[$name]) ? static::$defaultOptions[$name] : [];
             static::$maps[$name]['obj'] = new $class($options);
         }
-
         return static::$maps[$name]['obj'];
     }
 
@@ -205,7 +204,7 @@ abstract class Script
      *
      * @param array $options
      */
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
         $this->options = $options;
         $this->defaultAsset = new Asset($this->getRepositoryName());
@@ -238,7 +237,6 @@ abstract class Script
         if (!$exist) {
             $this->initRepository($repo);
         }
-
         return $repo;
     }
 
@@ -293,9 +291,8 @@ abstract class Script
     protected function addDependencies()
     {
         foreach (func_get_args() as $deps) {
-            $this->dependencies = array_merge($this->dependencies, is_array($deps) ? $deps : array($deps));
+            $this->dependencies = array_merge($this->dependencies, is_array($deps) ? $deps : [$deps]);
         }
-
         return $this;
     }
 
@@ -308,7 +305,6 @@ abstract class Script
     protected function setPosition($position = Repository::POSITION_LAST)
     {
         $this->position = $position;
-
         return $this;
     }
 
@@ -330,7 +326,6 @@ abstract class Script
     protected function markAsIncluded()
     {
         static::$included[get_class($this)] = $this;
-
         return $this;
     }
 
@@ -347,7 +342,6 @@ abstract class Script
             $this->create($class)
                 ->includeScript();
         }
-
         return $this;
     }
 
@@ -359,7 +353,6 @@ abstract class Script
     public function includeDefaults()
     {
         $this->includeDepedencies(static::$defaults);
-
         return $this;
     }
 
@@ -376,7 +369,6 @@ abstract class Script
             $this->includeDepedencies();
             $this->buildScript();
         }
-
         return $this;
     }
 
@@ -392,7 +384,6 @@ abstract class Script
             $this->useScript($this->addDebugInfo($script, static::DBG_CLASS));
         }
         $this->getInitScript();
-
         return $this;
     }
 
@@ -406,7 +397,6 @@ abstract class Script
     protected function useScript($script, $position = null)
     {
         $this->getRepository()->add($script, null === $position ? $this->position : $position);
-
         return $this;
     }
 
@@ -459,7 +449,6 @@ abstract class Script
     public function setPriority($priority)
     {
         $this->priority = $priority;
-
         return $this;
     }
 
@@ -495,7 +484,6 @@ abstract class Script
     public function setOption($name, $value)
     {
         $this->options[$name] = $value;
-
         return $this;
     }
 
@@ -520,7 +508,6 @@ abstract class Script
     public function setAsset($asset)
     {
         $this->asset = $asset;
-
         return $this;
     }
 
@@ -545,7 +532,6 @@ abstract class Script
     public function generateAsset($name, $type, $asset = null)
     {
         $asset = $asset ?: $this->getAsset();
-
         return $asset->get($type, $name);
     }
 
@@ -560,7 +546,6 @@ abstract class Script
     public function addJavascript($js, $priority = null, $attributes = null)
     {
         $this->getBackend()->addAsset($js, BackendInterface::ASSET_JS, $priority ?: BackendInterface::ASSET_PRIORITY_DEFAULT, $attributes);
-
         return $this;
     }
 
@@ -573,7 +558,6 @@ abstract class Script
     public function removeJavascript($js)
     {
         $this->getBackend()->removeAsset($js, BackendInterface::ASSET_JS);
-
         return $this;
     }
 
@@ -588,7 +572,6 @@ abstract class Script
     public function addStylesheet($css, $priority = null, $attributes = null)
     {
         $this->getBackend()->addAsset($css, BackendInterface::ASSET_CSS, $priority ?: BackendInterface::ASSET_PRIORITY_DEFAULT, $attributes);
-
         return $this;
     }
 
@@ -601,7 +584,6 @@ abstract class Script
     public function removeStylesheet($css)
     {
         $this->getBackend()->removeAsset($css, BackendInterface::ASSET_CSS);
-
         return $this;
     }
 
@@ -616,7 +598,6 @@ abstract class Script
     public function addOther($src, $priority = null, $attributes = null)
     {
         $this->getBackend()->addAsset($src, BackendInterface::ASSET_OTHER, $priority ?: BackendInterface::ASSET_PRIORITY_DEFAULT, $attributes);
-
         return $this;
     }
 
@@ -629,7 +610,6 @@ abstract class Script
     public function removeOther($src)
     {
         $this->getBackend()->removeAsset($src, BackendInterface::ASSET_OTHER);
-
         return $this;
     }
 
@@ -647,7 +627,6 @@ abstract class Script
     public function useJavascript($name, $asset = null, $priority = null, $attributes = null)
     {
         $this->addJavascript($this->generateAsset($name, Asset::ASSET_JAVASCRIPT, $asset), $priority, $attributes);
-
         return $this;
     }
 
@@ -660,25 +639,24 @@ abstract class Script
      */
     protected function getLocales($culture, $default)
     {
-        $locales = array();
+        $locales = [];
         $delimeter = null;
         if ($culture) {
             $locales[] = $culture;
-            foreach (array('-', '_') as $delim) {
+            foreach (['-', '_'] as $delim) {
                 if (false != strpos($culture, $delim)) {
                     $delimeter = $delim;
                     break;
                 }
             }
             if ($delimeter) {
-                $locales[] = strtr($culture, array('-' => '_', '_' => '-'));
+                $locales[] = strtr($culture, ['-' => '_', '_' => '-']);
                 $locales[] = substr($culture, 0, strpos($culture, $delimeter));
             }
         }
         if ($default && !in_array($default, $locales)) {
             $locales[] = $default;
         }
-
         return $locales;
     }
 
@@ -714,7 +692,6 @@ abstract class Script
                 break;
             }
         }
-
         return $this;
     }
 
@@ -730,7 +707,6 @@ abstract class Script
     public function useStylesheet($name, $asset = null, $priority = null, $attributes = null)
     {
         $this->addStylesheet($this->generateAsset($name, Asset::ASSET_STYLESHEET, $asset), $priority, $attributes);
-
         return $this;
     }
 
@@ -746,7 +722,6 @@ abstract class Script
     public function useOther($name, $asset = null, $priority = null, $attributes = null)
     {
         $this->addOther($this->generateAsset($name, Asset::ASSET_OTHER, $asset), $priority, $attributes);
-
         return $this;
     }
 
@@ -762,11 +737,10 @@ abstract class Script
     public function addAsset($type, $name, $priority = null, $attributes = null)
     {
         $asset = $this->getAsset();
-        $key = implode(':', array($type, $asset->getRepository(), $name));
+        $key = implode(':', [$type, $asset->getRepository(), $name]);
         if (!isset($this->assets[$key])) {
-            $this->assets[$key] = array($type, $name, $asset, $priority, $attributes);
+            $this->assets[$key] = [$type, $name, $asset, $priority, $attributes];
         }
-
         return $this;
     }
 
@@ -783,11 +757,10 @@ abstract class Script
     public function addLocaleAsset($type, $name, $culture = null, $priority = null, $attributes = null)
     {
         $asset = $this->getAsset();
-        $key = implode(':', array($type, $asset->getRepository(), $name, $culture));
+        $key = implode(':', [$type, $asset->getRepository(), $name, $culture]);
         if (!isset($this->assets[$key])) {
-            $this->assets[$key] = array($type, $name, $asset, $priority, $culture, $attributes);
+            $this->assets[$key] = [$type, $name, $asset, $priority, $culture, $attributes];
         }
-
         return $this;
     }
 
@@ -801,11 +774,10 @@ abstract class Script
     public function removeAsset($type, $name)
     {
         $asset = $this->getAsset();
-        $key = implode(':', array($type, $asset->getRepository(), $name));
+        $key = implode(':', [$type, $asset->getRepository(), $name]);
         if (isset($this->assets[$key])) {
             unset($this->assets[$key]);
         }
-
         return $this;
     }
 
@@ -817,13 +789,12 @@ abstract class Script
      */
     public function includeDependency($dependencies)
     {
-        $dependencies = is_array($dependencies) ? $dependencies : array($dependencies);
+        $dependencies = is_array($dependencies) ? $dependencies : [$dependencies];
         if (!$this->isIncluded()) {
             $this->addDependencies($dependencies);
         } else {
             $this->includeDepedencies($dependencies);
         }
-
         return $this;
     }
 
@@ -835,7 +806,7 @@ abstract class Script
      * @param string $domain  Text domain
      * @return string
      */
-    protected function trans($text, $vars = array(), $domain = null)
+    protected function trans($text, $vars = [], $domain = null)
     {
         return $this->getBackend()->trans($text, $vars, $domain);
     }
@@ -847,7 +818,7 @@ abstract class Script
      * @param array $options  URL options
      * @return string
      */
-    protected function url($url, $options = array())
+    protected function url($url, $options = [])
     {
         return $this->getBackend()->url($url, $options);
     }
@@ -874,7 +845,6 @@ abstract class Script
     public function setProp($name, $value)
     {
         $this->props[$name] = $value;
-
         return $this;
     }
 
@@ -888,7 +858,6 @@ abstract class Script
     public function add($script, $position = Repository::POSITION_LAST)
     {
         $this->useScript($this->addDebugInfo($script), $position);
-
         return $this;
     }
 
@@ -929,7 +898,6 @@ EOF;
                 }
             }
         }
-
         return $script;
     }
 
@@ -942,7 +910,7 @@ EOF;
      */
     public static function indentLines($lines, $size = 4)
     {
-        $result = array();
+        $result = [];
         $pad = str_repeat(' ', $size);
         foreach (explode(Escaper::getEol(), $lines) as $line) {
             if (strlen($line)) {
@@ -950,7 +918,6 @@ EOF;
             }
             $result[] = $line;
         }
-
         return implode(Escaper::getEol(), $result);
     }
 }

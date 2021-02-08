@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -42,8 +42,8 @@ class Bootstrap extends JQuery
 
     protected function configure()
     {
-        $this->setAsset(new Asset($this->repository, array(Asset::ASSET_JAVASCRIPT => 'js', Asset::ASSET_STYLESHEET => 'css')));
-        $this->addDependencies(array('JQuery', 'Popper'));
+        $this->setAsset(new Asset($this->repository, [Asset::ASSET_JAVASCRIPT => 'js', Asset::ASSET_STYLESHEET => 'css']));
+        $this->addDependencies(['JQuery', 'Popper']);
         $this->addAsset(Asset::ASSET_JAVASCRIPT, 'bootstrap.min');
         $this->addAsset(Asset::ASSET_STYLESHEET, 'bootstrap.min');
     }

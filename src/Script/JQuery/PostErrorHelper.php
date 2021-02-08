@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -38,7 +38,7 @@ class PostErrorHelper extends Base
 {
     protected function configure()
     {
-        $this->addDependencies(array('JQuery.Util', 'JQuery.ScrollTo'));
+        $this->addDependencies(['JQuery.Util', 'JQuery.ScrollTo']);
         $this->setPosition(Repository::POSITION_MIDDLE);
     }
 
@@ -206,7 +206,6 @@ $.errhelper = function(container, options) {
     if (typeof helper.errorContainer == 'string' && helper.container) {
         helper.errorContainer = helper.container.find(helper.errorContainer);
     }
-
     return helper;
 }
 EOF;

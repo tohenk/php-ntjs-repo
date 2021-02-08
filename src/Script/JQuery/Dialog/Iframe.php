@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -124,12 +124,12 @@ EOF;
      * @param array $options  The dialog options
      * @return string
      */
-    public function call($title, $content, $url, $options = array())
+    public function call($title, $content, $url, $options = [])
     {
         $dlg = isset($options['dialog_id']) ? $options['dialog_id'] : $this->getDlgId();
         $height = isset($options['height']) ? $options['height'] : 500;
         $width = isset($options['width']) ? $options['width'] : 600;
-        $iframeOptions = array('title' => $title, 'h' => $height, 'w' => $width);
+        $iframeOptions = ['title' => $title, 'h' => $height, 'w' => $width];
         if (isset($options['overflow'])) {
             $iframeOptions['overflow'] = $options['overflow'];
         }
@@ -152,6 +152,6 @@ EOF
         }
         unset($options['dialog_id'], $options['height'], $options['width'], $options['overflow'], $options['query_string']);
 
-        return $this->getBackend()->ctag('a', $content, array_merge(array('href' => $url, 'class' => 'dialog', 'id' => 'ref-dlg'.$dlg), $options));
+        return $this->getBackend()->ctag('a', $content, array_merge(['href' => $url, 'class' => 'dialog', 'id' => 'ref-dlg'.$dlg], $options));
     }
 }

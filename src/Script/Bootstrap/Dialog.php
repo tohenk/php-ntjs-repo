@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -179,7 +179,6 @@ $.define('ntdlg', {
             }
         });
         dlg.modal(modal_options);
-
         return dlg;
     },
     dialog: function(id, title, message, icon, buttons, close_cb) {
@@ -207,7 +206,6 @@ $.define('ntdlg', {
             buttons: buttons
         });
         dlg.modal('show');
-
         return dlg;
     },
     show: function(dlg) {
@@ -236,7 +234,6 @@ $.define('ntdlg', {
                     return true;
                 }
             }
-
             return false;
         }
     },

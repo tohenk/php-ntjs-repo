@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -47,7 +47,7 @@ class Manager
     /**
      * @var \NTLAB\JS\Repository[]
      */
-    protected $repositories = array();
+    protected $repositories = [];
 
     /**
      * @var \NTLAB\JS\BackendInterface
@@ -62,12 +62,12 @@ class Manager
     /**
      * @var \NTLAB\JS\DependencyResolverInterface[]
      */
-    protected $resolvers = array();
+    protected $resolvers = [];
 
     /**
      * @var \NTLAB\JS\Util\CDN[]
      */
-    protected $cdns = array();
+    protected $cdns = [];
 
     /**
      * Get the registry instance.
@@ -79,7 +79,6 @@ class Manager
         if (null === static::$instance) {
             static::$instance = new self();
         }
-
         return static::$instance;
     }
 
@@ -110,7 +109,6 @@ class Manager
     public function setBackend(BackendInterface $backend)
     {
         $this->backend = $backend;
-
         return $this;
     }
 
@@ -137,7 +135,6 @@ class Manager
         if (null !== $this->compressor && !$this->compressor instanceof Compressor) {
             throw new \InvalidArgumentException('Compressor must be a sub class of \NTLAB\JS\Compressor.');
         }
-
         return $this;
     }
 
@@ -160,7 +157,6 @@ class Manager
     public function addResolver(DependencyResolverInterface $resolver)
     {
         $this->resolvers[] = $resolver;
-
         return $this;
     }
 
@@ -185,7 +181,6 @@ class Manager
         if (!isset($this->cdns[$repository])) {
             $this->cdns[$repository] = new CDN($repository);
         }
-
         return $this->cdns[$repository];
     }
 
@@ -222,13 +217,13 @@ class Manager
                 $cdn->setVersion($parameters['version']);
             }
             if (isset($parameters['paths'])) {
-                foreach (array(Asset::ASSET_JAVASCRIPT, Asset::ASSET_STYLESHEET) as $asset) {
+                foreach ([Asset::ASSET_JAVASCRIPT, Asset::ASSET_STYLESHEET] as $asset) {
                     if (isset($parameters['paths'][$asset])) {
                         $cdn->setPath($asset, $parameters['paths'][$asset]);
                     }
                 }
             }
-            foreach (array(Asset::ASSET_JAVASCRIPT, Asset::ASSET_STYLESHEET) as $asset) {
+            foreach ([Asset::ASSET_JAVASCRIPT, Asset::ASSET_STYLESHEET] as $asset) {
                 if (isset($parameters[$asset])) {
                     foreach ($parameters[$asset] as $name => $path) {
                         switch ($asset) {
@@ -243,7 +238,6 @@ class Manager
                 }
             }
         }
-
         return $this;
     }
 
@@ -261,7 +255,6 @@ class Manager
         if (!isset($this->repositories[$name])) {
             $this->repositories[$name] = new Repository($name);
         }
-
         return $this->repositories[$name];
     }
 
@@ -296,7 +289,6 @@ class Manager
         if (strlen($content) && $includeTag) {
             $content = $this->scriptTag($content);
         }
-
         return $content;
     }
 
@@ -332,7 +324,6 @@ EOF;
                 }
             }
         }
-
         return false;
     }
 
@@ -346,7 +337,7 @@ EOF;
     {
         foreach ($this->resolvers as $resolver) {
             if (strlen($class = $resolver->resolve($dep))) {
-                foreach (array($class, 'NTLAB\\JS\Script\\'.$class) as $rClass) {
+                foreach ([$class, 'NTLAB\\JS\Script\\'.$class] as $rClass) {
                     if ($this->isScript($rClass)) {
                         return $rClass;
                     }
@@ -366,7 +357,6 @@ EOF;
         if (strlen($content) && null !== ($compressor = $this->getCompressor())) {
             $content = $compressor->compress($content);
         }
-
         return $content;
     }
 }

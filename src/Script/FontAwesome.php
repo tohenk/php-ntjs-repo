@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2017 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2017-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -38,7 +38,7 @@ class FontAwesome extends Base
 {
     protected function configure()
     {
-        $this->setAsset(new Asset('fontawesome', array(Asset::ASSET_STYLESHEET => 'css', Asset::ASSET_JAVASCRIPT => 'js')));
+        $this->setAsset(new Asset('fontawesome', [Asset::ASSET_STYLESHEET => 'css', Asset::ASSET_JAVASCRIPT => 'js']));
         if ($this->getOption('use_svg', true)) {
             $this->addAsset(Asset::ASSET_JAVASCRIPT, 'all.min');
         } else {

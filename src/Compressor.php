@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -31,7 +31,7 @@ abstract class Compressor
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * @var bool
@@ -43,7 +43,7 @@ abstract class Compressor
      *
      * @param array $options  Compressor options
      */
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
         $this->options = $options;
     }

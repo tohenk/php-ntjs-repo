@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -63,7 +63,7 @@ class Repository
     /**
      * @var array
      */
-    protected $scripts = array();
+    protected $scripts = [];
 
     /**
      * Constructor.
@@ -96,7 +96,6 @@ class Repository
         if ($text != $this->wrapper) {
             $this->wrapper = $text;
         }
-
         return $this;
     }
 
@@ -109,7 +108,6 @@ class Repository
     public function setWrapSize($size)
     {
         $this->wrapSize = (int) $size;
-
         return $this;
     }
 
@@ -121,7 +119,6 @@ class Repository
     public function enableWrapper()
     {
         $this->useWrapper = true;
-
         return $this;
     }
 
@@ -133,7 +130,6 @@ class Repository
     public function disableWrapper()
     {
         $this->useWrapper = true;
-
         return $this;
     }
 
@@ -154,9 +150,8 @@ class Repository
      */
     public function clear()
     {
-        $this->scripts = array();
+        $this->scripts = [];
         $this->included = false;
-
         return $this;
     }
 
@@ -175,16 +170,15 @@ class Repository
             }
             $text .= Escaper::getEol();
             // adjust position
-            if (!in_array($position, array(static::POSITION_FIRST, static::POSITION_MIDDLE, static::POSITION_LAST))) {
+            if (!in_array($position, [static::POSITION_FIRST, static::POSITION_MIDDLE, static::POSITION_LAST])) {
                 $position = static::POSITION_LAST;
             }
             // insert the script by position
             if (!isset($this->scripts[$position])) {
-                $this->scripts[$position] = array();
+                $this->scripts[$position] = [];
             }
             $this->scripts[$position][] = $text;
         }
-
         return $this;
     }
 
@@ -198,7 +192,6 @@ class Repository
     {
         if (!$this->included) {
             $this->included = true;
-
             return Manager::getInstance()->compress($this->__toString());
         }
     }
@@ -206,7 +199,7 @@ class Repository
     public function __toString()
     {
         $script = null;
-        foreach (array(static::POSITION_FIRST, static::POSITION_MIDDLE, static::POSITION_LAST) as $position) {
+        foreach ([static::POSITION_FIRST, static::POSITION_MIDDLE, static::POSITION_LAST] as $position) {
             if (isset($this->scripts[$position])) {
                 $script .= implode('', $this->scripts[$position]);
             }
@@ -216,7 +209,6 @@ class Repository
                 $script = sprintf($this->wrapper, Escaper::implodeAndPad(explode(Escaper::getEol(), rtrim($script)), $this->wrapSize, null));
             }
         }
-
         return $script;
     }
 }

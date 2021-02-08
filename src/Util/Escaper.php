@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2018 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -75,7 +75,7 @@ class Escaper
             } else {
                 // if all arrays keys is numeric then use [] otherwise use {}
                 $numKeys = true;
-                $values = array();
+                $values = [];
                 foreach ($value as $k => $v) {
                     $result = '';
                     if (!is_int($k) || !$numKeys) {
@@ -103,7 +103,6 @@ class Escaper
                 $value = self::escapeValue($value, true);
             }
         }
-
         return $value;
     }
 
@@ -123,9 +122,8 @@ class Escaper
         } else if (is_numeric($value)) {
             $value = (string) $value;
         } else if ($escape) {
-            $value = '\''.strtr($value, array('\'' => '\\\'', "\r" => '\\r', "\n" => '\\n', "\t" => '\\t', "\b" => '\\b', "\f" => '\\f')).'\'';
+            $value = '\''.strtr($value, ['\'' => '\\\'', "\r" => '\\r', "\n" => '\\n', "\t" => '\\t', "\b" => '\\b', "\f" => '\\f']).'\'';
         }
-
         return $value;
     }
 
@@ -141,7 +139,6 @@ class Escaper
         if (is_int($value) || is_bool($value) || is_array($value) || is_object($value)) {
             return false;
         }
-
         return true;
     }
 
@@ -156,7 +153,6 @@ class Escaper
     public static function implodeAndPad($array, $size, $delim = ',')
     {
         $pad = self::padLeft($size);
-
         return static::$eol.$pad.implode($delim.static::$eol.$pad, $array).static::$eol.self::padLeft($size - 1);
     }
 

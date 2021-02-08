@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -53,7 +53,7 @@ interface BackendInterface
      * @param string $domain  Text domain
      * @return string
      */
-    public function trans($text, $vars = array(), $domain = null);
+    public function trans($text, $vars = [], $domain = null);
 
     /**
      * Perform URL translation or transform.
@@ -62,7 +62,7 @@ interface BackendInterface
      * @param array $options  URL options
      * @return string
      */
-    public function url($url, $options = array());
+    public function url($url, $options = []);
 
     /**
      * Perform asset translation for javascript or stylesheet.
@@ -116,7 +116,7 @@ interface BackendInterface
      * @param array $options  Tag options and attributes
      * @return string
      */
-    public function tag($name, $options = array());
+    public function tag($name, $options = []);
 
     /**
      * Create HTML tag with content.
@@ -126,5 +126,5 @@ interface BackendInterface
      * @param array $options  Tag options and attributes
      * @return string
      */
-    public function ctag($name, $content, $options = array());
+    public function ctag($name, $content, $options = []);
 }
