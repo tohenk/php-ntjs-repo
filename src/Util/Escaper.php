@@ -87,6 +87,12 @@ class Escaper
                         }
                         $result = $akey.': ';
                     }
+                    // treat string started with 'function(' as raw
+                    if (is_string($v) && 'function(' === substr($v, 0, 9)) {
+                        // add indentation
+                        $v = self::implodeAndPad(explode(self::getEol(), $v), 1, null);
+                        $v = JSValue::createRaw(trim($v));
+                    }
                     $result .= self::escape($v, $k, $indent + 1, $v instanceof JSValue && null !== $v->isInline() ? $v->isInline() : $inline);
                     $values[] = $result;
                 }
