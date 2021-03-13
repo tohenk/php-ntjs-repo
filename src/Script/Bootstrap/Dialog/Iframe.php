@@ -82,7 +82,7 @@ $.define('ntdlg', {
                 $.ntdlg.iframeLoader($(this), {ajax: ajax, url: url, overflow: overflow});
             }
         }
-        var opts = ['size', 'closable', 'backdrop', 'keyboard', 'show', 'remote'];
+        var opts = ['size', 'closable', 'backdrop', 'keyboard', 'show', 'close', 'remote'];
         $.util.applyProp(opts, options, params);
         $.ntdlg.create(id, title, '', params);
     }
@@ -120,6 +120,11 @@ EOF;
             $iframeOptions['overflow'] = $options['overflow'];
         }
         $iframeOptions['close_cb'] = '$.ntdlg.closeIframe'.$dlg;
+        $iframeOptions['close'] = <<<EOF
+function(e) {
+    $(this).remove();
+}
+EOF;
         $iframeOptions = JSValue::create($iframeOptions)->setIndent(1);
         $this->includeScript();
         $this->add(<<<EOF
