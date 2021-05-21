@@ -26,11 +26,11 @@
 
 namespace NTLAB\JS\Script\Bootstrap\Dialog;
 
-use NTLAB\JS\Script\Bootstrap as Base;
+use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
- * JQuery UI confirm dialog.
+ * Bootstrap confirm modal.
  *
  * Usage:
  * $.ntdlg.confirm('my', 'Confirm', 'Do you want to do something?', $.ntdlg.ICON_QUESTION,

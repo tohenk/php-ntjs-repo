@@ -38,7 +38,7 @@ class Popper extends Base
 {
     const UMD = 'umd';
     const ESM = 'esm';
-    const ESNext = '';
+    const CJS = 'cjs';
 
     /**
      * @var string
@@ -54,8 +54,8 @@ class Popper extends Base
             case static::ESM:
                 $this->getAsset()->setPath(Asset::ASSET_JAVASCRIPT, static::ESM);
                 break;
-            case static::ESNext:
-                $this->getAsset()->setPath(Asset::ASSET_JAVASCRIPT, static::ESNext);
+            case static::CJS:
+                $this->getAsset()->setPath(Asset::ASSET_JAVASCRIPT, static::CJS);
                 break;
         }
         $this->addAsset(Asset::ASSET_JAVASCRIPT, 'popper.min');

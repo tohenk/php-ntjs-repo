@@ -26,11 +26,11 @@
 
 namespace NTLAB\JS\Script\Bootstrap\Dialog;
 
-use NTLAB\JS\Script\Bootstrap as Base;
+use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
- * JQuery UI message dialog.
+ * Bootstrap message modal.
  *
  * Usage:
  * $.ntdlg.message('my', 'Message', 'This is an example');

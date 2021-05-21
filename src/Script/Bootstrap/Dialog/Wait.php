@@ -26,11 +26,11 @@
 
 namespace NTLAB\JS\Script\Bootstrap\Dialog;
 
-use NTLAB\JS\Script\Bootstrap as Base;
+use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
- * Bootstrap dialog to show a waiting dialog while in progress.
+ * Bootstrap modal to show a waiting dialog while in progress.
  *
  * Usage:
  * $.ntdlg.wait('I\'m doing something');
@@ -45,7 +45,7 @@ class Wait extends Base
 {
     protected function configure()
     {
-        $this->addDependencies('JQuery.NS', 'FontAwesome');
+        $this->addDependencies('JQuery.NS');
         $this->setPosition(Repository::POSITION_FIRST);
     }
 
@@ -65,15 +65,16 @@ $.define('ntdlg', {
                 self.dlg = dlg;
             } else {
                 if (create) {
+                    var spinner = $.ntdlg.spinnerTmpl;
                     var content =
-                        '<div id="' + self.id + '" class="modal fade" tabindex="-1" role="dialog">' +
-                          '<div class="modal-dialog" role="document">' +
+                        '<div id="' + self.id + '" class="modal fade" tabindex="-1">' +
+                          '<div class="modal-dialog modal-dialog-centered">' +
                             '<div class="modal-content">' +
                               '<div class="modal-header">$title</div>' +
                               '<div class="modal-body">' +
-                                '<div class="media">' +
-                                  '<div class="icon mr-3"><i class="fas fa-circle-notch fa-spin fa-fw fa-2x"></i></div>' +
-                                  '<div class="media-body">' +
+                                '<div class="d-flex">' +
+                                  '<div class="flex-shrink-0 icon">' + spinner + '</div>' +
+                                  '<div class="flex-grow-1 ms-3">' +
                                     '<div class="msg">$message</div>' +
                                   '</div>' +
                                 '</div>' +
@@ -96,7 +97,7 @@ $.define('ntdlg', {
                         var dlg = $(this);
                         dlg.removeClass('active');
                     });
-                    dlg.modal({keyboard: false});
+                    $.ntdlg._create(dlg[0], {keyboard: false});
                     self.dlg = dlg;
                 }
             }

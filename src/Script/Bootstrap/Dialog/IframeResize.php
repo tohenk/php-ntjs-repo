@@ -26,7 +26,7 @@
 
 namespace NTLAB\JS\Script\Bootstrap\Dialog;
 
-use NTLAB\JS\Script\Bootstrap as Base;
+use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**

@@ -26,11 +26,12 @@
 
 namespace NTLAB\JS\Script\Bootstrap;
 
-use NTLAB\JS\Script\Bootstrap as Base;
+use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
+use NTLAB\JS\Util\JSValue;
 
 /**
- * Bootstrap dialog wrapper to create and handling dialog.
+ * Bootstrap modal wrapper to create and handle dialog.
  *
  * Usage:
  * $.ntdlg.dialog('mydlg', 'A Dialog', 'This is a dialog', {
@@ -45,30 +46,81 @@ use NTLAB\JS\Repository;
  */
 class Dialog extends Base
 {
+    const ICON_BOOTSTRAP = 'Bootstrap';
+    const ICON_FONTAWESOME = 'FontAwesome';
+
     protected function configure()
     {
-        $this->addDependencies('Bootstrap', 'JQuery.NS', 'JQuery.Util', 'FontAwesome');
+        $this->addDependencies('Bootstrap', 'JQuery.NS', 'JQuery.Util');
         $this->setPosition(Repository::POSITION_FIRST);
+        switch ($this->getIconSet()) {
+            case static::ICON_BOOTSTRAP:
+                $this->addDependencies('BootstrapIcons');
+                break;
+            case static::ICON_FONTAWESOME:
+                $this->addDependencies('FontAwesome');
+                break;
+        }
+    }
+
+    protected function getIconSet()
+    {
+        return $this->getOption('icon-set', static::ICON_BOOTSTRAP);
+    }
+
+    protected function getIcons()
+    {
+        $loading = $this->trans('Loading...');
+        switch ($this->getIconSet()) {
+            case static::ICON_BOOTSTRAP:
+                return [
+                    'ICON_INFO' => 'bi-info-circle text-info fs-1',
+                    'ICON_ALERT' =>'bi-exclamation-circle text-warning fs-1',
+                    'ICON_ERROR' => 'bi-x-circle text-danger fs-1',
+                    'ICON_SUCCESS' => 'bi-check-circle text-success fs-1',
+                    'ICON_QUESTION' => 'bi-question-circle text-primary fs-1',
+                    'ICON_INPUT' => 'bi-pencil-square text-primary fs-1',
+                    'BTN_ICON_OK' => 'bi-check',
+                    'BTN_ICON_CANCEL' => 'bi-backspace',
+                    'BTN_ICON_CLOSE' => 'bi-x',
+                    'spinnerTmpl' => '<div class="spinner-border text-secondary" role="status"><span class="visually-hidden">'.$loading.'</span></div>',
+                ];
+            case static::ICON_FONTAWESOME:
+                return [
+                    'ICON_INFO' => 'fas fa-info-circle text-info',
+                    'ICON_ALERT' =>'fas fa-exclamation-circle text-warning',
+                    'ICON_ERROR' => 'fas fa-times-circle text-danger',
+                    'ICON_SUCCESS' => 'fas fa-check-circle text-success',
+                    'ICON_QUESTION' => 'fas fa-question-circle text-primary',
+                    'ICON_INPUT' => 'fas fa-edit text-primary',
+                    'BTN_ICON_OK' => 'fas fa-check',
+                    'BTN_ICON_CANCEL' => 'fas fa-ban',
+                    'BTN_ICON_CLOSE' => 'fas fa-times',
+                    'iconTmpl' => '<span class="dialog-icon %ICON% fa-fw fa-2x"></span>',
+                    'spinnerTmpl' => '<span class="fas fa-circle-notch fa-spin fa-fw fa-2x"></span>',
+                ];
+        }
     }
 
     public function getScript()
     {
+        $icons = JSValue::create($this->getIcons())->setIndent(2);
         $close = $this->trans('Close');
 
         return <<<EOF
 $.define('ntdlg', {
-    ICON_INFO: 'fas fa-info-circle text-info',
-    ICON_ALERT: 'fas fa-exclamation-circle text-warning',
-    ICON_ERROR: 'fas fa-times-circle text-danger',
-    ICON_SUCCESS: 'fas fa-check-circle text-success',
-    ICON_QUESTION: 'fas fa-question-circle text-primary',
-    ICON_INPUT: 'fas fa-edit text-primary',
-    BTN_ICON_OK: 'fas fa-check',
-    BTN_ICON_CANCEL: 'fas fa-ban',
-    BTN_ICON_CLOSE: 'fas fa-times',
+    ICON_INFO: null,
+    ICON_ALERT: null,
+    ICON_ERROR: null,
+    ICON_SUCCESS: null,
+    ICON_QUESTION: null,
+    ICON_INPUT: null,
+    BTN_ICON_OK: null,
+    BTN_ICON_CANCEL: null,
+    BTN_ICON_CLOSE: null,
     dialogTmpl:
-        '<div id="%ID%" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="%ID%-title">' +
-          '<div class="%MODAL%" role="document">' +
+        '<div id="%ID%" class="modal fade" tabindex="-1" aria-labelledby="%ID%-title">' +
+          '<div class="%MODAL%">' +
             '<div class="modal-content">' +
               '<div class="modal-header">' +
                 '<h5 id="%ID%-title" class="modal-title">%TITLE%</h5>' +
@@ -80,11 +132,11 @@ $.define('ntdlg', {
           '</div>' +
         '</div>',
     iconTmpl:
-        '<span class="dialog-icon %ICON% fa-fw fa-2x"></span>',
+        '<span class="dialog-icon %ICON%"></span>',
     messageTmpl:
-        '<div class="media d-flex align-items-center">' +
-          '<div class="p-2 mr-1">%ICON%</div>' +
-          '<div class="media-body">%MESSAGE%</div>' +
+        '<div class="d-flex align-items-center">' +
+          '<div class="flex-shrink-0 p-2">%ICON%</div>' +
+          '<div class="flex-grow-1 ms-3">%MESSAGE%</div>' +
         '</div>',
     buttonClass:
         'btn btn-outline-%TYPE%',
@@ -93,7 +145,7 @@ $.define('ntdlg', {
     buttonTmpl:
         '<button id="%ID%" type="button" class="%BTNCLASS%">%CAPTION%</button>',
     closeTmpl:
-        '<button type="button" class="close" data-dismiss="modal" aria-label="$close"><span aria-hidden="true">&times;</span></button>',
+        '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="$close"></button>',
     create: function(id, title, message, options) {
         var self = this;
         var dlg_id = '#' + id;
@@ -135,10 +187,12 @@ $.define('ntdlg', {
                 cnt++;
             });
         }
+        var m = ['modal-dialog', 'modal-dialog-centered'];
+        if (options.size) m.push('modal-' + options.size);
         var content = $.util.template(self.dialogTmpl, {
             ID: id,
             TITLE: title,
-            MODAL: 'modal-dialog' + (options.size ? ' modal-' + options.size : ''),
+            MODAL: m.join(' '),
             CLOSE: closable ? self.closeTmpl : '',
             BUTTONS: buttons.join(''),
             CONTENT: message
@@ -178,7 +232,7 @@ $.define('ntdlg', {
                 dlg.on(event, options[prop]);
             }
         });
-        dlg.modal(modal_options);
+        self._create(dlg[0], modal_options);
         return dlg;
     },
     dialog: function(id, title, message, icon, buttons, close_cb) {
@@ -205,23 +259,30 @@ $.define('ntdlg', {
             },
             buttons: buttons
         });
-        dlg.modal('show');
+        $.ntdlg.show(dlg);
         return dlg;
     },
     show: function(dlg) {
+        var self = this;
         if (dlg && !this.isVisible(dlg)) {
             if (typeof dlg == 'string') {
                 dlg = $('#' + dlg);
             }
-            dlg.modal('show');
+            var d = self._get(dlg[0]);
+            if (!d) {
+                d = self._create(dlg[0]);
+            }
+            if (d) d.show();
         }
     },
     close: function(dlg) {
+        var self = this;
         if (dlg) {
             if (typeof dlg == 'string') {
                 dlg = $('#' + dlg);
             }
-            dlg.modal('hide');
+            var d = self._get(dlg[0]);
+            if (d) d.hide();
         }
     },
     isVisible: function(dlg) {
@@ -245,12 +306,21 @@ $.define('ntdlg', {
             return dlg.find('.modal-body:first');
         }
     },
-    fixModal: function() {
+    _create: function(el, options) {
+        return new bootstrap.Modal(el, options || {});
+    },
+    _get: function(el) {
+        return bootstrap.Modal.getInstance(el);
+    },
+    init: function() {
+        // icon set
+        $.extend(this, $icons);
         // https://stackoverflow.com/questions/19305821/multiple-modals-overlay
         // fix z-index
-        if (typeof $.fn.modal.Constructor.prototype.__showElement == 'undefined') {
-            $.fn.modal.Constructor.prototype.__showElement = $.fn.modal.Constructor.prototype._showElement;
-            $.fn.modal.Constructor.prototype._showElement = function(relatedTarget) {
+        var p = bootstrap.Modal.prototype;
+        if (typeof p.__showElement == 'undefined') {
+            p.__showElement = p._showElement;
+            p._showElement = function(relatedTarget) {
                 this.__showElement(relatedTarget);
                 var cIdx = zIdx = parseInt($(this._element).css('z-index'));
                 if ($.ntdlg.zIndex) {
@@ -265,9 +335,9 @@ $.define('ntdlg', {
             }
         }
         // re-add modal-open class if there're still opened modal
-        if (typeof $.fn.modal.Constructor.prototype.__resetAdjustments == 'undefined') {
-            $.fn.modal.Constructor.prototype.__resetAdjustments = $.fn.modal.Constructor.prototype._resetAdjustments;
-            $.fn.modal.Constructor.prototype._resetAdjustments = function() {
+        if (typeof p.__resetAdjustments == 'undefined') {
+            p.__resetAdjustments = p._resetAdjustments;
+            p._resetAdjustments = function() {
                 this.__resetAdjustments();
                 if ($('.modal:visible').length > 0) {
                     $(document.body).addClass('modal-open');
@@ -286,7 +356,7 @@ EOF;
     public function getInitScript()
     {
         $this->add(<<<EOF
-$.ntdlg.fixModal();
+$.ntdlg.init();
 EOF);
     }
 }

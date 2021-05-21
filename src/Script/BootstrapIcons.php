@@ -30,22 +30,20 @@ use NTLAB\JS\Script as Base;
 use NTLAB\JS\Util\Asset;
 
 /**
- * Bootstrap javascript code repository for PHP.
+ * Bootstrap Icons.
  *
  * @author Toha
  */
-class Bootstrap extends Base
+class BootstrapIcons extends Base
 {
     /**
      * @var string
      */
-    protected $repository = 'bootstrap';
+    protected $repository = 'bootstrap-icons';
 
     protected function configure()
     {
-        $this->setAsset(new Asset($this->repository, [Asset::ASSET_JAVASCRIPT => 'js', Asset::ASSET_STYLESHEET => 'css']));
-        $this->addDependencies(['Popper']);
-        $this->addAsset(Asset::ASSET_JAVASCRIPT, 'bootstrap.min');
-        $this->addAsset(Asset::ASSET_STYLESHEET, 'bootstrap.min');
+        $this->setAsset(new Asset($this->repository, [Asset::ASSET_JAVASCRIPT => '', Asset::ASSET_STYLESHEET => '']));
+        $this->addAsset(Asset::ASSET_STYLESHEET, 'bootstrap-icons');
     }
 }

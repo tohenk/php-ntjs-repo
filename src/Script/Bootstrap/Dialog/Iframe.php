@@ -26,12 +26,12 @@
 
 namespace NTLAB\JS\Script\Bootstrap\Dialog;
 
-use NTLAB\JS\Script\Bootstrap as Base;
+use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 use NTLAB\JS\Util\JSValue;
 
 /**
- * JQuery UI iframe dialog.
+ * Bootstrap iframe modal.
  *
  * Usage:
  * $.ntdlg.iframe('my', '/path/to/url', {
@@ -84,7 +84,8 @@ $.define('ntdlg', {
         }
         var opts = ['size', 'closable', 'backdrop', 'keyboard', 'show', 'close', 'remote'];
         $.util.applyProp(opts, options, params);
-        $.ntdlg.create(id, title, '', params);
+        var dlg = $.ntdlg.create(id, title, '', params);
+        $.ntdlg.show(dlg);
     }
 }, true);
 EOF;

@@ -26,7 +26,7 @@
 
 namespace NTLAB\JS\Script\Bootstrap\Dialog;
 
-use NTLAB\JS\Script\Bootstrap as Base;
+use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
@@ -56,7 +56,7 @@ $.define('ntdlg', {
         }
         if (options.ajax) {
             bd.css({'max-height': '', 'height': ''});
-            bd.html('<span class="fas fa-circle-notch fa-spin fa-fw"></span>');
+            bd.html($.ntdlg.spinnerTmpl);
             $.get(options.url).then(function(html) {
                 bd.html(html);
                 $(document).trigger('iframeContentLoaded', bd);

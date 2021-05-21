@@ -25,11 +25,11 @@
  */
 namespace NTLAB\JS\Script\Bootstrap\Dialog;
 
-use NTLAB\JS\Script\Bootstrap as Base;
+use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
- * JQuery UI input dialog.
+ * Bootstrap input modal.
  *
  * Usage:
  * var myvalue = '';
@@ -64,7 +64,7 @@ $.define('ntdlg', {
         }
         var size = size || 50;
         var icon = icon || $.ntdlg.ICON_INPUT;
-        var message = '<p>' + message + '</p><input class="form-control focused" type="text" value="' + value + '" size="' + size + '">'
+        var message = '<p class="mb-1">' + message + '</p><input class="form-control focused" type="text" value="' + value + '" size="' + size + '">'
         $.ntdlg.dialog(id, title, message, icon, {
             '$ok': {
                 icon: $.ntdlg.BTN_ICON_OK,
