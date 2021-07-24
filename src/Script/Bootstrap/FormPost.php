@@ -58,8 +58,8 @@ class FormPost extends Base
         return [
             'showSuccessMessage' => JSValue::createRaw(<<<EOF
 function(title, message, opts) {
-            var autoclose = opts.autoClose || false;
-            var withokay = opts.withOkay || true;
+            var autoclose = typeof opts.autoClose != 'undefined' ? opts.autoClose : false;
+            var withokay = typeof opts.withOkay != 'undefined' ? opts.withOkay : true;
             var buttons = {};
             if (withokay && !autoclose) {
                 buttons['$ok'] = {
@@ -99,8 +99,7 @@ EOF
         return [
             'errorContainer' => '.alert-danger',
             'errorFormat' => JSValue::createRaw('$.errformat.INPLACE'),
-            'parentSelector' => '.form-group',
-            'parentClass' => 'has-error',
+            'parentClass' => null,
             'errClass' => 'is-invalid',
             'toggleClass' => 'd-none',
             'listClass' => 'list-unstyled mb-0',
@@ -109,28 +108,48 @@ function(el, error) {
             if (el.hasClass('alert-danger')) {
                 el.html(error);
             } else {
-                // don't add tooltip on hidden input
-                if (el.is('input[type="hidden"]')) {
-                    var el = el.siblings('input');
+                var tt = el;
+                var f = function(x, a, p) {
+                    var errDisp = x.attr(a);
+                    if (errDisp) {
+                        var xel = p ? x.parents(errDisp) : x.siblings(errDisp);
+                        if (xel.length) {
+                            return xel;
+                        }
+                    }
                 }
-                var tooltip = el.data('bs.tooltip');
+                var xel = f(tt, 'data-err-display');
+                if (!xel) xel = f(tt, 'data-err-display-parent', true);
+                if (xel) tt = xel;
+                // don't add tooltip on hidden input
+                if (tt.is('input[type="hidden"]')) {
+                    tt = tt.siblings('input');
+                }
+                var tooltip = tt.data('bs.tooltip');
                 if (tooltip != undefined) {
                     tooltip.config.title = error;
                 } else {
-                    el.tooltip({title: error, placement: 'right'});
+                    tt.tooltip({title: error, placement: 'right'});
                 }
+                xel = f(el, 'data-err-target');
+                el = xel ? xel : tt;
+                el.data('err-tt', tt);
             }
+            return el;
         }
 EOF
             ),
             'onErrReset' => JSValue::createRaw(<<<EOF
 function(helper) {
             if (helper.container) {
-                helper.container.find(helper.parentSelector + ' .' + helper.errClass).each(function() {
+                helper.container.find('.' + helper.errClass).each(function() {
                     var el = $(this);
-                    var tooltip = el.data('bs.tooltip');
-                    if (tooltip != undefined) {
-                        tooltip.options.title = '';
+                    var tt = el.data('err-tt');
+                    if (tt) {
+                        var tooltip = tt.data('bs.tooltip');
+                        if (tooltip != undefined) {
+                            tooltip.options.title = '';
+                        }
                     }
                     el.removeClass(helper.errClass);
                 });

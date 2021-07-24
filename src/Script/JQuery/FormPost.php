@@ -139,23 +139,23 @@ $.formpost = function(form, options) {
             }
             request.done(function(data) {
                 $.handlePostData(data, fp.errhelper, function(data) {
-                    if (typeof(success_cb) == 'function') {
+                    if (typeof success_cb == 'function') {
                         success_cb(data);
                     }
                 }, function(data) {
-                    if (typeof(error_cb) == 'function') {
+                    if (typeof error_cb == 'function') {
                         error_cb(data);
                     }
-                    if (typeof($.onerror) == 'function') {
+                    if (typeof fp.onerror == 'function') {
                         fp.onerror(data);
                     }
                 });
             }).fail(function() {
-                if (typeof(fp.onfail) == 'function') {
+                if (typeof fp.onfail == 'function') {
                     fp.onfail();
                 }
             }).always(function() {
-                if (typeof(fp.onalways) == 'function') {
+                if (typeof fp.onalways == 'function') {
                     fp.onalways();
                 }
             });
@@ -171,8 +171,7 @@ $.formpost = function(form, options) {
                 }
                 form.data('submit', xtra).submit();
             }
-            form.find('input[type=submit]').on('click', submitclicker);
-            form.find('button[type=submit]').on('click', submitclicker);
+            form.find('[type=submit]').on('click', submitclicker);
             var doit = function() {
                 if (self.hasRequired(form) || (typeof self.onsubmit == 'function' && !self.onsubmit(form))) {
                     return false;
@@ -236,8 +235,8 @@ $.formpost = function(form, options) {
             });
         },
         showSuccessMessage: function(title, message, opts) {
-            var autoclose = opts.autoClose || false;
-            var withokay = opts.withOkay || true;
+            var autoclose = typeof opts.autoClose != 'undefined' ? opts.autoClose : false;
+            var withokay = typeof opts.withOkay != 'undefined' ? opts.withOkay : true;
             var buttons = {};
             if (withokay && !autoclose) {
                 buttons['$ok'] = function() {

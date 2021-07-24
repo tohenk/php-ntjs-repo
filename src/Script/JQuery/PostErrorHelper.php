@@ -106,9 +106,9 @@ $.errhelper = function(container, options) {
                 case $.errformat.INPLACE:
                     var error = self.getError(err, null, ', ');
                     if (typeof self.inplace == 'function') {
-                        self.inplace(el, error);
-                        self.addErrorClass(el);
-                        self.showError(el);
+                        var iel = self.inplace(el, error);
+                        self.addErrorClass(iel);
+                        self.showError(iel);
                     }
                     break;
                 case $.errformat.ASLIST:

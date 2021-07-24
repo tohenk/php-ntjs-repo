@@ -123,8 +123,8 @@ EOF;
         $iframeOptions['close_cb'] = '$.ntdlg.closeIframe'.$dlg;
         $iframeOptions['close'] = <<<EOF
 function(e) {
-    $(this).remove();
-}
+        $(this).remove();
+    }
 EOF;
         $iframeOptions = JSValue::create($iframeOptions)->setIndent(1);
         $this->includeScript();
