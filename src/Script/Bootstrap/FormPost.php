@@ -125,11 +125,11 @@ function(el, error) {
                 if (tt.is('input[type="hidden"]')) {
                     tt = tt.siblings('input');
                 }
-                var tooltip = tt.data('bs.tooltip');
-                if (tooltip != undefined) {
-                    tooltip.config.title = error;
+                var tooltip = bootstrap.Tooltip.getInstance(tt[0]);
+                if (tooltip) {
+                    tooltip._config.title = error;
                 } else {
-                    tt.tooltip({title: error, placement: 'right'});
+                    tooltip = new bootstrap.Tooltip(tt[0], {title: error, placement: 'right'});
                 }
                 xel = f(el, 'data-err-target');
                 el = xel ? xel : tt;
@@ -146,9 +146,9 @@ function(helper) {
                     var el = $(this);
                     var tt = el.data('err-tt');
                     if (tt) {
-                        var tooltip = tt.data('bs.tooltip');
-                        if (tooltip != undefined) {
-                            tooltip.options.title = '';
+                        var tooltip = bootstrap.Tooltip.getInstance(tt[0]);
+                        if (tooltip) {
+                            tooltip._config.title = '';
                         }
                     }
                     el.removeClass(helper.errClass);
