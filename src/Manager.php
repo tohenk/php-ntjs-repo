@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2021 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2022 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -55,7 +55,7 @@ class Manager
     protected $backend = null;
 
     /**
-     * @var \NTLAB\JS\Compressor
+     * @var \NTLAB\JS\CompressorInterface
      */
     protected $compressor = null;
 
@@ -125,23 +125,23 @@ class Manager
     /**
      * Set script compressor.
      *
-     * @param \NTLAB\JS\Compressor $compressor  Script compressor
+     * @param \NTLAB\JS\CompressorInterface $compressor  Script compressor
      * @throws \InvalidArgumentException
      * @return \NTLAB\JS\Manager
      */
     public function setCompressor($compressor)
     {
-        $this->compressor = $compressor;
-        if (null !== $this->compressor && !$this->compressor instanceof Compressor) {
-            throw new \InvalidArgumentException('Compressor must be a sub class of \NTLAB\JS\Compressor.');
+        if (!$compressor instanceof CompressorInterface) {
+            throw new \InvalidArgumentException('Compressor must be a CompressorInterface.');
         }
+        $this->compressor = $compressor;
         return $this;
     }
 
     /**
      * Get script compressor.
      *
-     * @return \NTLAB\JS\Compressor
+     * @return \NTLAB\JS\CompressorInterface
      */
     public function getCompressor()
     {

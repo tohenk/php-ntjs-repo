@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2021 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2022 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,19 +24,15 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Compressor;
+namespace NTLAB\JS;
 
-use NTLAB\JS\Compressor as Base;
-use JShrink\Minifier;
-
-class JShrink extends Base
+interface CompressorInterface
 {
     /**
-     * {@inheritDoc}
-     * @see \NTLAB\JS\Compressor::compress()
+     * Compress content.
+     *
+     * @param string $content  The content to compress
+     * @return string
      */
-    public function compress($content)
-    {
-        return Minifier::minify($content, $this->options);
-    }
+    public function compress($content);
 }
