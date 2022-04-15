@@ -188,7 +188,7 @@ class Asset
     public function getDir($asset = null, $repository = null)
     {
         $dir = $this->backend->getAssetDir(null !== $repository ? $repository : $this->repository);
-        if (strlen($dirName = $this->getDirName($asset))) {
+        if (($dirName = $this->getDirName($asset)) && strlen($dirName)) {
             $dir .= '/'.$dirName;
         }
         return $dir;

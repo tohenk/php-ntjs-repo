@@ -286,7 +286,7 @@ class Manager
                 $content .= $script;
             }
         }
-        if (strlen($content) && $includeTag) {
+        if (null !== $content && strlen($content) && $includeTag) {
             $content = $this->scriptTag($content);
         }
         return $content;
