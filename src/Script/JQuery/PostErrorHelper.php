@@ -61,6 +61,7 @@ $.errhelper = function(container, options) {
         toggleClass: null,
         inplace: null,
         focused: null,
+        visibilityUseClass: false,
         getError: function(err, fmt, sep) {
             var error = '';
             $.map($.isArray(err) ? err : new Array(err), function(e) {
@@ -77,10 +78,29 @@ $.errhelper = function(container, options) {
 
             return error;
         },
+        doShow: function(el, show = true) {
+            var self = this;
+            if (self.visibilityUseClass && self.toggleClass) {
+                if (show) {
+                    el.removeClass(self.toggleClass);
+                } else {
+                    el.addClass(self.toggleClass);
+                }
+            } else {
+                if (show) {
+                    el.show();
+                } else {
+                    el.hide();
+                }
+            }
+        },
         showError: function(el) {
             var self = this;
-            el.show();
-            if (self.toggleClass) el.removeClass(self.toggleClass);
+            self.doShow(el, true);
+            if (self.toggleClass) {
+                el.removeClass(self.toggleClass);
+                el.parents().removeClass(self.toggleClass);
+            }
         },
         addErrorClass: function(el) {
             var self = this;
@@ -94,6 +114,12 @@ $.errhelper = function(container, options) {
         addError: function(err, el, errtype) {
             var self = this;
             var errtype = errtype ? errtype : $.errformat.REPLACE;
+            if (Array.isArray(el)) {
+                el.forEach(function(x) {
+                    self.showError(x);
+                });
+                el = el[el.length - 1];
+            }
             switch (errtype) {
                 case $.errformat.REPLACE:
                     var error = self.getError(err, null, ', ');
@@ -121,8 +147,6 @@ $.errhelper = function(container, options) {
                     }
                     self.addErrorClass(el);
                     self.showError(el);
-                    break;
-                default:
                     break;
             }
         },
@@ -192,7 +216,11 @@ $.errhelper = function(container, options) {
                 }
             }
             if (self.errorContainer) {
-                self.errorContainer.hide();
+                if (Array.isArray(self.errorContainer)) {
+                    self.doShow(self.errorContainer[0], false);
+                } else {
+                    self.doShow(self.errorContainer, false);
+                }
             }
             if (typeof self.onErrReset == 'function') {
                 self.onErrReset(self);
@@ -202,9 +230,31 @@ $.errhelper = function(container, options) {
     helper.container = container;
     var options = options ? options : {};
     $.util.applyProp(['errorContainer', 'errorFormat', 'requiredSelector', 'parentSelector', 'parentClass',
-        'errClass', 'listClass', 'toggleClass', 'inplace', 'onErrReset'], options, helper);
+        'errClass', 'listClass', 'toggleClass', 'visibilityUseClass', 'inplace', 'onErrReset'], options, helper);
     if (typeof helper.errorContainer == 'string' && helper.container) {
-        helper.errorContainer = helper.container.find(helper.errorContainer);
+        var p = helper.container;
+        var containers = helper.errorContainer.split(' ');
+        var items = [];
+        while (true) {
+            if (containers.length == 0) break;
+            var selector = containers.shift();
+            var el = p.find(selector);
+            if (el.length) {
+                p = el;
+                items.push(el);
+            } else {
+                break;
+            }
+        }
+        if (items.length) {
+            if (items.length > 1) {
+                helper.errorContainer = items;
+            } else {
+                helper.errorContainer = items[0];
+            }
+        } else {
+            delete helper.errorContainer;
+        }
     }
     return helper;
 }

@@ -97,12 +97,13 @@ EOF
     protected function getErrHelperOptions()
     {
         return [
-            'errorContainer' => '.alert-danger',
+            'errorContainer' => '.alert-danger .msg',
             'errorFormat' => JSValue::createRaw('$.errformat.INPLACE'),
             'parentClass' => null,
             'errClass' => 'is-invalid',
             'toggleClass' => 'd-none',
             'listClass' => 'list-unstyled mb-0',
+            'visibilityUseClass' => true,
             'inplace' => JSValue::createRaw(<<<EOF
 function(el, error) {
             if (el.hasClass('alert-danger')) {
