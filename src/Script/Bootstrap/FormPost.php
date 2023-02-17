@@ -58,9 +58,9 @@ class FormPost extends Base
         return [
             'showSuccessMessage' => JSValue::createRaw(<<<EOF
 function(title, message, opts) {
-            var autoclose = typeof opts.autoClose != 'undefined' ? opts.autoClose : false;
-            var withokay = typeof opts.withOkay != 'undefined' ? opts.withOkay : true;
-            var buttons = {};
+            const autoclose = typeof opts.autoClose != 'undefined' ? opts.autoClose : false;
+            const withokay = typeof opts.withOkay != 'undefined' ? opts.withOkay : true;
+            const buttons = {};
             if (withokay && !autoclose) {
                 buttons['$ok'] = {
                     icon: $.ntdlg.BTN_ICON_OK,
@@ -69,7 +69,7 @@ function(title, message, opts) {
                     }
                 }
             }
-            var dlg = $.ntdlg.dialog('form_post_success', title, message, $.ntdlg.ICON_SUCCESS, buttons);
+            const dlg = $.ntdlg.dialog('form_post_success', title, message, $.ntdlg.ICON_SUCCESS, buttons);
             if (autoclose) {
                 dlg.on('shown.bs.modal', function() {
                     $.ntdlg.close($(this));
@@ -109,24 +109,24 @@ function(el, error) {
             if (el.hasClass('alert-danger')) {
                 el.html(error);
             } else {
-                var tt = el;
-                var f = function(x, a, p) {
-                    var errDisp = x.attr(a);
+                let tt = el;
+                const f = function(x, a, p) {
+                    const errDisp = x.attr(a);
                     if (errDisp) {
-                        var xel = p ? x.parents(errDisp) : x.siblings(errDisp);
+                        const xel = p ? x.parents(errDisp) : x.siblings(errDisp);
                         if (xel.length) {
                             return xel;
                         }
                     }
                 }
-                var xel = f(tt, 'data-err-display');
+                let xel = f(tt, 'data-err-display');
                 if (!xel) xel = f(tt, 'data-err-display-parent', true);
                 if (xel) tt = xel;
                 // don't add tooltip on hidden input
                 if (tt.is('input[type="hidden"]')) {
                     tt = tt.siblings('input');
                 }
-                var tooltip = bootstrap.Tooltip.getInstance(tt[0]);
+                let tooltip = bootstrap.Tooltip.getInstance(tt[0]);
                 if (tooltip) {
                     tooltip._config.title = error;
                 } else {
@@ -144,10 +144,10 @@ EOF
 function(helper) {
             if (helper.container) {
                 helper.container.find('.' + helper.errClass).each(function() {
-                    var el = $(this);
-                    var tt = el.data('err-tt');
+                    const el = $(this);
+                    const tt = el.data('err-tt');
                     if (tt) {
-                        var tooltip = bootstrap.Tooltip.getInstance(tt[0]);
+                        const tooltip = bootstrap.Tooltip.getInstance(tt[0]);
                         if (tooltip) {
                             tooltip._config.title = '';
                         }

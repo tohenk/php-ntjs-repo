@@ -64,14 +64,14 @@ class Iframe extends Base
         return <<<EOF
 $.define('ntdlg', {
     iframe: function(id, url, options) {
-        var self = this;
-        var options = options || {};
-        var title = options.title || '';
-        var w = options.w || 600;
-        var h = options.h || 500;
-        var overflow = options.overflow || 'hidden';
-        var close_cb = options.close_cb || null;
-        var params = {
+        const self = this;
+        options = options || {};
+        let title = options.title || '';
+        let w = options.w || 600;
+        let h = options.h || 500;
+        let overflow = options.overflow || 'hidden';
+        let close_cb = options.close_cb || null;
+        const params = {
             resizable: false,
             buttons: [],
             create: function(event, ui) {
@@ -81,16 +81,16 @@ $.define('ntdlg', {
                 $.overflow.restore();
             },
             open: function() {
-                var d = $(this);
-                var h = Math.floor(d.height());
-                var w = Math.floor(d.width());
+                let d = $(this);
+                let h = Math.floor(d.height());
+                let w = Math.floor(d.width());
                 url += (url.indexOf('?') > -1 ? '&' : '?') + 'height=' + h + '&width=' + w + '&closecb=' + (close_cb ? close_cb : '') + '&_dialog=1';
                 d.html('<iframe src="' + url + '" frameborder="0" hspace="0" width="' + w + '" height="' + h + '" style="overflow: ' + overflow + ';"></iframe>');
                 d.addClass('ui-dialog-iframe-container');
             }
         };
         // adjust dialog size
-        var win = $(window);
+        let win = $(window);
         if (typeof(h) == 'number') {
             if (h > win.height()) h = win.height() - 10;
             params.height = h;

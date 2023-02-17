@@ -46,21 +46,21 @@ class AjaxHelper extends Base
     {
         return <<<EOF
 $.ajaxhelper = function(el) {
-    var helper = {
+    const helper = {
         el: null,
         dataKey: '_acxhr',
         load: function(url, params, callback) {
-            var self = this;
+            const self = this;
             if (typeof params === 'function') {
-                var callback = params;
-                var params = {};
+                callback = params;
+                params = {};
             }
-            var oxhr = self.el.data(self.dataKey);
+            const oxhr = self.el.data(self.dataKey);
             if (oxhr && 'pending' === oxhr.state()) {
                 oxhr.abort();
             }
             self.el.trigger('xhrstart');
-            var xhr = $.ajax({
+            const xhr = $.ajax({
                 url: url,
                 dataType: 'json',
                 data: params

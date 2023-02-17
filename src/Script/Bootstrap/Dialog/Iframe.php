@@ -69,22 +69,22 @@ class Iframe extends Base
         return <<<EOF
 $.define('ntdlg', {
     iframe: function(id, url, options) {
-        var self = this;
-        var options = options || {};
-        var title = options.title || '';
-        var overflow = options.overflow || 'hidden';
-        var close_cb = options.close_cb || null;
-        var ajax = options.ajax || true;
+        const self = this;
+        options = options || {};
+        const title = options.title || '';
+        const overflow = options.overflow || 'hidden';
+        const close_cb = options.close_cb || null;
+        const ajax = options.ajax || true;
         url += (url.indexOf('?') > -1 ? '&' : '?') + 'closecb=' + (close_cb ? close_cb : '') + '&_dialog=1';
-        var params = {
+        const params = {
             buttons: [],
             'shown.bs.modal': function() {
                 $.ntdlg.iframeLoader($(this), {ajax: ajax, url: url, overflow: overflow});
             }
         }
-        var opts = ['size', 'closable', 'backdrop', 'keyboard', 'show', 'close', 'remote'];
+        const opts = ['size', 'closable', 'backdrop', 'keyboard', 'show', 'close', 'remote'];
         $.util.applyProp(opts, options, params);
-        var dlg = $.ntdlg.create(id, title, '', params);
+        const dlg = $.ntdlg.create(id, title, '', params);
         $.ntdlg.show(dlg);
     }
 }, true);

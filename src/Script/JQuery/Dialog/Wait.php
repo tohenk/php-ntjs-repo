@@ -62,9 +62,10 @@ $.define('ntdlg', {
         d: null,
         active: false,
         create: function() {
-            if (null === this.d) {
+            const self = this;
+            if (self.d == null) {
                 $(document.body).append('<div id="wdialog" title="$title">$message</div>');
-                this.d = $('#wdialog').dialog({
+                self.d = $('#wdialog').dialog({
                     autoOpen: false,
                     modal: true,
                     width: $width,
@@ -88,16 +89,18 @@ $.define('ntdlg', {
             }
         },
         show: function(msg) {
-            if (this.active) this.close();
-            this.create();
+            const self = this;
+            if (self.active) self.close();
+            self.create();
             if (msg) {
-                $(this.d).text(msg);
+                $(self.d).text(msg);
             }
-            $.ntdlg.show(this.d);
+            $.ntdlg.show(self.d);
         },
         close: function() {
-            if (this.d) {
-                $.ntdlg.close(this.d);
+            const self = this;
+            if (self.d) {
+                $.ntdlg.close(self.d);
             }
         }
     },

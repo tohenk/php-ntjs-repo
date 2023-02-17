@@ -51,8 +51,8 @@ class Util extends Base
         return <<<EOF
 $.define('util', {
     template: function(tmpl, replaces) {
-        for (var n in replaces) {
-            var re = new RegExp('%' + n + '%', 'g');
+        for (let n in replaces) {
+            let re = new RegExp('%' + n + '%', 'g');
             tmpl = tmpl.replace(re, replaces[n]);
         }
         return tmpl;
@@ -66,12 +66,12 @@ $.define('util', {
         }
     },
     applyProp: function(props, src, dest, remove) {
-        var self = this;
+        const self = this;
         if (src && dest) {
             if (typeof props == 'object') {
                 if ($.isArray(props)) {
-                    for (var i = 0; i < props.length; i++) {
-                        var prop = props[i];
+                    for (let i = 0; i < props.length; i++) {
+                        let prop = props[i];
                         self.copyProp(prop, src, dest, remove);
                     }
                 } else {
@@ -88,11 +88,11 @@ $.define('util', {
         }
     },
     applyEvent: function(el, events, handlers) {
-        var self = this;
+        const self = this;
         if (typeof events == 'object') {
             if ($.isArray(events)) {
-                for (var i = 0; i < events.length; i++) {
-                    var event = events[i];
+                for (let i = 0; i < events.length; i++) {
+                    let event = events[i];
                     self.bindEvent(el, event, handlers);
                 }
             } else {

@@ -147,20 +147,20 @@ $.define('ntdlg', {
     closeTmpl:
         '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="$close"></button>',
     create: function(id, title, message, options) {
-        var self = this;
-        var dlg_id = '#' + id;
+        const self = this;
+        const dlg_id = '#' + id;
         $(dlg_id).remove();
         if ($.ntdlg.moved && typeof $.ntdlg.moved.refs[id] != 'undefined') {
             $('div.' + $.ntdlg.moved.refs[id]).remove();
             delete $.ntdlg.moved.refs[id];
         }
-        var closable = typeof options.closable != 'undefined' ? options.closable : true;
-        var buttons = [];
-        var handlers = [];
-        var cnt = 0;
+        const closable = typeof options.closable != 'undefined' ? options.closable : true;
+        const buttons = [];
+        const handlers = [];
+        let cnt = 0;
         if (options.buttons) {
             $.each(options.buttons, function(k, v) {
-                var caption, btnType, btnIcon, handler;
+                let caption, btnType, btnIcon, handler;
                 if ($.isArray(v) || $.isPlainObject(v)) {
                     caption = v.caption ? v.caption : k;
                     btnType = v.type ? v.type : (0 == cnt ? 'primary' : 'secondary');
@@ -171,8 +171,8 @@ $.define('ntdlg', {
                     btnType = 0 == cnt ? 'primary' : 'secondary';
                     handler = typeof v == 'function' ? v : null;
                 }
-                var btnid = id + '_btn_' + caption.replace(/\W+/g, "-").toLowerCase();
-                var btnclass = $.util.template(self.buttonClass, {TYPE: btnType});
+                let btnid = id + '_btn_' + caption.replace(/\W+/g, "-").toLowerCase();
+                let btnclass = $.util.template(self.buttonClass, {TYPE: btnType});
                 if (btnIcon) {
                     caption = $.util.template(self.buttonIconTmpl, {CAPTION: caption, ICON: btnIcon});
                 }
@@ -187,9 +187,9 @@ $.define('ntdlg', {
                 cnt++;
             });
         }
-        var m = ['modal-dialog', 'modal-dialog-centered'];
+        const m = ['modal-dialog', 'modal-dialog-centered'];
         if (options.size) m.push('modal-' + options.size);
-        var content = $.util.template(self.dialogTmpl, {
+        const content = $.util.template(self.dialogTmpl, {
             ID: id,
             TITLE: title,
             MODAL: m.join(' '),
@@ -198,16 +198,16 @@ $.define('ntdlg', {
             CONTENT: message
         });
         $(document.body).append(content);
-        var dlg = $(dlg_id);
+        const dlg = $(dlg_id);
         // move embedded modal
-        var bd = dlg.find('.modal-body');
-        var d = bd.find('div.modal');
+        const bd = dlg.find('.modal-body');
+        const d = bd.find('div.modal');
         if (d.length) {
             if (!$.ntdlg.moved) {
                 $.ntdlg.moved = {count: 0, refs: {}}
             }
             $.ntdlg.moved.count++;
-            var movedDlg = id + '-moved-' + $.ntdlg.moved.count;
+            const movedDlg = id + '-moved-' + $.ntdlg.moved.count;
             $.ntdlg.moved.refs[id] = movedDlg;
             d.addClass(movedDlg);
             d.appendTo($(document.body));
@@ -221,9 +221,9 @@ $.define('ntdlg', {
                 v.handler.apply(dlg);
             });
         });
-        var opts = ['backdrop', 'keyboard', 'show', 'remote'];
-        var events = ['show.bs.modal', 'shown.bs.modal', 'hide.bs.modal', 'hidden.bs.modal', 'loaded.bs.modal'];
-        var modal_options = {};
+        const opts = ['backdrop', 'keyboard', 'show', 'remote'];
+        const events = ['show.bs.modal', 'shown.bs.modal', 'hide.bs.modal', 'hidden.bs.modal', 'loaded.bs.modal'];
+        const modal_options = {};
         $.util.applyProp(opts, options, modal_options);
         $.util.applyEvent(dlg, events, options);
         // compatibility with JQuery UI dialog
@@ -236,17 +236,17 @@ $.define('ntdlg', {
         return dlg;
     },
     dialog: function(id, title, message, icon, buttons, close_cb) {
-        var self = this;
-        var icon = icon || self.ICON_INFO;
-        var buttons = buttons || [];
-        var message = $.util.template(self.messageTmpl, {
+        const self = this;
+        icon = icon || self.ICON_INFO;
+        buttons = buttons || [];
+        message = $.util.template(self.messageTmpl, {
             ICON: $.util.template(self.iconTmpl, {ICON: icon}),
             MESSAGE: message
         });
-        var dlg = self.create(id, title, message, {
+        const dlg = self.create(id, title, message, {
             'shown.bs.modal': function(e) {
                 e.preventDefault();
-                var focused = dlg.find('input.focused');
+                let focused = dlg.find('input.focused');
                 if (focused.length) {
                     focused.focus();
                 }
@@ -263,12 +263,12 @@ $.define('ntdlg', {
         return dlg;
     },
     show: function(dlg) {
-        var self = this;
+        const self = this;
         if (dlg && !this.isVisible(dlg)) {
             if (typeof dlg == 'string') {
                 dlg = $('#' + dlg);
             }
-            var d = self._get(dlg[0]);
+            let d = self._get(dlg[0]);
             if (!d) {
                 d = self._create(dlg[0]);
             }
@@ -276,12 +276,12 @@ $.define('ntdlg', {
         }
     },
     close: function(dlg) {
-        var self = this;
+        const self = this;
         if (dlg) {
             if (typeof dlg == 'string') {
                 dlg = $('#' + dlg);
             }
-            var d = self._get(dlg[0]);
+            const d = self._get(dlg[0]);
             if (d) d.hide();
         }
     },
@@ -317,16 +317,16 @@ $.define('ntdlg', {
         $.extend(this, $icons);
         // https://stackoverflow.com/questions/19305821/multiple-modals-overlay
         // fix z-index
-        var p = bootstrap.Modal.prototype;
+        const p = bootstrap.Modal.prototype;
         if (typeof p.__showElement == 'undefined') {
             p.__showElement = p._showElement;
             p._showElement = function(relatedTarget) {
                 this.__showElement(relatedTarget);
-                var cIdx = zIdx = parseInt($(this._element).css('z-index'));
+                let cIdx = zIdx = parseInt($(this._element).css('z-index'));
                 if ($.ntdlg.zIndex) {
                     zIdx = Math.max(zIdx, $.ntdlg.zIndex);
                 }
-                var modalCount = $('.modal:visible').length;
+                const modalCount = $('.modal:visible').length;
                 if (modalCount > 1 || zIdx > cIdx) {
                     zIdx += 10 * (modalCount - 1);
                     $(this._element).css('z-index', zIdx);

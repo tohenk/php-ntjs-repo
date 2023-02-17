@@ -61,11 +61,11 @@ class Confirm extends Base
 $.define('ntdlg', {
     confirm: function(id, title, message, icon, cb_yes, cb_no) {
         if (typeof icon == 'function') {
-            var cb_no = cb_yes;
-            var cb_yes = icon;
-            var icon = undefined;
+            cb_no = cb_yes;
+            cb_yes = icon;
+            icon = undefined;
         }
-        var icon = icon || $.ntdlg.ICON_QUESTION;
+        icon = icon || $.ntdlg.ICON_QUESTION;
         $.ntdlg.dialog(id, title, message, icon, {
             '$yes': {
                 icon: $.ntdlg.BTN_ICON_OK,

@@ -49,7 +49,7 @@ class PostErrorHelper extends Base
         return <<<EOF
 $.errformat = {REPLACE: 0, INPLACE: 1, ASLIST: 2}
 $.errhelper = function(container, options) {
-    var helper = {
+    const helper = {
         container: null,
         errorContainer: null,
         errorFormat: $.errformat.ASLIST,
@@ -63,12 +63,12 @@ $.errhelper = function(container, options) {
         focused: null,
         visibilityUseClass: false,
         getError: function(err, fmt, sep) {
-            var error = '';
+            let error = '';
             $.map($.isArray(err) ? err : new Array(err), function(e) {
                 if (error.length && sep) {
                     error = error + sep;
                 }
-                var e = $.isArray(e) ? e.join(': ') : e;
+                e = $.isArray(e) ? e.join(': ') : e;
                 if (fmt) {
                     error = error + $.util.template(fmt, {error: e});
                 } else {
@@ -79,7 +79,7 @@ $.errhelper = function(container, options) {
             return error;
         },
         doShow: function(el, show = true) {
-            var self = this;
+            const self = this;
             if (self.visibilityUseClass && self.toggleClass) {
                 if (show) {
                     el.removeClass(self.toggleClass);
@@ -95,7 +95,7 @@ $.errhelper = function(container, options) {
             }
         },
         showError: function(el) {
-            var self = this;
+            const self = this;
             self.doShow(el, true);
             if (self.toggleClass) {
                 el.removeClass(self.toggleClass);
@@ -103,26 +103,27 @@ $.errhelper = function(container, options) {
             }
         },
         addErrorClass: function(el) {
-            var self = this;
+            const self = this;
             if (self.errClass) {
                 if (el.is('input[type="hidden"]')) {
-                    var el = el.siblings('input');
+                    el = el.siblings('input');
                 }
                 el.addClass(self.errClass);
             }
         },
         addError: function(err, el, errtype) {
-            var self = this;
-            var errtype = errtype ? errtype : $.errformat.REPLACE;
+            const self = this;
+            errtype = errtype ? errtype : $.errformat.REPLACE;
             if (Array.isArray(el)) {
                 el.forEach(function(x) {
                     self.showError(x);
                 });
                 el = el[el.length - 1];
             }
+            let error;
             switch (errtype) {
                 case $.errformat.REPLACE:
-                    var error = self.getError(err, null, ', ');
+                    error = self.getError(err, null, ', ');
                     if (error.length) {
                         el.html(error);
                         self.addErrorClass(el);
@@ -130,16 +131,16 @@ $.errhelper = function(container, options) {
                     }
                     break;
                 case $.errformat.INPLACE:
-                    var error = self.getError(err, null, ', ');
+                    error = self.getError(err, null, ', ');
                     if (typeof self.inplace == 'function') {
-                        var iel = self.inplace(el, error);
+                        let iel = self.inplace(el, error);
                         self.addErrorClass(iel);
                         self.showError(iel);
                     }
                     break;
                 case $.errformat.ASLIST:
-                    var error = self.getError(err, '<li>%error%</li>');
-                    var ul = el.find('ul.' + self.listClass);
+                    error = self.getError(err, '<li>%error%</li>');
+                    let ul = el.find('ul.' + self.listClass);
                     if (ul.length) {
                         ul.append(error);
                     } else {
@@ -151,10 +152,10 @@ $.errhelper = function(container, options) {
             }
         },
         handleError: function(err) {
-            var handled = false;
+            let handled = false;
             // reference self using variable
             if ($.isArray(err)) {
-                var el = $('#' + err[0]);
+                const el = $('#' + err[0]);
                 // check if error element is exist
                 if (el.length) {
                     handled = true;
@@ -174,7 +175,7 @@ $.errhelper = function(container, options) {
                         }
                     }
                 } else {
-                    var err = err[0] + ': ' + err[1];
+                    err = err[0] + ': ' + err[1];
                 }
             }
             if (!handled) {
@@ -191,14 +192,14 @@ $.errhelper = function(container, options) {
             }
         },
         focusError: function() {
-            var self = this;
+            const self = this;
             if (self.focused != null) {
                 $.scrollto(self.focused);
                 self.focused.focus();
             }
         },
         resetError: function() {
-            var self = this;
+            const self = this;
             self.focused = null;
             if (self.container) {
                 if (self.listClass) {
@@ -228,17 +229,17 @@ $.errhelper = function(container, options) {
         }
     }
     helper.container = container;
-    var options = options ? options : {};
+    options = options ? options : {};
     $.util.applyProp(['errorContainer', 'errorFormat', 'requiredSelector', 'parentSelector', 'parentClass',
         'errClass', 'listClass', 'toggleClass', 'visibilityUseClass', 'inplace', 'onErrReset'], options, helper);
     if (typeof helper.errorContainer == 'string' && helper.container) {
-        var p = helper.container;
-        var containers = helper.errorContainer.split(' ');
-        var items = [];
+        let p = helper.container;
+        let containers = helper.errorContainer.split(' ');
+        let items = [];
         while (true) {
             if (containers.length == 0) break;
-            var selector = containers.shift();
-            var el = p.find(selector);
+            let selector = containers.shift();
+            let el = p.find(selector);
             if (el.length) {
                 p = el;
                 items.push(el);

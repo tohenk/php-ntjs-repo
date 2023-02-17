@@ -59,14 +59,14 @@ $.define('ntdlg', {
     waitdlg: {
         id: 'wdialog',
         getDlg: function(create) {
-            var self = this;
-            var dlg = $('#' + self.id);
+            const self = this;
+            let dlg = $('#' + self.id);
             if (dlg.length) {
                 self.dlg = dlg;
             } else {
                 if (create) {
-                    var spinner = $.ntdlg.spinnerTmpl;
-                    var content =
+                    const spinner = $.ntdlg.spinnerTmpl;
+                    const content =
                         '<div id="' + self.id + '" class="modal fade" tabindex="-1">' +
                           '<div class="modal-dialog modal-dialog-centered">' +
                             '<div class="modal-content">' +
@@ -85,7 +85,7 @@ $.define('ntdlg', {
                     $(document.body).append(content);
                     dlg = $('#' + self.id);
                     dlg.on('shown.bs.modal', function(e) {
-                        var dlg = $(this);
+                        const dlg = $(this);
                         dlg.addClass('active');
                         if (dlg.hasClass('dismiss')) {
                             setTimeout(function() {
@@ -94,7 +94,7 @@ $.define('ntdlg', {
                         }
                     });
                     dlg.on('hidden.bs.modal', function(e) {
-                        var dlg = $(this);
+                        const dlg = $(this);
                         dlg.removeClass('active');
                     });
                     $.ntdlg._create(dlg[0], {keyboard: false});
@@ -103,14 +103,14 @@ $.define('ntdlg', {
             }
         },
         isActive: function() {
-            var self = this;
+            const self = this;
             self.getDlg();
             if (self.dlg) {
                 return self.dlg.hasClass('show') ? true : false;
             }
         },
         show: function(msg) {
-            var self = this;
+            const self = this;
             self.close();
             self.getDlg(true);
             if (msg) {
@@ -120,7 +120,7 @@ $.define('ntdlg', {
             $.ntdlg.show(self.dlg);
         },
         close: function() {
-            var self = this;
+            const self = this;
             self.getDlg();
             if (self.dlg) {
                 if (self.dlg.hasClass('active')) {

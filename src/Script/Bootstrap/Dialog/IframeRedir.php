@@ -47,7 +47,7 @@ class IframeRedir extends Base
         return <<<EOF
 $.define('ntdlg', {
     iframeRedir: function(url) {
-        var pIframe = $(parent.document.body).find('div.ui-dialog-iframe-container iframe');
+        let pIframe = $(parent.document.body).find('div.ui-dialog-iframe-container iframe');
         if (!pIframe.length) {
             pIframe = $('div.modal.show div.ui-dialog-iframe-container:last');
         }

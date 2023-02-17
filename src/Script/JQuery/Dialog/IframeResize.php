@@ -54,8 +54,8 @@ $.define('dlgresize', {
     dlg: null,
     oHeight: null,
     resize: function(grow) {
-        var self = this;
-        var doit = false;
+        const self = this;
+        let doit = false;
         if (grow) {
             if (self.bd.height() > self.dlg.height() && self.bd.height() <= self.oHeight) {
                 doit = true;
@@ -71,9 +71,9 @@ $.define('dlgresize', {
         }
     },
     init: function() {
-        var self = this;
+        const self = this;
         self.dlg = self.pIframe.parents('div.ui-dialog-content');
-        var h = self.dlg.attr('oheight');
+        const h = self.dlg.attr('oheight');
         if (h) {
             self.oHeight = h;
         } else {

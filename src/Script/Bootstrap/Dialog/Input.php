@@ -32,7 +32,7 @@ use NTLAB\JS\Repository;
  * Bootstrap input modal.
  *
  * Usage:
- * var myvalue = '';
+ * let myvalue = '';
  * $.ntdlg.input('my', 'Input something', 'Please input something:', myvalue, function(value) {
  *     alert('You give me ' + value);
  * });
@@ -62,17 +62,17 @@ $.define('ntdlg', {
             callback = icon;
             icon = null;
         }
-        var size = size || 50;
-        var icon = icon || $.ntdlg.ICON_INPUT;
-        var message = '<p class="mb-1">' + message + '</p><input class="form-control focused" type="text" value="' + value + '" size="' + size + '">'
+        size = size || 50;
+        icon = icon || $.ntdlg.ICON_INPUT;
+        message = '<p class="mb-1">' + message + '</p><input class="form-control focused" type="text" value="' + value + '" size="' + size + '">'
         $.ntdlg.dialog(id, title, message, icon, {
             '$ok': {
                 icon: $.ntdlg.BTN_ICON_OK,
                 handler: function() {
-                    var dlg = $(this);
+                    const dlg = $(this);
                     $.ntdlg.close(dlg);
                     if (typeof callback == 'function') {
-                        var v = dlg.find('input[type=text]').val();
+                        const v = dlg.find('input[type=text]').val();
                         callback(v);
                     }
                 }

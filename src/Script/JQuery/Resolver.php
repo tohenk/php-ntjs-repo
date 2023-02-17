@@ -59,7 +59,7 @@ class Resolver extends Base
         return <<<EOF
 $.define('resolver', {
     resolve: function(n, o) {
-        var i, l;
+        let i, l;
         o = o || parent || window;
         n = n.split('.');
         for (i = 0, l = n.length; i < l; i++) {

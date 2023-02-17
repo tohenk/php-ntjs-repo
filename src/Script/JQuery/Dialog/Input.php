@@ -32,7 +32,7 @@ use NTLAB\JS\Repository;
  * JQuery UI input dialog.
  *
  * Usage:
- * var myvalue = '';
+ * let myvalue = '';
  * $.ntdlg.input('my', 'Input something', 'Please input something:', myvalue, function(value) {
  *     alert('You give me ' + value);
  * });
@@ -62,15 +62,15 @@ $.define('ntdlg', {
             callback = icon;
             icon = null;
         }
-        var size = size || 50;
-        var icon = icon || $.ntdlg.ICON_INPUT;
-        var message = message + '<br/><input type="text" value="' + value + '" size="' + size + '">'
+        size = size || 50;
+        icon = icon || $.ntdlg.ICON_INPUT;
+        message = message + '<br/><input type="text" value="' + value + '" size="' + size + '">'
         $.ntdlg.dialog(id, title, message, icon, {
             '$ok': function() {
-                var dlg = $(this);
+                const dlg = $(this);
                 $.ntdlg.close(dlg);
                 if (typeof callback == 'function') {
-                    var v = dlg.find('input[type=text]').val();
+                    const v = dlg.find('input[type=text]').val();
                     callback(v);
                 }
             },

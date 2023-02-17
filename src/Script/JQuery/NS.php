@@ -59,18 +59,18 @@ if (!$.define) {
     'use strict';
     $.namespace = {
         create: function(ns) {
-            var o = $;
-            var p = ns.split('.');
-            for (var i = 0; i < p.length; i++) {
+            let o = $;
+            let p = ns.split('.');
+            for (let i = 0; i < p.length; i++) {
                 o[p[i]] = o[p[i]] || {};
                 o = o[p[i]];
             }
             return o;
         },
         has: function(ns) {
-            var o = $;
-            var p = ns.split('.');
-            for (var i = 0; i < p.length; i++) {
+            let o = $;
+            let p = ns.split('.');
+            for (let i = 0; i < p.length; i++) {
                 if (!o[p[i]]) {
                     return false;
                 }

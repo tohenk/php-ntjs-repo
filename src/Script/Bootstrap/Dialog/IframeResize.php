@@ -51,20 +51,20 @@ class IframeResize extends Base
 $.define('dlgresize', {
     pIframe: null,
     resize: function(grow) {
-        var self = this;
-        var dlg = parent.$(self.pIframe.parents('div.modal.show'));
+        const self = this;
+        const dlg = parent.$(self.pIframe.parents('div.modal.show'));
         if (!dlg.length) return;
-        var maxheight = dlg.height() - 60;
-        var mc = dlg.find('.modal-content');
-        var header = mc.find('.modal-header');
+        let maxheight = dlg.height() - 60;
+        let mc = dlg.find('.modal-content');
+        let header = mc.find('.modal-header');
         if (header.length) maxheight -= header.outerHeight(true);
-        var footer = mc.find('.modal-footer');
+        let footer = mc.find('.modal-footer');
         if (footer.length) maxheight -= footer.outerHeight(true);
-        var bd = mc.find('.modal-body');
+        let bd = mc.find('.modal-body');
         if (bd.length) maxheight -= (bd.outerHeight(true) - bd.height());
-        var isIframe = self.pIframe[0].nodeName == 'IFRAME';
-        var bd = isIframe ? $(document.body) : mc.find('.modal-body');
-        var h;
+        let isIframe = self.pIframe[0].nodeName == 'IFRAME';
+        bd = isIframe ? $(document.body) : mc.find('.modal-body');
+        let h;
         if (grow || grow == undefined) {
             if (isIframe) {
                 h = Math.min(maxheight, bd.height());
@@ -84,7 +84,7 @@ $.define('dlgresize', {
     },
     init: function() {
         // bootstrap modal always resized to its content
-        var self = this;
+        const self = this;
         self.pIframe = $(parent.document.body).find('div.ui-dialog-iframe-container iframe');
         if (!self.pIframe.length) {
             self.pIframe = $('div.modal.show div.ui-dialog-iframe-container:last');

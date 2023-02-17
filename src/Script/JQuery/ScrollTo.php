@@ -51,15 +51,15 @@ class ScrollTo extends Base
         return <<<EOF
 $.scrollto = function(el) {
     if (typeof el == 'string') {
-        var el = $(el);
+        el = $(el);
     }
     if (el.length) {
-        var top = el.offset().top;
-        var w = $(window);
-        var t = w.scrollTop();
-        var h = w.height();
+        let top = el.offset().top;
+        let w = $(window);
+        let t = w.scrollTop();
+        let h = w.height();
         if (top < t || top > t + h) {
-            var ptop = parseInt($(document.body).css('padding-top'));
+            let ptop = parseInt($(document.body).css('padding-top'));
             w.scrollTop(top - ptop);
         }
     }

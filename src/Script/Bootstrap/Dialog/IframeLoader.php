@@ -47,8 +47,8 @@ class IframeLoader extends Base
         return <<<EOF
 $.define('ntdlg', {
     iframeLoader: function(dlg, options) {
-        var self = this;
-        var bd = dlg.find('.modal-body');
+        const self = this;
+        const bd = dlg.find('.modal-body');
         if (bd.hasClass('ui-dialog-iframe-container')) {
             options.ajax = bd[0].nodeName == 'IFRAME' ? false : true;
         } else {
@@ -62,9 +62,9 @@ $.define('ntdlg', {
                 $(document).trigger('iframeContentLoaded', bd);
             });
         } else {
-            var overflow = options.overflow || 'hidden';
-            var height = dlg.height();
-            var header = dlg.find('.modal-header');
+            const overflow = options.overflow || 'hidden';
+            let height = dlg.height();
+            const header = dlg.find('.modal-header');
             if (header.length) height -= (2 * header.outerHeight(true));
             bd.html('<iframe src="' + options.url + '" frameborder="0" hspace="0" width="100%" height="' + height + '" style="overflow: ' + overflow + ';"></iframe>');
         }

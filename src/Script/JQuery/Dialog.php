@@ -69,9 +69,9 @@ $.define('ntdlg', {
     iconTmpl: '<span class="ui-icon ui-icon-%ICON%"></span>',
     messageTmpl: '<div class="msg-container"><div class="msg-icon" style="float:left;margin:0 10px 0 0;padding:0 10px 0 10px;">%ICON%</div><div class="msg-content" style="margin-left: 50px;">%MESSAGE%</div></div>',
     create: function(id, title, message, params) {
-        var self = this;
-        var dlg_id = '#' + id;
-        var content = $.util.template(self.dialogTmpl, {
+        const self = this;
+        const dlg_id = '#' + id;
+        const content = $.util.template(self.dialogTmpl, {
             ID: id,
             TITLE: title,
             CONTENT: message
@@ -82,10 +82,10 @@ $.define('ntdlg', {
         $(dlg_id).dialog(params);
     },
     dialog: function(id, title, message, icon, buttons, close_cb) {
-        var self = this;
-        var icon = icon || $.ntdlg.ICON_INFO;
-        var buttons = buttons || [];
-        var message = $.util.template(self.messageTmpl, {
+        const self = this;
+        icon = icon || $.ntdlg.ICON_INFO;
+        buttons = buttons || [];
+        message = $.util.template(self.messageTmpl, {
             ICON: $.util.template(self.iconTmpl, {ICON: icon}),
             MESSAGE: message
         });
@@ -97,7 +97,7 @@ $.define('ntdlg', {
                 }
             },
             open: function() {
-                var dlg = $(this);
+                const dlg = $(this);
                 if ($.ntdlg.minWidth && dlg.width() < $.ntdlg.minWidth) {
                     dlg.dialog('option', 'width', $.ntdlg.minWidth);
                 }

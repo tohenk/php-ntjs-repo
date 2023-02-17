@@ -73,7 +73,7 @@ class FormPost extends Base
 
         return <<<EOF
 $.formpost = function(form, options) {
-    var fp = {
+    const fp = {
         errhelper: null,
         message: '$message',
         xhr: false,
@@ -86,13 +86,13 @@ $.formpost = function(form, options) {
         onalways: null,
         onconfirm: null,
         hasRequired: function(form) {
-            var self = this;
-            var status = false;
+            const self = this;
+            let status = false;
             if (self.errhelper.requiredSelector) {
                 form.find(self.errhelper.requiredSelector).each(function() {
-                    var el = $(this);
+                    const el = $(this);
                     if ((el.is('input') || el.is('select') || el.is('textarea')) && el.is(':visible') && !el.is(':disabled')) {
-                        var value = el.val();
+                        const value = el.val();
                         if (!value) {
                             status = true;
                             self.errhelper.focused = el;
@@ -105,24 +105,25 @@ $.formpost = function(form, options) {
             return status;
         },
         formPost: function(form, url, success_cb, error_cb) {
+            let params, request;
             form.trigger('formpost');
             if (fp.paramName) {
-                var params = form.data('submit-params');
+                params = form.data('submit-params');
                 params = typeof params == 'object' ? params : {};
                 params[fp.paramName] = form.serialize();
             } else {
-                var params = form.serializeArray();
+                params = form.serializeArray();
             }
-            var xtra = form.data('submit');
+            const xtra = form.data('submit');
             if ($.isArray(xtra) && xtra.length) {
-                for (var i = 0; i < xtra.length; i++) {
+                for (let i = 0; i < xtra.length; i++) {
                     params.push(xtra[i]);
                 }
             }
             fp.errhelper.resetError();
             form.trigger('formrequest');
             if (fp.xhr) {
-                var request = $.ajax({
+                request = $.ajax({
                     url: url,
                     type: 'POST',
                     dataType: 'json',
@@ -135,7 +136,7 @@ $.formpost = function(form, options) {
                     }
                 });
             } else {
-                var request = $.post(url, params);
+                request = $.post(url, params);
             }
             request.done(function(data) {
                 $.handlePostData(data, fp.errhelper, function(data) {
@@ -161,22 +162,22 @@ $.formpost = function(form, options) {
             });
         },
         bind: function(form) {
-            var self = this;
-            var submitclicker = function(e) {
+            const self = this;
+            const submitclicker = function(e) {
                 e.preventDefault();
-                var submitter = $(this);
-                var xtra = [];
+                const submitter = $(this);
+                const xtra = [];
                 if (submitter.attr('name')) {
                     xtra.push({name: submitter.attr('name'), value: submitter.val()});
                 }
                 form.data('submit', xtra).submit();
             }
             form.find('[type=submit]').on('click', submitclicker);
-            var doit = function() {
+            const doit = function() {
                 if (self.hasRequired(form) || (typeof self.onsubmit == 'function' && !self.onsubmit(form))) {
                     return false;
                 }
-                var url = self.url || form.attr('action');
+                const url = self.url || form.attr('action');
                 if (self.progress) {
                     $.ntdlg.wait(self.message);
                 }
@@ -199,7 +200,7 @@ $.formpost = function(form, options) {
                     if (typeof self.onalways == 'function') {
                         self.onalways();
                     }
-                    var f = function() {
+                    const f = function() {
                         self.errhelper.focusError();
                         form.trigger('formerror', [json]);
                         if (typeof $.formErrorHandler == 'function') {
@@ -235,15 +236,15 @@ $.formpost = function(form, options) {
             });
         },
         showSuccessMessage: function(title, message, opts) {
-            var autoclose = typeof opts.autoClose != 'undefined' ? opts.autoClose : false;
-            var withokay = typeof opts.withOkay != 'undefined' ? opts.withOkay : true;
-            var buttons = {};
+            const autoclose = typeof opts.autoClose != 'undefined' ? opts.autoClose : false;
+            const withokay = typeof opts.withOkay != 'undefined' ? opts.withOkay : true;
+            const buttons = {};
             if (withokay && !autoclose) {
                 buttons['$ok'] = function() {
                     $.ntdlg.close($(this));
                 }
             }
-            var dlg = $.ntdlg.dialog('form_post_success', title, message, $.ntdlg.ICON_SUCCESS, buttons);
+            const dlg = $.ntdlg.dialog('form_post_success', title, message, $.ntdlg.ICON_SUCCESS, buttons);
             if (autoclose) {
                 dlg.on('dialogopen', function() {
                     $.ntdlg.close($(this));
@@ -259,7 +260,7 @@ $.formpost = function(form, options) {
         }
     }
     $.extend(fp, $overrides);
-    var props = ['message', 'progress', 'xhr', 'url', 'paramName', 'onsubmit', 'onconfirm'];
+    const props = ['message', 'progress', 'xhr', 'url', 'paramName', 'onsubmit', 'onconfirm'];
     $.util.applyProp(props, options, fp, true);
     fp.bind(form);
     fp.errhelper = $.errhelper(form, $erroptions);

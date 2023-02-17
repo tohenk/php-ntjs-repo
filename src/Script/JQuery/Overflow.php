@@ -60,7 +60,7 @@ $.define('overflow', {
         }
     },
     restore: function(force) {
-        var force = force || false;
+        force = force || false;
         if ($.overflow.active || force) {
             $.overflow.active = false;
             $(document.body).css('overflow', 'inherit');
