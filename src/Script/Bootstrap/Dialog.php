@@ -80,9 +80,9 @@ class Dialog extends Base
                     'ICON_SUCCESS' => 'bi-check-circle text-success fs-1',
                     'ICON_QUESTION' => 'bi-question-circle text-primary fs-1',
                     'ICON_INPUT' => 'bi-pencil-square text-primary fs-1',
-                    'BTN_ICON_OK' => 'bi-check',
-                    'BTN_ICON_CANCEL' => 'bi-backspace',
-                    'BTN_ICON_CLOSE' => 'bi-x',
+                    'BTN_ICON_OK' => 'bi-check-lg',
+                    'BTN_ICON_CANCEL' => 'bi-x-lg',
+                    'BTN_ICON_CLOSE' => 'bi-x-lg',
                     'spinnerTmpl' => '<div class="spinner-border text-secondary" role="status"><span class="visually-hidden">'.$loading.'</span></div>',
                 ];
             case static::ICON_FONTAWESOME:
@@ -134,9 +134,9 @@ $.define('ntdlg', {
     iconTmpl:
         '<span class="dialog-icon %ICON%"></span>',
     messageTmpl:
-        '<div class="d-flex align-items-center">' +
+        '<div class="d-flex flex-row">' +
           '<div class="flex-shrink-0 p-2">%ICON%</div>' +
-          '<div class="flex-grow-1 ms-3">%MESSAGE%</div>' +
+          '<div class="flex-grow-1 ms-3 align-self-center">%MESSAGE%</div>' +
         '</div>',
     buttonClass:
         'btn btn-outline-%TYPE%',
