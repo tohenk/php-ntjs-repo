@@ -46,6 +46,11 @@ class CDN
     /**
      * @var string
      */
+    protected $package = null;
+
+    /**
+     * @var string
+     */
     protected $version = null;
 
     /**
@@ -62,6 +67,11 @@ class CDN
      * @var array
      */
     protected $css = [];
+
+    /**
+     * @var string[]
+     */
+    protected $tags = ['%', '<>'];
 
     /**
      * Constructor.
@@ -93,6 +103,28 @@ class CDN
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * Set cdn package.
+     *
+     * @param string $version
+     * @return \NTLAB\JS\Util\CDN
+     */
+    public function setPackage($package)
+    {
+        $this->package = $package;
+        return $this;
+    }
+
+    /**
+     * Get cdn package.
+     *
+     * @return string
+     */
+    public function getPackage()
+    {
+        return $this->package;
     }
 
     /**
@@ -196,6 +228,37 @@ class CDN
     }
 
     /**
+     * Replace tag in url.
+     *
+     * @param string $str Url to replace
+     * @param string $tag Tag to replace
+     * @param string $value Replacement
+     * @return string
+     */
+    protected function replaceTag($str, $tag, $value)
+    {
+        foreach ($this->tags as $marker) {
+            $tagged = $marker[0].$tag.(strlen($marker) > 1 ? $marker[1] : $marker[0]);
+            if (false !== strpos($str, $tagged)) {
+                $str = str_replace($tagged.(!strlen((string) $value) ? '/' : ''), (string) $value, $str);
+                break;
+            }
+        }
+        return $str;
+    }
+
+    /**
+     * Replace package.
+     *
+     * @param string $str
+     * @return string
+     */
+    protected function replacePackage($str)
+    {
+        return $this->replaceTag($str, 'PKG', $this->package);
+    }
+
+    /**
      * Replace version.
      *
      * @param string $str
@@ -203,7 +266,7 @@ class CDN
      */
     protected function replaceVersion($str)
     {
-        return str_replace('%VER%'.(null === $this->version ? '/' : ''), $this->version, $str);
+        return $this->replaceTag($str, 'VER', $this->version);
     }
 
     /**
@@ -217,7 +280,7 @@ class CDN
     protected function replacePath($asset, $str, $default = null)
     {
         $type = isset($this->paths[$asset]) ? $this->paths[$asset] : $default;
-        return str_replace('%TYPE%'.(!strlen($type) ? '/' : ''), $type, $str);
+        return $this->replaceTag($str, 'TYPE', $type);
     }
 
     /**
@@ -229,7 +292,7 @@ class CDN
      */
     protected function replaceName($name, $str)
     {
-        return str_replace('%NAME%', $name, $str);
+        return $this->replaceTag($str, 'NAME', $name);
     }
 
     /**
@@ -255,6 +318,7 @@ class CDN
         if ($file) {
             $file = $this->replaceVersion($file);
             $cdn = $this->getUrl();
+            $cdn = $this->replacePackage($cdn);
             $cdn = $this->replacePath($asset, $cdn, $path);
             $cdn = $this->replaceVersion($cdn);
             $cdn = $this->replaceName($file, $cdn);

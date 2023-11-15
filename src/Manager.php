@@ -205,13 +205,27 @@ class Manager
      */
     public function parseCdn($cdns)
     {
+        $providers = [];
         foreach ($cdns as $repository => $parameters) {
+            // empty key is CDN providers
+            if ($repository === '') {
+                $providers = $parameters;
+                continue;
+            }
             if (isset($parameters['disabled']) && $parameters['disabled']) {
                 continue;
             }
             $cdn = $this->addCdn($repository);
             if (isset($parameters['url'])) {
                 $cdn->setUrl($parameters['url']);
+            } else {
+                foreach ($providers as $provider => $url) {
+                    if (isset($parameters[$provider])) {
+                        $cdn->setPackage($parameters[$provider] ? $parameters[$provider] : $repository);
+                        $cdn->setUrl($url);
+                        break;
+                    }
+                }
             }
             if (isset($parameters['version'])) {
                 $cdn->setVersion($parameters['version']);
