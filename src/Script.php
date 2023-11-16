@@ -673,7 +673,7 @@ abstract class Script
      */
     public function useLocaleJavascript($name, $culture = null, $default = 'en', $asset = null, $priority = null, $attributes = null)
     {
-        if (false == strpos($name, '%s')) {
+        if (false == strpos((string) $name, '%s')) {
             $name .= '%s';
         }
         $asset   = $asset ?: $this->getAsset();
@@ -681,15 +681,17 @@ abstract class Script
         $culture = $culture ?: $this->getBackend()->getConfig('default-culture');
         // check file
         foreach ($this->getLocales($culture, $default ?: 'en') as $locale) {
-            $localeJs = sprintf($name, $locale).$asset->getExtension(Asset::ASSET_JAVASCRIPT);
-            $realJs = $baseDir;
-            if ($dirName = $asset->getDirName(Asset::ASSET_JAVASCRIPT)) {
-                $realJs .= DIRECTORY_SEPARATOR.$dirName;
-            }
-            $realJs .= DIRECTORY_SEPARATOR.$localeJs;
-            if (is_readable($realJs)) {
-                $this->useJavascript($localeJs, $asset, $priority, $attributes);
-                break;
+            foreach ($asset->getExtension(Asset::ASSET_JAVASCRIPT) as $extension) {
+                $localeJs = sprintf($name, $locale).'.'.$extension;
+                $realJs = $baseDir;
+                if ($dirName = $asset->getDirName(Asset::ASSET_JAVASCRIPT)) {
+                    $realJs .= DIRECTORY_SEPARATOR.$dirName;
+                }
+                $realJs .= DIRECTORY_SEPARATOR.$localeJs;
+                if (is_readable($realJs)) {
+                    $this->useJavascript($localeJs, $asset, $priority, $attributes);
+                    break 2;
+                }
             }
         }
         return $this;

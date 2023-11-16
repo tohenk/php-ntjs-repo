@@ -153,15 +153,15 @@ class Asset
      * Get asset extension.
      *
      * @param string $asset  Asset type
-     * @return string
+     * @return string[]
      */
     public function getExtension($asset)
     {
         switch ($asset) {
             case static::ASSET_JAVASCRIPT:
-                return '.js';
+                return ['js', 'mjs'];
             case static::ASSET_STYLESHEET:
-                return '.css';
+                return ['css'];
         }
     }
 
@@ -203,8 +203,18 @@ class Asset
      */
     protected function fixExtension($asset, $name)
     {
-        if (false == strpos($name, '?') && null !== ($extension = $this->getExtension($asset)) && substr($name, -strlen($extension)) != $extension) {
-            $name .= $extension;
+        if (false === strpos($name, '?') && ($extension = $this->getExtension($asset))) {
+            $usedExtension = null;
+            foreach ($extension as $ext) {
+                $dotExt = '.'.$ext;
+                if (substr($name, -strlen($dotExt)) === $dotExt) {
+                    $usedExtension = $ext;
+                    break;
+                }
+            }
+            if (null === $usedExtension) {
+                $name .= '.'.$extension[0];
+            }
         }
         return $name;
     }
