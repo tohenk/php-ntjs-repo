@@ -43,7 +43,7 @@ class BootstrapIcons extends Base
 
     protected function configure()
     {
-        $this->setAsset(new Asset($this->repository, [Asset::ASSET_JAVASCRIPT => '', Asset::ASSET_STYLESHEET => '']));
+        $this->setAsset(new Asset($this->repository, [Asset::ASSET_STYLESHEET => 'font']));
         $this->addAsset(Asset::ASSET_STYLESHEET, 'bootstrap-icons');
     }
 }
