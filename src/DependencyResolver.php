@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2022 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -29,11 +29,27 @@ namespace NTLAB\JS;
 class DependencyResolver implements DependencyResolverInterface
 {
     /**
+     * @var string
+     */
+    protected $prefix = null;
+
+    /**
+     * Constructor.
+     *
+     * @param string $prefix Class prefix
+     */
+    public function __construct($prefix = null)
+    {
+        $this->prefix = $prefix;
+    }
+
+    /**
      * {@inheritDoc}
      * @see \NTLAB\JS\DependencyResolverInterface::resolve()
      */
     public function resolve($dep)
     {
-        return str_replace('.', '\\', $dep);
+        return ($this->prefix ? $this->prefix.(substr($this->prefix, -1) !== '\\' ? '\\' : '') : '')
+            .str_replace('.', '\\', $dep);
     }
 }

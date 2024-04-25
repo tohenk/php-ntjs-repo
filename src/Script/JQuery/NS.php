@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2022 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -60,7 +60,7 @@ if (!$.define) {
     $.namespace = {
         create: function(ns) {
             let o = $;
-            let p = ns.split('.');
+            const p = ns.split('.');
             for (let i = 0; i < p.length; i++) {
                 o[p[i]] = o[p[i]] || {};
                 o = o[p[i]];
@@ -69,7 +69,7 @@ if (!$.define) {
         },
         has: function(ns) {
             let o = $;
-            let p = ns.split('.');
+            const p = ns.split('.');
             for (let i = 0; i < p.length; i++) {
                 if (!o[p[i]]) {
                     return false;

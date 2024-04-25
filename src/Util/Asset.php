@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2022 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -203,7 +203,7 @@ class Asset
      */
     protected function fixExtension($asset, $name)
     {
-        if (false === strpos($name, '?') && ($extension = $this->getExtension($asset))) {
+        if ($name && false === strpos($name, '?') && ($extension = $this->getExtension($asset))) {
             $usedExtension = null;
             foreach ($extension as $ext) {
                 $dotExt = '.'.$ext;

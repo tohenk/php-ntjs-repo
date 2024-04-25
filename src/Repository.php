@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2022 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -55,7 +55,6 @@ class Repository
     protected $useWrapper = true;
 
     /**
-     * 
      * @var bool
      */
     protected $included = false;
@@ -64,6 +63,11 @@ class Repository
      * @var array
      */
     protected $scripts = [];
+
+    /**
+     * @var array
+     */
+    protected $noDelimiters = [['/*', '//'], ['}', ';', '*/']];
 
     /**
      * Constructor.
@@ -156,6 +160,24 @@ class Repository
     }
 
     /**
+     * Add script delimiter if necessary
+     *
+     * @param string $script
+     * @return string
+     */
+    public function addDelimiter($script)
+    {
+        foreach ($this->noDelimiters as $i => $delimiters) {
+            foreach ($delimiters as $delimiter) {
+                if (($i === 0 ? substr(ltrim($script), 0, strlen($delimiter)) : substr(rtrim($script), -strlen($delimiter))) === $delimiter) {
+                    return $script;
+                }
+            }
+        }
+        return rtrim($script).';';
+    }
+
+    /**
      * Add new script text to the existing script.
      *
      * @param string $text  Script text
@@ -165,10 +187,8 @@ class Repository
     public function add($text, $position = self::POSITION_LAST)
     {
         if ($text) {
-            if (!('}' == substr(rtrim($text), -1) || ';' == substr(rtrim($text), -1) || '*/' == substr(rtrim($text), -2))) {
-                $text = rtrim($text).";".Escaper::getEol();
-            }
-            $text .= Escaper::getEol();
+            // add delimiter if necessary
+            $text = $this->addDelimiter($text);
             // adjust position
             if (!in_array($position, [static::POSITION_FIRST, static::POSITION_MIDDLE, static::POSITION_LAST])) {
                 $position = static::POSITION_LAST;
@@ -198,14 +218,14 @@ class Repository
 
     public function __toString()
     {
-        $script = null;
+        $scripts = [];
         foreach ([static::POSITION_FIRST, static::POSITION_MIDDLE, static::POSITION_LAST] as $position) {
             if (isset($this->scripts[$position])) {
-                $script .= implode('', $this->scripts[$position]);
+                array_push($scripts, ...$this->scripts[$position]);
             }
         }
-        if (strlen($script)) {
-            if ($this->useWrapper && false != strpos($this->wrapper, '%s')) {
+        if (strlen($script = implode(Escaper::getEol(), $scripts))) {
+            if ($this->useWrapper && $this->wrapper && false !== strpos($this->wrapper, '%s')) {
                 $script = sprintf($this->wrapper, Escaper::implodeAndPad(explode(Escaper::getEol(), rtrim($script)), $this->wrapSize, null));
             }
         }

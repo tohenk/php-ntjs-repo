@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2022 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -34,7 +34,7 @@ use NTLAB\JS\Util\Escaper;
  *
  * Using object approach to write javascript code to create well
  * maintained code and automatic dependency inclusion.
- * 
+ *
  * @author Toha
  */
 abstract class Script
@@ -901,6 +901,20 @@ EOF;
             }
         }
         return $script;
+    }
+
+    /**
+     * Call script.
+     *
+     * @return string
+     */
+    public function call()
+    {
+        $args = func_get_args();
+        if (method_exists($this, 'doCall')) {
+            $this->includeScript();
+            return call_user_func_array([$this, 'doCall'], $args);
+        }
     }
 
     /**

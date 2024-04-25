@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2022 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -36,6 +36,7 @@ use NTLAB\JS\Util\JSValue;
  * Usage:
  * $.ntdlg.iframe('/path/to/url', 'my', 'My Iframe Dialog', true, 500, 400);
  *
+ * @method string call(string $title, string $content, string $url, array $options = [])
  * @author Toha
  */
 class Iframe extends Base
@@ -124,7 +125,7 @@ EOF;
      * @param array $options  The dialog options
      * @return string
      */
-    public function call($title, $content, $url, $options = [])
+    public function doCall($title, $content, $url, $options = [])
     {
         $dlg = isset($options['dialog_id']) ? $options['dialog_id'] : $this->getDlgId();
         $height = isset($options['height']) ? $options['height'] : 500;
@@ -135,7 +136,6 @@ EOF;
         }
         $iframeOptions['close_cb'] = '$.ntdlg.closeIframe'.$dlg;
         $iframeOptions = JSValue::create($iframeOptions)->setIndent(1);
-        $this->includeScript();
         $this->add(<<<EOF
 $.ntdlg.closeIframe$dlg = function() {
     $.ntdlg.close('dlg$dlg');
@@ -151,7 +151,6 @@ EOF
             $url .= (false !== strpos($url, '?') ? '&' : '?').$options['query_string'];
         }
         unset($options['dialog_id'], $options['height'], $options['width'], $options['overflow'], $options['query_string']);
-
         return $this->getBackend()->ctag('a', $content, array_merge(['href' => $url, 'class' => 'dialog', 'id' => 'ref-dlg'.$dlg], $options));
     }
 }

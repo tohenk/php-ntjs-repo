@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,29 +24,21 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery\UI;
+namespace NTLAB\JS\Test\Script;
 
-use NTLAB\JS\Script\JQuery\FormPost as Base;
+use NTLAB\JS\Script as Base;
 
-/**
- * Handling form submission using ajax.
- *
- * Usage:
- * <?php
- *
- * use NTLAB\JS\Script;
- *
- * $script = Script::create('JQuery.UI.FormPost');
- * $script->call('#myform');
- * ?>
- *
- * @author Toha
- */
-class FormPost extends Base
+class TestScript extends Base
 {
-    protected function configure()
+    protected function getRepositoryName()
     {
-        parent::configure();
-        $this->addDependencies(['JQuery.Dialog', 'JQuery.Dialog.Wait']);
+        return 'test';
+    }
+
+    protected function doCall($message)
+    {
+        $this->add(<<<EOF
+// $message
+EOF);
     }
 }

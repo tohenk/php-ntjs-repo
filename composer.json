@@ -23,7 +23,8 @@
 	},
 	"autoload" : {
 		"psr-4" : {
-			"NTLAB\\JS\\" : "src/"
+			"NTLAB\\JS\\" : "src/",
+			"NTLAB\\JS\\Test\\" : "tests/"
 		}
 	}
 }
