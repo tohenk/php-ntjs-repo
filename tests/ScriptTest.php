@@ -34,8 +34,6 @@ use NTLAB\JS\Test\Script\TestScript;
 
 class ScriptTest extends BaseTest
 {
-    protected $script;
-
     protected function setUp(): void
     {
         Manager::getInstance()
@@ -61,9 +59,35 @@ EOF
         , $script->getRepository()->getContent(), 'Script call() should include script doCall()');
     }
 
+    public function testAutoIncludeOff()
+    {
+        Script::setDefaultOption('autoInclude', false);
+
+        $script = Script::create('IncludeScript');
+        $script
+            ->add('call_include_script()');
+        $this->assertEquals(<<<EOF
+call_include_script();
+EOF
+        , $script->getRepository()->getContent(), 'Script auto include off should not add script content');
+    }
+
+    public function testAutoIncludeOn()
+    {
+        Script::setDefaultOption('autoInclude', true);
+
+        $script = Script::create('IncludeScript');
+        $script
+            ->add('call_include_script()');
+        $this->assertEquals(<<<EOF
+// include script test content
+call_include_script();
+EOF
+        , $script->getRepository()->getContent(), 'Script auto include on should add script content');
+    }
+
     public function testScript()
     {
-
         $script = Script::create('JQuery');
         $script->getRepository()
             ->setWrapper(<<<EOF

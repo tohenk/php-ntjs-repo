@@ -39,9 +39,8 @@ use NTLAB\JS\Util\Escaper;
  */
 abstract class Script
 {
-    const DBG_LINE = 1;
-
-    const DBG_CLASS = 2;
+    public const DBG_LINE = 1;
+    public const DBG_CLASS = 2;
 
     /**
      * @var string
@@ -71,7 +70,7 @@ abstract class Script
     /**
      * @var array
      */
-    protected static $defaultOptions = [];
+    protected static $defaultOptions = ['autoInclude' => true];
 
     /**
      * @var \NTLAB\JS\Util\Asset
@@ -123,7 +122,7 @@ abstract class Script
     public static function create($name)
     {
         if (!isset(static::$maps[$name])) {
-            if (null == $class = Manager::getInstance()->resolveDependency($name)) {
+            if (null === $class = Manager::getInstance()->resolveDependency($name)) {
                 throw new \RuntimeException(sprintf('Can\'t resolve script "%s".', $name));
             }
             static::$maps[$name] = ['class' => $class];
@@ -145,7 +144,7 @@ abstract class Script
     public static function alias($class)
     {
         foreach (static::$maps as $name => $map) {
-            if (isset($map['class']) && $class == $map['class']) {
+            if (isset($map['class']) && $class === $map['class']) {
                 return $name;
             }
         }
@@ -179,14 +178,14 @@ abstract class Script
     }
 
     /**
-     * Add script default options.
+     * Set script default option.
      *
      * @param string $name  The script name
-     * @param array $options  Script options
+     * @param mixed $value  Script options
      */
-    public static function addOptions($name, $options)
+    public static function setDefaultOption($name, $value)
     {
-        static::$defaultOptions[$name] = $options;
+        static::$defaultOptions[$name] = $value;
     }
 
     /**
@@ -644,7 +643,7 @@ abstract class Script
         if ($culture) {
             $locales[] = $culture;
             foreach (['-', '_'] as $delim) {
-                if (false != strpos($culture, $delim)) {
+                if (false !== strpos($culture, $delim)) {
                     $delimeter = $delim;
                     break;
                 }
@@ -673,7 +672,7 @@ abstract class Script
      */
     public function useLocaleJavascript($name, $culture = null, $default = 'en', $asset = null, $priority = null, $attributes = null)
     {
-        if (false == strpos((string) $name, '%s')) {
+        if (false === strpos((string) $name, '%s')) {
             $name .= '%s';
         }
         $asset   = $asset ?: $this->getAsset();
@@ -859,6 +858,9 @@ abstract class Script
      */
     public function add($script, $position = Repository::POSITION_LAST)
     {
+        if (self::$defaultOptions['autoInclude']) {
+            $this->includeScript();
+        }
         $this->useScript($this->addDebugInfo($script), $position);
         return $this;
     }
@@ -875,22 +877,22 @@ abstract class Script
     protected function addDebugInfo($script, $info = null, $trace = null, $size = null)
     {
         if (strlen($script) && static::$debug) {
-            if (null == $info) {
+            if (null === $info) {
                 $info = static::DBG_LINE;
             }
-            if (($info & static::DBG_CLASS) == static::DBG_CLASS) {
+            if (($info & static::DBG_CLASS) === static::DBG_CLASS) {
                 $class = get_class($this);
                 $script = <<<EOF
 /* $class */
 $script
 EOF;
             }
-            if (($info & static::DBG_LINE) == static::DBG_LINE) {
-                if (null == $trace) {
+            if (($info & static::DBG_LINE) === static::DBG_LINE) {
+                if (null === $trace) {
                     $traces = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, $size ?: 2);
                     $trace = array_pop($traces);
                 }
-                if (isset($trace['file']) && isset($trace['line']) && $trace['file'] != __FILE__) {
+                if (isset($trace['file']) && isset($trace['line']) && $trace['file'] !== __FILE__) {
                     $sourceFile = $trace['file'];
                     $sourceLine = $trace['line'];
                     $script = <<<EOF

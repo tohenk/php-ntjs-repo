@@ -97,7 +97,7 @@ class Repository
      */
     public function setWrapper($text)
     {
-        if ($text != $this->wrapper) {
+        if ($text !== $this->wrapper) {
             $this->wrapper = $text;
         }
         return $this;
@@ -187,6 +187,10 @@ class Repository
     public function add($text, $position = self::POSITION_LAST)
     {
         if ($text) {
+            // if it was included, clear it
+            if ($this->isIncluded()) {
+                $this->clear();
+            }
             // add delimiter if necessary
             $text = $this->addDelimiter($text);
             // adjust position

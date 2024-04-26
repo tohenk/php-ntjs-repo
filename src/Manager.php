@@ -368,8 +368,8 @@ EOF;
      */
     public function compress($content)
     {
-        if (strlen($content) && null !== ($compressor = $this->getCompressor())) {
-            $content = $compressor->compress($content);
+        if ($content && null !== ($compressor = $this->getCompressor())) {
+            $content = $compressor->compress((string) $content);
         }
         return $content;
     }

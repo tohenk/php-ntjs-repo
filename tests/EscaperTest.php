@@ -54,6 +54,6 @@ class EscaperTest extends BaseTest
     test: function(){}
 }
 EOF
-, Escaper::escape(array('test' => JSValue::createRaw('function(){}'))), 'Proper escape nested');
+        , Escaper::escape(array('test' => JSValue::createRaw('function(){}'))), 'Proper escape nested');
     }
 }
