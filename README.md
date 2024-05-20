@@ -29,19 +29,7 @@ Integrate With Your Code
 To integrate PHP-NTJS with your code, you need to enable [Composer](https://getcomposer.org)
 support in your project.
 
-* Add PHP-NTJS repository.
-
-```shell
-php composer.phar config repositories.php-ntjs vcs https://github.com/tohenk/php-ntjs.git
-```
-
-* Set minimum-stability to dev to allow PHP-NTJS to be installed.
-
-```shell
-php composer.phar config minimum-stability dev
-```
-
-* Require ntlab/ntjs and install dependencies.
+* Require `ntlab/ntjs` and install dependencies.
 
 ```shell
 php composer.phar require ntlab/ntjs
@@ -62,10 +50,12 @@ git clone https://github.com/tohenk/ntjs-web-assets /path/to/www/cdn
   when the script referenced. It must be implements `NTLAB\JS\DependencyResolverInterface`.
   An example of resolver is available [here](https://github.com/tohenk/php-ntjs-demo/blob/master/src/Backend.php).
 
+* Optionally, create script compressor which implements `NTLAB\JS\CompressorInterface`.
+  An example of compressor is available [here](https://github.com/tohenk/php-ntjs-demo/blob/master/src/Backend.php).
+
 * Connect it together, see [example](https://github.com/tohenk/php-ntjs-demo/blob/master/src/Demo.php).
 
 ```php
-use NTLAB\JS\Compressos\JSMin;
 use NTLAB\JS\Manager;
 use NTLAB\JS\Script;
 
@@ -82,11 +72,11 @@ class MyClass
         $backend = new Backend($this->useCDN);
         // set script backend
         $manager->setBackend($backend);
-        // register script resolver
+        // register script resolver, the backend also a resolver
         $manager->addResolver($backend);
-        // register script compressor
+        // register script compressor, the backend also a compressor
         if ($this->minifyScript) {
-            $manager->setCompressor(new JSMin());
+            $manager->setCompressor($backend);
         }
         // set script debug information
         if ($this->debugScript) {
@@ -109,7 +99,7 @@ class MyDemoClass
             ->add(<<<EOF
 alert('Do something');
 EOF
-        );
+            );
     }
 }
 ```
@@ -121,4 +111,4 @@ EOF
 Live Demo
 ---------
 
-Live demo is available [here](https://ntlab.id/demo/php-ntjs).
+Live demo is available [here](https://apps.ntlab.id/demo/php-ntjs).
