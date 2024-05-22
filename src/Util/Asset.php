@@ -195,6 +195,19 @@ class Asset
     }
 
     /**
+     * Parse url part into protocol, domain, and path.
+     *
+     * @param string $url
+     * @return array
+     */
+    protected function parseUrl($url)
+    {
+        $matches = null;
+        preg_match('#^(?P<PROTO>https?)\://(?P<DOMAIN>[a-zA-Z0-9\-\.]+)/?(?P<PATH>.*)#', $url, $matches);
+        return $matches;
+    }
+
+    /**
      * Fix asset extension.
      *
      * @param string $asset  Asset type
@@ -204,16 +217,20 @@ class Asset
     protected function fixExtension($asset, $name)
     {
         if ($name && false === strpos($name, '?') && ($extension = $this->getExtension($asset))) {
-            $usedExtension = null;
-            foreach ($extension as $ext) {
-                $dotExt = '.'.$ext;
-                if (substr($name, -strlen($dotExt)) === $dotExt) {
-                    $usedExtension = $ext;
-                    break;
+            // skip domain only name
+            $matches = $this->parseUrl($name);
+            if (null === $matches || $matches['PATH']) {
+                $usedExtension = null;
+                foreach ($extension as $ext) {
+                    $dotExt = '.'.$ext;
+                    if (substr($name, -strlen($dotExt)) === $dotExt) {
+                        $usedExtension = $ext;
+                        break;
+                    }
                 }
-            }
-            if (null === $usedExtension) {
-                $name .= '.'.$extension[0];
+                if (null === $usedExtension) {
+                    $name .= '.'.$extension[0];
+                }
             }
         }
         return $name;
@@ -227,7 +244,8 @@ class Asset
      */
     protected function isLocal($name)
     {
-        return preg_match('#(^http(s)*\:)*\/\/(.*)#', $name) ? false : true;
+        $matches = $this->parseUrl($name);
+        return $matches && $matches['PROTO'] ? false : true;
     }
 
     /**
