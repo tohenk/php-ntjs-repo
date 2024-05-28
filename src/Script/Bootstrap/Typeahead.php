@@ -68,6 +68,16 @@ EOF,
 
         return <<<EOF
 $.bstypeahead = function(el, url, options) {
+    if (typeof url === 'object') {
+        options = url;
+        url = undefined;
+    }
+    if (!url) {
+        const dataUrl = el.data('url');
+        if (dataUrl) {
+            url = dataUrl;
+        }
+    }
     const typeahead = {
         url: url,
         el: null,
@@ -78,7 +88,7 @@ $.bstypeahead = function(el, url, options) {
         init: function(options) {
             const self = this;
             $.extend(self.options, options);
-            if (typeof self.options.source === 'undefined') {
+            if (self.options.source === undefined) {
                 self.options.source = function(query, process) {
                     self.query = query;
                     const sourceLoader = function() {
@@ -153,11 +163,20 @@ EOF;
             $options['items'] = 25;
         }
         $options = JSValue::create($options);
-        $this
-            ->add(
-                <<<EOF
+        if ($url) {
+            $this
+                ->add(
+                    <<<EOF
 $.bstypeahead($('$el'), '$url', $options);
 EOF
-            );
+                );
+        } else {
+            $this
+                ->add(
+                    <<<EOF
+$.bstypeahead($('$el'), $options);
+EOF
+                );
+        }
     }
 }

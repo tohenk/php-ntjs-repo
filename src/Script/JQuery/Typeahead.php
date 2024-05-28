@@ -34,7 +34,7 @@ use NTLAB\JS\Util\JSValue;
 /**
  * A JQuery typeahead (auto complete).
  *
- * @method string call(string $el, array $options = [], array $datasource = [])
+ * @method string call(string $el, array $datasource = [], array $options = [])
  * @author Toha <tohenk@yahoo.com>
  */
 class Typeahead extends Base
@@ -51,15 +51,18 @@ class Typeahead extends Base
         $this->useJavascript('typeahead.bundle.min');
 
         return <<<EOF
-$.actypeahead = function(el, options, source) {
-    options = options ? options : {};
+$.actypeahead = function(el, datasource, options) {
+    options = options || {};
     $.extend(options, {
         classNames: {
-            menu: 'dropdown-menu col-xs-12 tt-menu',
-            dataset: 'col-xs-12 tt-dataset'
+            menu: 'dropdown-menu tt-menu',
+            dataset: 'dropdown-item tt-dataset'
         }
     });
-    el.typeahead(options, source);
+    if (typeof datasource === 'function') {
+        datasource = datasource(el);
+    }
+    el.typeahead(options, datasource);
 }
 EOF
         ;
@@ -74,51 +77,69 @@ EOF
      */
     public function setupDatasource($url, $options = [])
     {
-        $url .= (false !== strpos($url, '?') ? '&' : '?').'term=%Q';
         $source = JSValue::create([
             'queryTokenizer' => JSValue::createRaw('Bloodhound.tokenizers.whitespace'),
             'datumTokenizer' => JSValue::createRaw('Bloodhound.tokenizers.whitespace'),
             'remote' => [
-                'url' => $url,
+                'url' => JSValue::createRaw('url'),
                 'wildcard' => '%Q',
             ],
-        ], null, 1);
-
-        return array_merge([
+        ])->setIndent(2);
+        $datasource = JSValue::create(array_merge([
             'source' => JSValue::createRaw("new Bloodhound($source)"),
             'display' => <<<EOF
 function(data) {
-    if (typeof data === 'string') {
+        if (typeof data === 'string') {
+            return data;
+        }
+        if (typeof data === 'object') {
+            return data.label;
+        }
         return data;
     }
-    if (typeof data === 'object') {
-        return data.label;
-    }
-    return data;
-}
 EOF,
-        ], $options);
+        ], $options))->setIndent(1);
+
+        return JSValue::createRaw(
+            <<<EOF
+function(el) {
+    let url = '$url';
+    if (!url && el) {
+        const dataUrl = el.data('url');
+        if (dataUrl) {
+            url = dataUrl;
+        }
+    }
+    if (url) {
+        url += (url.indexOf('?') < 0 ? '?' : '&') + 'term=%Q';
+    }
+    return $datasource
+}
+EOF
+        );
     }
 
     /**
      * Call script.
      *
      * @param string $el      The element selector
-     * @param array $options  The autocomplete options
      * @param array $datasource  The autocomplete datasource
+     * @param array $options  The autocomplete options
      */
-    public function doCall($el, $options = [], $datasource = [])
+    public function doCall($el, $datasource = [], $options = [])
     {
         $defaults = [
             'minLength' => 1,
             'highlight' => true,
         ];
         $options = JSValue::create(array_merge($defaults, (array) $options));
-        $datasource = JSValue::create((array) $datasource);
+        if (!$datasource instanceof JSValue) {
+            $datasource = JSValue::create((array) $datasource);
+        }
         $this
             ->add(
                 <<<EOF
-$.actypeahead($('$el'), $options, $datasource);
+$.actypeahead($('$el'), $datasource, $options);
 EOF
             );
     }
