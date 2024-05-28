@@ -27,23 +27,22 @@
 namespace NTLAB\JS\Script;
 
 use NTLAB\JS\Script as Base;
-use NTLAB\JS\Repository;
 use NTLAB\JS\Util\Asset;
 
 /**
- * JQuery javascript code repository for PHP.
+ * Include JQuery assets.
  *
- * To code JQuery from PHP, shown below:
+ * An example how to code JQuery from PHP is shown below:
  *
+ * ```php
  * <?php
  *
  * use NTLAB\JS\Script;
  *
- * $jq = Script::create('JQuery');
- * // include dependency
- * $jq->includeDependencies(['JQuery.Dialog.Message']);
- * // create code
- * $jq->add(<<<EOF
+ * $script = Script::create('JQuery')
+ *     ->includeDependencies(['JQuery.Dialog.Message']) // include dependency
+ *     ->add(                                           // create code 
+ *         <<<EOF
  * $.post('/path/to/url', {data: mydata}, function(json) {
  *     if (json.success) {
  *         $.ntdlg.message('mysuccess', 'Success', 'Your changes has been saved.');
@@ -52,19 +51,20 @@ use NTLAB\JS\Util\Asset;
  *     }
  * });
  * EOF
- * );
- *
- * ?>
+ *     );
+ * ```
  *
  * To include the code into HTML:
  *
+ * ```php
  * <script type="text/javascript">
  * //<![CDATA[
  * <?php echo \NTLAB\JS\Manager::getInstance()->get('jquery')->getContent() ?>
  * //]]>
  * </script>
+ * ```
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class JQuery extends Base
 {
@@ -76,26 +76,5 @@ class JQuery extends Base
     protected function getRepositoryName()
     {
         return 'jquery';
-    }
-
-    protected function initRepository(Repository $repo)
-    {
-        $repo
-            ->setWrapper(<<<EOF
-(function($) {
-    (function loader(f) {
-        if (document.ntloader && !document.ntloader.isScriptLoaded()) {
-            setTimeout(function() {
-                loader(f);
-            }, 100);
-        } else {
-            f($);
-        }
-    })(function($) {%s});
-})(jQuery);
-EOF
-            )
-            ->setWrapSize(2)
-        ;
     }
 }

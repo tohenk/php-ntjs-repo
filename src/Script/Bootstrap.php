@@ -30,9 +30,9 @@ use NTLAB\JS\Script as Base;
 use NTLAB\JS\Util\Asset;
 
 /**
- * Bootstrap javascript code repository for PHP.
+ * Include Bootstrap assets.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Bootstrap extends Base
 {
@@ -43,7 +43,10 @@ class Bootstrap extends Base
 
     protected function configure()
     {
-        $this->setAsset(new Asset($this->repository, [Asset::ASSET_JAVASCRIPT => 'js', Asset::ASSET_STYLESHEET => 'css']));
+        $this->setAsset(new Asset($this->repository, [
+            Asset::ASSET_JAVASCRIPT => 'js',
+            Asset::ASSET_STYLESHEET => 'css',
+        ]));
         $this->addDependencies(['Popper']);
         $this->addAsset(Asset::ASSET_JAVASCRIPT, 'bootstrap.min');
         $this->addAsset(Asset::ASSET_STYLESHEET, 'bootstrap.min');

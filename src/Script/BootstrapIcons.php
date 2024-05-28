@@ -30,9 +30,9 @@ use NTLAB\JS\Script as Base;
 use NTLAB\JS\Util\Asset;
 
 /**
- * Bootstrap Icons.
+ * Include Bootstrap Icons assets.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class BootstrapIcons extends Base
 {
@@ -43,7 +43,9 @@ class BootstrapIcons extends Base
 
     protected function configure()
     {
-        $this->setAsset(new Asset($this->repository, [Asset::ASSET_STYLESHEET => 'font']));
+        $this->setAsset(new Asset($this->repository, [
+            Asset::ASSET_STYLESHEET => 'font',
+        ]));
         $this->addAsset(Asset::ASSET_STYLESHEET, 'bootstrap-icons');
     }
 }

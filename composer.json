@@ -26,5 +26,13 @@
 			"NTLAB\\JS\\" : "src/",
 			"NTLAB\\JS\\Test\\" : "tests/"
 		}
+	},
+	"extra": {
+		"script-resolvers": {
+			"NTLAB\\JS\\Script": "NTLAB\\JS\\DependencyResolver"
+		},
+		"repository-initializers": {
+			"jquery": "NTLAB\\JS\\Repository\\JQuery"
+		}
 	}
 }

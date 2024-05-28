@@ -33,15 +33,17 @@ use NTLAB\JS\Util\JSValue;
  * Handling form submission using ajax.
  *
  * Usage:
+ *
+ * ```php
  * <?php
  *
  * use NTLAB\JS\Script;
  *
- * $script = Script::create('Bootstrap.FormPost');
- * $script->call('#myform');
- * ?>
+ * $script = Script::create('Bootstrap.FormPost')
+ *     ->call('#myform');
+ * ```
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class FormPost extends Base
 {
@@ -58,8 +60,9 @@ class FormPost extends Base
         return [
             'showSuccessMessage' => JSValue::createRaw(<<<EOF
 function(title, message, opts) {
-            const autoclose = typeof opts.autoClose != 'undefined' ? opts.autoClose : false;
-            const withokay = typeof opts.withOkay != 'undefined' ? opts.withOkay : true;
+            opts = opts || {};
+            const autoclose = opts.autoClose !== undefined ? opts.autoClose : false;
+            const withokay = opts.withOkay !== undefined ? opts.withOkay : true;
             const buttons = {};
             if (withokay && !autoclose) {
                 buttons['$ok'] = {
@@ -120,8 +123,12 @@ function(el, error) {
                     }
                 }
                 let xel = f(tt, 'data-err-display');
-                if (!xel) xel = f(tt, 'data-err-display-parent', true);
-                if (xel) tt = xel;
+                if (!xel) {
+                    xel = f(tt, 'data-err-display-parent', true);
+                }
+                if (xel) {
+                    tt = xel;
+                }
                 // don't add tooltip on hidden input
                 if (tt.is('input[type="hidden"]')) {
                     tt = tt.siblings('input');

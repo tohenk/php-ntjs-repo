@@ -31,14 +31,14 @@ use NTLAB\JS\Manager;
 /**
  * Javascript assets helper.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Asset
 {
-    const ASSET_JAVASCRIPT = 'js';
-    const ASSET_STYLESHEET = 'css';
-    const ASSET_IMAGE = 'img';
-    const ASSET_OTHER = 'other';
+    public const ASSET_JAVASCRIPT = 'js';
+    public const ASSET_STYLESHEET = 'css';
+    public const ASSET_IMAGE = 'img';
+    public const ASSET_OTHER = 'other';
 
     /**
      * @var \NTLAB\JS\Manager

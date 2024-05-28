@@ -32,15 +32,17 @@ use NTLAB\JS\Script\JQuery\FormPost as Base;
  * Handling form submission using ajax.
  *
  * Usage:
+ *
+ * ```php
  * <?php
  *
  * use NTLAB\JS\Script;
  *
- * $script = Script::create('JQuery.UI.FormPost');
- * $script->call('#myform');
- * ?>
+ * $script = Script::create('JQuery.UI.FormPost')
+ *     ->call('#myform');
+ * ```
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class FormPost extends Base
 {

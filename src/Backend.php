@@ -41,6 +41,14 @@ class Backend implements BackendInterface
 
     /**
      * {@inheritDoc}
+     * @see \NTLAB\JS\BackendInterface::getDefaultRepository()
+     */
+    public function getDefaultRepository()
+    {
+    }
+
+    /**
+     * {@inheritDoc}
      * @see \NTLAB\JS\BackendInterface::trans()
      */
     public function trans($text, $vars = [], $domain = null)

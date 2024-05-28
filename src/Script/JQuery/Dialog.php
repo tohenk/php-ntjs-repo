@@ -33,6 +33,8 @@ use NTLAB\JS\Repository;
  * JQuery UI dialog wrapper to create and handling dialog.
  *
  * Usage:
+ *
+ * ```js
  * $.ntdlg.dialog('mydlg', 'A Dialog', 'This is a dialog', {
  *     buttons: {
  *         'OK': function() {
@@ -40,8 +42,9 @@ use NTLAB\JS\Repository;
  *         }
  *     }
  * });
+ * ```
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Dialog extends Base
 {
@@ -76,7 +79,9 @@ $.define('ntdlg', {
             TITLE: title,
             CONTENT: message
         });
-        if (!params.modal) params.modal = true;
+        if (!params.modal) {
+            params.modal = true;
+        }
         $(dlg_id).remove();
         $(document.body).append(content);
         $(dlg_id).dialog(params);
@@ -115,7 +120,7 @@ $.define('ntdlg', {
     },
     show: function(dlg) {
         if (dlg && !this.isVisible(dlg)) {
-            if (typeof dlg == 'string') {
+            if (typeof dlg === 'string') {
                 dlg = $('#' + dlg);
             }
             dlg.dialog('open');
@@ -123,7 +128,7 @@ $.define('ntdlg', {
     },
     close: function(dlg) {
         if (dlg) {
-            if (typeof dlg == 'string') {
+            if (typeof dlg === 'string') {
                 dlg = $('#' + dlg);
             }
             dlg.dialog('close');
@@ -131,7 +136,7 @@ $.define('ntdlg', {
     },
     isVisible: function(dlg) {
         if (dlg) {
-            if (typeof dlg == 'string') {
+            if (typeof dlg === 'string') {
                 dlg = $('#' + dlg);
             }
             return dlg.dialog('isOpen');
@@ -139,7 +144,7 @@ $.define('ntdlg', {
     },
     getBody: function(dlg) {
         if (dlg) {
-            if (typeof dlg == 'string') {
+            if (typeof dlg === 'string') {
                 dlg = $('#' + dlg);
             }
             return dlg;

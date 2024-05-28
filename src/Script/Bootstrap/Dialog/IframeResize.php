@@ -30,12 +30,12 @@ use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
- * JQuery iframe dialog auto-height implementation to resize the
+ * Bootstrap iframe dialog auto-height implementation to resize the
  * parent dialog height according to its frame content height.
  *
  * Simply include this script into the iframe content (not the dialog).
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class IframeResize extends Base
 {
@@ -53,16 +53,24 @@ $.define('dlgresize', {
     resize: function(grow) {
         const self = this;
         const dlg = parent.$(self.pIframe.parents('div.modal.show'));
-        if (!dlg.length) return;
+        if (!dlg.length) {
+            return;
+        }
         let maxheight = dlg.height() - 60;
         let mc = dlg.find('.modal-content');
         let header = mc.find('.modal-header');
-        if (header.length) maxheight -= header.outerHeight(true);
+        if (header.length) {
+            maxheight -= header.outerHeight(true);
+        }
         let footer = mc.find('.modal-footer');
-        if (footer.length) maxheight -= footer.outerHeight(true);
+        if (footer.length) {
+            maxheight -= footer.outerHeight(true);
+        }
         let bd = mc.find('.modal-body');
-        if (bd.length) maxheight -= (bd.outerHeight(true) - bd.height());
-        let isIframe = self.pIframe[0].nodeName == 'IFRAME';
+        if (bd.length) {
+            maxheight -= (bd.outerHeight(true) - bd.height());
+        }
+        let isIframe = self.pIframe[0].nodeName === 'IFRAME';
         bd = isIframe ? $(document.body) : mc.find('.modal-body');
         let h;
         if (grow || grow == undefined) {
@@ -100,9 +108,11 @@ EOF;
 
     public function getInitScript()
     {
-        $this->add(<<<EOF
+        $this
+            ->add(
+                <<<EOF
 $.dlgresize.init();
 EOF
-        );
+            );
     }
 }

@@ -33,13 +33,16 @@ use NTLAB\JS\Repository;
  * Bootstrap modal to show a waiting dialog while in progress.
  *
  * Usage:
+ *
+ * ```js
  * $.ntdlg.wait('I\'m doing something');
  * // do something here
  * $.ntdlg.wait('I\'m doing another thing');
  * // close wait dialog
  * $.ntdlg.wait();
+ * ```
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Wait extends Base
 {

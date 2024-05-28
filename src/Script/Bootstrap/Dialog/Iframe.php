@@ -34,15 +34,18 @@ use NTLAB\JS\Util\JSValue;
  * Bootstrap iframe modal.
  *
  * Usage:
+ *
+ * ```js
  * $.ntdlg.iframe('my', '/path/to/url', {
  *     title: 'My Iframe Dialog',
  *     modal: true,
  *     width: 500,
  *     height: 400
  * });
+ * ```
  *
  * @method string call(string $title, string $content, string $url, array $options = [])
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Iframe extends Base
 {
@@ -83,8 +86,7 @@ $.define('ntdlg', {
                 $.ntdlg.iframeLoader($(this), {ajax: ajax, url: url, overflow: overflow});
             }
         }
-        const opts = ['size', 'closable', 'backdrop', 'keyboard', 'show', 'close', 'remote'];
-        $.util.applyProp(opts, options, params);
+        $.util.applyProp(['size', 'closable', 'backdrop', 'keyboard', 'show', 'close', 'remote'], options, params);
         const dlg = $.ntdlg.create(id, title, '', params);
         $.ntdlg.show(dlg);
     }
@@ -128,7 +130,9 @@ function(e) {
     }
 EOF;
         $iframeOptions = JSValue::create($iframeOptions)->setIndent(1);
-        $this->add(<<<EOF
+        $this
+            ->add(
+                <<<EOF
 $.ntdlg.closeIframe$dlg = function() {
     $.ntdlg.close('dlg$dlg');
 }
@@ -137,7 +141,7 @@ $('#ref-dlg$dlg').on('click', function(e) {
     $.ntdlg.iframe('dlg$dlg', $(this).attr('href'), $iframeOptions);
 });
 EOF
-        );
+            );
         $clicker_class = isset($options['clicker_class']) ? $options['clicker_class'] : null;
         $url = $this->getBackend()->url($url);
         if (isset($options['query_string'])) {

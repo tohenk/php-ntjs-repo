@@ -32,7 +32,7 @@ use NTLAB\JS\Repository;
 /**
  * A callback handler to set the value of an element, such as an input tag.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class SetValue extends Base
 {

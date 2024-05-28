@@ -32,7 +32,7 @@ use NTLAB\JS\BackendInterface;
 /**
  * Javascript assets loader.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Loader
 {

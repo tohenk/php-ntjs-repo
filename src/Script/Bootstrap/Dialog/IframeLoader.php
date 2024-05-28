@@ -30,9 +30,9 @@ use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
- * Iframe loader helper.
+ * Bootstrap iframe loader helper.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class IframeLoader extends Base
 {
@@ -50,7 +50,7 @@ $.define('ntdlg', {
         const self = this;
         const bd = dlg.find('.modal-body');
         if (bd.hasClass('ui-dialog-iframe-container')) {
-            options.ajax = bd[0].nodeName == 'IFRAME' ? false : true;
+            options.ajax = bd[0].nodeName === 'IFRAME' ? false : true;
         } else {
             bd.addClass('ui-dialog-iframe-container');
         }
@@ -65,7 +65,9 @@ $.define('ntdlg', {
             const overflow = options.overflow || 'hidden';
             let height = dlg.height();
             const header = dlg.find('.modal-header');
-            if (header.length) height -= (2 * header.outerHeight(true));
+            if (header.length) {
+                height -= (2 * header.outerHeight(true));
+            }
             bd.html('<iframe src="' + options.url + '" frameborder="0" hspace="0" width="100%" height="' + height + '" style="overflow: ' + overflow + ';"></iframe>');
         }
     }

@@ -29,7 +29,7 @@ namespace NTLAB\JS\Util;
 /**
  * Javascript CDN helper.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class CDN
 {

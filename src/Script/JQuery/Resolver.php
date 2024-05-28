@@ -35,6 +35,8 @@ use NTLAB\JS\Repository;
  * to other window.
  *
  * Usage:
+ *
+ * ```js
  * $.define('my', {
  *     doit: function() {
  *         alert('I\'m doing it.');
@@ -42,9 +44,9 @@ use NTLAB\JS\Repository;
  * });
  *
  * $.resolver.exec('$.my.doit');
+ * ```
  *
- * @author Toha
- *
+ * @author Toha <tohenk@yahoo.com>
  */
 class Resolver extends Base
 {
@@ -64,15 +66,17 @@ $.define('resolver', {
         n = n.split('.');
         for (i = 0, l = n.length; i < l; i++) {
             o = o[n[i]];
-            if (!o) break;
+            if (!o) {
+                break;
+            }
         }
         return o;
     },
     exec: function(cb) {
-        if ('function' == typeof(cb)) {
+        if (typeof cb === 'function') {
             return cb.apply(cb, Array.prototype.slice.call(arguments, 1));
         }
-        if ('string' == typeof(cb)) {
+        if (typeof cb === 'string') {
             scope = cb.replace(/\.\w+$/, '');
             scope = scope ? this.resolve(scope) : 0;
             cb = this.resolve(cb);

@@ -27,7 +27,9 @@
 namespace NTLAB\JS;
 
 use NTLAB\JS\Util\Asset;
+use NTLAB\JS\Util\Composer;
 use NTLAB\JS\Util\Escaper;
+use NTLAB\JS\Util\JSValue;
 
 /**
  * A base class to write javascript code easily in PHP.
@@ -35,7 +37,7 @@ use NTLAB\JS\Util\Escaper;
  * Using object approach to write javascript code to create well
  * maintained code and automatic dependency inclusion.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 abstract class Script
 {
@@ -70,7 +72,17 @@ abstract class Script
     /**
      * @var array
      */
+    protected static $vars = [];
+
+    /**
+     * @var array
+     */
     protected static $defaultOptions = ['autoInclude' => true];
+
+    /**
+     * @var array
+     */
+    protected static $initializers = null;
 
     /**
      * @var \NTLAB\JS\Util\Asset
@@ -199,6 +211,16 @@ abstract class Script
     }
 
     /**
+     * Get script variables data.
+     *
+     * @return array
+     */
+    public static function getVars()
+    {
+        return static::$vars;
+    }
+
+    /**
      * Constructor.
      *
      * @param array $options
@@ -229,7 +251,10 @@ abstract class Script
     public function getRepository()
     {
         if (null === ($repoName = $this->getRepositoryName())) {
-            throw new \Exception(sprintf('Repository "%s" is not implemented yet.', $repoName));
+            $repoName = $this->getBackend()->getDefaultRepository();
+        }
+        if (null === $repoName) {
+            throw new \Exception(sprintf('Script %s has no repository!', get_class($this)));
         }
         $exist = $this->getManager()->has($repoName);
         $repo = $this->getManager()->get($repoName);
@@ -253,8 +278,25 @@ abstract class Script
      *
      * @param \NTLAB\JS\Repository $repo  The script repository name
      */
-    protected function initRepository(Repository $repo)
+    protected function initRepository($repo)
     {
+        if (null === static::$initializers) {
+            static::$initializers = [];
+            $composer = new Composer();
+            foreach ($composer->getPackages() as $package) {
+                if (isset($package['extra']) && isset($package['extra']['repository-initializers'])) {
+                    foreach ($package['extra']['repository-initializers'] as $repository => $class) {
+                        if (class_exists($class)) {
+                            static::$initializers[$repository] = $class;
+                        }
+                    }
+                }
+            }
+        }
+        if (isset(static::$initializers[$repo->getName()])) {
+            $initializer = static::$initializers[$repo->getName()];
+            $initializer::initialize($repo);
+        }
     }
 
     /**
@@ -630,6 +672,22 @@ abstract class Script
     }
 
     /**
+     * Get configured locale or fallback to global locale.
+     *
+     * @param bool $short
+     * @return string
+     */
+    protected function getLocale($short = null)
+    {
+        if ($locale = $this->getOption('locale', (string) $this->getBackend()->getConfig('locale'))) {
+            if ($short) {
+                $locale = substr($locale, 0, 2);
+            }
+        }
+        return $locale;
+    }
+
+    /**
      * Get all possible locale variants.
      *
      * @param string $culture
@@ -847,6 +905,26 @@ abstract class Script
     {
         $this->props[$name] = $value;
         return $this;
+    }
+
+    /**
+     * Use a variable data.
+     *
+     * @param string $name
+     * @param mixed $value
+     * @return string
+     */
+    public function useVar($name, $value)
+    {
+        if ($consumer = $this->getManager()->getConsumer()) {
+            static::$vars[$name] = $value;
+            return $consumer->use($name, $value);
+        } else {
+            if (!$value instanceof JSValue) {
+                $value = JSValue::create($value);
+            }
+            return $value;
+        }
     }
 
     /**

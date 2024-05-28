@@ -32,9 +32,9 @@ use NTLAB\JS\Util\Asset;
  * JQuery UI base class for script that is depends on JQuery UI.
  *
  * JQuery UI support theming which can be set by returning configuration
- * named 'jquery-ui-theme' from within backend handler.
+ * named `jquery-ui-theme` from within backend handler.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class UI extends Base
 {

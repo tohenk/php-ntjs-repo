@@ -29,7 +29,7 @@ namespace NTLAB\JS\Util;
 /**
  * Javascript escaper escape PHP value into javascript.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Escaper
 {
@@ -125,7 +125,7 @@ class Escaper
             $value = 'null';
         } else if (is_bool($value)) {
             $value = $value ? 'true' : 'false';
-        } else if (is_numeric($value)) {
+        } else if (is_int($value) || is_float($value)) {
             $value = (string) $value;
         } else if ($escape) {
             $value = '\''.strtr($value, ['\'' => '\\\'', "\r" => '\\r', "\n" => '\\n', "\t" => '\\t', "\b" => '\\b', "\f" => '\\f']).'\'';

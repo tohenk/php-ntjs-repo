@@ -32,7 +32,7 @@ use NTLAB\JS\Repository;
 /**
  * A callback handler to set html content of an element.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class SetHtml extends Base
 {

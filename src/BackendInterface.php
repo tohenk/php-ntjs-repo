@@ -30,11 +30,11 @@ use NTLAB\JS\Util\Asset;
 
 interface BackendInterface
 {
-    const ASSET_JS = 1;
-    const ASSET_CSS = 2;
-    const ASSET_OTHER = 3;
-    const ASSET_PRIORITY_DEFAULT = 0;
-    const ASSET_PRIORITY_FIRST = 1;
+    public const ASSET_JS = 1;
+    public const ASSET_CSS = 2;
+    public const ASSET_OTHER = 3;
+    public const ASSET_PRIORITY_DEFAULT = 0;
+    public const ASSET_PRIORITY_FIRST = 1;
 
     /**
      * Get various script configuration.
@@ -44,6 +44,14 @@ interface BackendInterface
      * @return mixed
      */
     public function getConfig($name, $default = null);
+
+    /**
+     * Get default script repository name used as a fallback
+     * repository name for script which is not define a repository.
+     *
+     * @return string
+     */
+    public function getDefaultRepository();
 
     /**
      * Translate text for internationalization.

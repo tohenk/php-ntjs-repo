@@ -33,6 +33,8 @@ use NTLAB\JS\Repository;
  * JQuery UI confirm dialog.
  *
  * Usage:
+ *
+ * ```js
  * $.ntdlg.confirm('my', 'Confirm', 'Do you want to do something?', $.ntdlg.ICON_QUESTION,
  *     function() {
  *         alert('Okay!');
@@ -41,8 +43,9 @@ use NTLAB\JS\Repository;
  *         alert('Nope!');
  *     }
  * );
+ * ```
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Confirm extends Base
 {
@@ -60,7 +63,7 @@ class Confirm extends Base
         return <<<EOF
 $.define('ntdlg', {
     confirm: function(id, title, message, icon, cb_yes, cb_no) {
-        if (typeof icon == 'function') {
+        if (typeof icon === 'function') {
             cb_no = cb_yes;
             cb_yes = icon;
             icon = undefined;
@@ -69,13 +72,13 @@ $.define('ntdlg', {
         $.ntdlg.dialog(id, title, message, icon, {
             '$yes': function() {
                 $.ntdlg.close($(this));
-                if (typeof cb_yes == 'function') {
+                if (typeof cb_yes === 'function') {
                     cb_yes();
                 }
             },
             '$no': function() {
                 $.ntdlg.close($(this));
-                if (typeof cb_no == 'function') {
+                if (typeof cb_no === 'function') {
                     cb_no();
                 }
             }

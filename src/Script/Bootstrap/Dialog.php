@@ -34,6 +34,8 @@ use NTLAB\JS\Util\JSValue;
  * Bootstrap modal wrapper to create and handle dialog.
  *
  * Usage:
+ *
+ * ```js
  * $.ntdlg.dialog('mydlg', 'A Dialog', 'This is a dialog', {
  *     buttons: {
  *         'OK': function() {
@@ -41,8 +43,9 @@ use NTLAB\JS\Util\JSValue;
  *         }
  *     }
  * });
+ * ```
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Dialog extends Base
 {
@@ -150,26 +153,28 @@ $.define('ntdlg', {
         const self = this;
         const dlg_id = '#' + id;
         $(dlg_id).remove();
-        if ($.ntdlg.moved && typeof $.ntdlg.moved.refs[id] != 'undefined') {
+        if ($.ntdlg.moved && $.ntdlg.moved.refs[id] !== undefined) {
             $('div.' + $.ntdlg.moved.refs[id]).remove();
             delete $.ntdlg.moved.refs[id];
         }
-        const closable = typeof options.closable != 'undefined' ? options.closable : true;
+        const closable = options.closable !== undefined ? options.closable : true;
         const buttons = [];
         const handlers = [];
         let cnt = 0;
         if (options.buttons) {
             $.each(options.buttons, function(k, v) {
                 let caption, btnType, btnIcon, handler;
-                if ($.isArray(v) || $.isPlainObject(v)) {
+                if (Array.isArray(v) || $.isPlainObject(v)) {
                     caption = v.caption ? v.caption : k;
-                    btnType = v.type ? v.type : (0 == cnt ? 'primary' : 'secondary');
-                    if (v.icon) btnIcon = v.icon;
-                    handler = typeof v.handler == 'function' ? v.handler : null;
+                    btnType = v.type ? v.type : (0 === cnt ? 'primary' : 'secondary');
+                    if (v.icon) {
+                        btnIcon = v.icon;
+                    }
+                    handler = typeof v.handler === 'function' ? v.handler : null;
                 } else {
                     caption = k;
-                    btnType = 0 == cnt ? 'primary' : 'secondary';
-                    handler = typeof v == 'function' ? v : null;
+                    btnType = 0 === cnt ? 'primary' : 'secondary';
+                    handler = typeof v === 'function' ? v : null;
                 }
                 let btnid = id + '_btn_' + caption.replace(/\W+/g, "-").toLowerCase();
                 let btnclass = $.util.template(self.buttonClass, {TYPE: btnType});
@@ -181,14 +186,16 @@ $.define('ntdlg', {
                     BTNCLASS: btnclass,
                     CAPTION: caption
                 }));
-                if (typeof handler == 'function') {
+                if (typeof handler === 'function') {
                     handlers.push({id: btnid, handler: handler});
                 }
                 cnt++;
             });
         }
         const m = ['modal-dialog', 'modal-dialog-centered'];
-        if (options.size) m.push('modal-' + options.size);
+        if (options.size) {
+            m.push('modal-' + options.size);
+        }
         const content = $.util.template(self.dialogTmpl, {
             ID: id,
             TITLE: title,
@@ -212,7 +219,7 @@ $.define('ntdlg', {
             d.addClass(movedDlg);
             d.appendTo($(document.body));
         }
-        if (buttons.length == 0) {
+        if (buttons.length === 0) {
             dlg.find('.modal-footer').hide();
         }
         $.each(handlers, function(k, v) {
@@ -221,14 +228,12 @@ $.define('ntdlg', {
                 v.handler.apply(dlg);
             });
         });
-        const opts = ['backdrop', 'keyboard', 'show', 'remote'];
-        const events = ['show.bs.modal', 'shown.bs.modal', 'hide.bs.modal', 'hidden.bs.modal', 'loaded.bs.modal'];
         const modal_options = {};
-        $.util.applyProp(opts, options, modal_options);
-        $.util.applyEvent(dlg, events, options);
+        $.util.applyProp(['backdrop', 'keyboard', 'show', 'remote'], options, modal_options);
+        $.util.applyEvent(dlg, ['show.bs.modal', 'shown.bs.modal', 'hide.bs.modal', 'hidden.bs.modal', 'loaded.bs.modal'], options);
         // compatibility with JQuery UI dialog
         $.each({open: 'shown.bs.modal', close: 'hidden.bs.modal'}, function(prop, event) {
-            if (typeof options[prop] == 'function') {
+            if (typeof options[prop] === 'function') {
                 dlg.on(event, options[prop]);
             }
         });
@@ -253,7 +258,7 @@ $.define('ntdlg', {
             },
             'hidden.bs.modal': function(e) {
                 e.preventDefault();
-                if (typeof close_cb == 'function') {
+                if (typeof close_cb === 'function') {
                     close_cb();
                 }
             },
@@ -265,7 +270,7 @@ $.define('ntdlg', {
     show: function(dlg) {
         const self = this;
         if (dlg && !this.isVisible(dlg)) {
-            if (typeof dlg == 'string') {
+            if (typeof dlg === 'string') {
                 dlg = $('#' + dlg);
             }
             let d = self._get(dlg[0]);
@@ -278,7 +283,7 @@ $.define('ntdlg', {
     close: function(dlg) {
         const self = this;
         if (dlg) {
-            if (typeof dlg == 'string') {
+            if (typeof dlg === 'string') {
                 dlg = $('#' + dlg);
             }
             const d = self._get(dlg[0]);
@@ -287,7 +292,7 @@ $.define('ntdlg', {
     },
     isVisible: function(dlg) {
         if (dlg) {
-            if (typeof dlg == 'string') {
+            if (typeof dlg === 'string') {
                 dlg = $('#' + dlg);
             }
             if (dlg.length) {
@@ -300,7 +305,7 @@ $.define('ntdlg', {
     },
     getBody: function(dlg) {
         if (dlg) {
-            if (typeof dlg == 'string') {
+            if (typeof dlg === 'string') {
                 dlg = $('#' + dlg);
             }
             return dlg.find('.modal-body:first');
@@ -318,7 +323,7 @@ $.define('ntdlg', {
         // https://stackoverflow.com/questions/19305821/multiple-modals-overlay
         // fix z-index
         const p = bootstrap.Modal.prototype;
-        if (typeof p.__showElement == 'undefined') {
+        if (p.__showElement === undefined) {
             p.__showElement = p._showElement;
             p._showElement = function(relatedTarget) {
                 this.__showElement(relatedTarget);
@@ -335,7 +340,7 @@ $.define('ntdlg', {
             }
         }
         // re-add modal-open class if there're still opened modal
-        if (typeof p.__resetAdjustments == 'undefined') {
+        if (p.__resetAdjustments === undefined) {
             p.__resetAdjustments = p._resetAdjustments;
             p._resetAdjustments = function() {
                 this.__resetAdjustments();
@@ -355,8 +360,11 @@ EOF;
      */
     public function getInitScript()
     {
-        $this->add(<<<EOF
+        $this
+            ->add(
+                <<<EOF
 $.ntdlg.init();
-EOF);
+EOF
+            );
     }
 }

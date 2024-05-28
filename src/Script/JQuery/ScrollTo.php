@@ -33,10 +33,12 @@ use NTLAB\JS\Repository;
  * Update window scroll top based on element.
  *
  * Usage:
+ *
+ * ```js
  * $.scrollto($('#me'));
+ * ```
  *
- * @author Toha
- *
+ * @author Toha <tohenk@yahoo.com>
  */
 class ScrollTo extends Base
 {
@@ -50,16 +52,16 @@ class ScrollTo extends Base
     {
         return <<<EOF
 $.scrollto = function(el) {
-    if (typeof el == 'string') {
+    if (typeof el === 'string') {
         el = $(el);
     }
     if (el.length) {
-        let top = el.offset().top;
-        let w = $(window);
-        let t = w.scrollTop();
-        let h = w.height();
+        const top = el.offset().top;
+        const w = $(window);
+        const t = w.scrollTop();
+        const h = w.height();
         if (top < t || top > t + h) {
-            let ptop = parseInt($(document.body).css('padding-top'));
+            const ptop = parseInt($(document.body).css('padding-top'));
             w.scrollTop(top - ptop);
         }
     }

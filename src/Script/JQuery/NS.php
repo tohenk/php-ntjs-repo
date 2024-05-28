@@ -33,6 +33,8 @@ use NTLAB\JS\Repository;
  * JQuery namespace helper, to avoid javascript function redefine.
  *
  * Usage:
+ *
+ * ```js
  * $.define('my', {
  *     test: function() {
  *         alert('Test');
@@ -41,8 +43,9 @@ use NTLAB\JS\Repository;
  *
  * // call it
  * $.my.test();
+ * ```
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class NS extends Base
 {
@@ -79,7 +82,9 @@ if (!$.define) {
             return true;
         },
         define: function(ns, o, e) {
-            if (!e && $.namespace.has(ns)) return;
+            if (!e && $.namespace.has(ns)) {
+                return;
+            }
             $.extend($.namespace.create(ns), o);
         }
     }

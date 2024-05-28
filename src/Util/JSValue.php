@@ -29,7 +29,7 @@ namespace NTLAB\JS\Util;
 /**
  * Represent javascript value.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class JSValue
 {

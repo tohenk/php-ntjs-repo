@@ -34,16 +34,18 @@ use NTLAB\JS\Util\JSValue;
  * Handling form submission using ajax.
  *
  * Usage:
+ *
+ * ```php
  * <?php
  *
  * use NTLAB\JS\Script;
  *
  * $script = Script::create('JQuery.FormPost');
- * $script->call('#myform');
- * ?>
+ *     ->call('#myform');
+ * ```
  *
  * @method string call(string $selector, string $message = null)
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class FormPost extends Base
 {
@@ -110,13 +112,13 @@ $.formpost = function(form, options) {
             form.trigger('formpost');
             if (fp.paramName) {
                 params = form.data('submit-params');
-                params = typeof params == 'object' ? params : {};
+                params = typeof params === 'object' ? params : {};
                 params[fp.paramName] = form.serialize();
             } else {
                 params = form.serializeArray();
             }
             const xtra = form.data('submit');
-            if ($.isArray(xtra) && xtra.length) {
+            if (Array.isArray(xtra) && xtra.length) {
                 for (let i = 0; i < xtra.length; i++) {
                     params.push(xtra[i]);
                 }
@@ -141,23 +143,23 @@ $.formpost = function(form, options) {
             }
             request.done(function(data) {
                 $.handlePostData(data, fp.errhelper, function(data) {
-                    if (typeof success_cb == 'function') {
+                    if (typeof success_cb === 'function') {
                         success_cb(data);
                     }
                 }, function(data) {
-                    if (typeof error_cb == 'function') {
+                    if (typeof error_cb === 'function') {
                         error_cb(data);
                     }
-                    if (typeof fp.onerror == 'function') {
+                    if (typeof fp.onerror === 'function') {
                         fp.onerror(data);
                     }
                 });
             }).fail(function() {
-                if (typeof fp.onfail == 'function') {
+                if (typeof fp.onfail === 'function') {
                     fp.onfail();
                 }
             }).always(function() {
-                if (typeof fp.onalways == 'function') {
+                if (typeof fp.onalways === 'function') {
                     fp.onalways();
                 }
             });
@@ -175,7 +177,7 @@ $.formpost = function(form, options) {
             }
             form.find('[type=submit]').on('click', submitclicker);
             const doit = function() {
-                if (self.hasRequired(form) || (typeof self.onsubmit == 'function' && !self.onsubmit(form))) {
+                if (self.hasRequired(form) || (typeof self.onsubmit === 'function' && !self.onsubmit(form))) {
                     return false;
                 }
                 const url = self.url || form.attr('action');
@@ -187,24 +189,24 @@ $.formpost = function(form, options) {
                     if (json.notice) {
                         self.showSuccessMessage('$title', json.notice, {
                             withOkay: !json.redir,
-                            autoClose: typeof $.fpRedir == 'function'
+                            autoClose: typeof $.fpRedir === 'function'
                         });
                     }
                     if (json.redir) {
-                        if (typeof $.fpRedir == 'function') {
+                        if (typeof $.fpRedir === 'function') {
                             $.fpRedir(json.redir);
                         } else {
                             window.location.href = json.redir;
                         }
                     }
                 }, function(json) {
-                    if (typeof self.onalways == 'function') {
+                    if (typeof self.onalways === 'function') {
                         self.onalways();
                     }
                     const f = function() {
                         self.errhelper.focusError();
                         form.trigger('formerror', [json]);
-                        if (typeof $.formErrorHandler == 'function') {
+                        if (typeof $.formErrorHandler === 'function') {
                             $.formErrorHandler(form);
                         }
                     }
@@ -229,7 +231,7 @@ $.formpost = function(form, options) {
             }
             form.on('submit', function(e) {
                 e.preventDefault();
-                if (typeof self.onconfirm == 'function') {
+                if (typeof self.onconfirm === 'function') {
                     self.onconfirm(form, doit);
                 } else {
                     doit();
@@ -237,8 +239,9 @@ $.formpost = function(form, options) {
             });
         },
         showSuccessMessage: function(title, message, opts) {
-            const autoclose = typeof opts.autoClose != 'undefined' ? opts.autoClose : false;
-            const withokay = typeof opts.withOkay != 'undefined' ? opts.withOkay : true;
+            opts = opts || {};
+            const autoclose = opts.autoClose !== undefined ? opts.autoClose : false;
+            const withokay = opts.withOkay !== undefined ? opts.withOkay : true;
             const buttons = {};
             if (withokay && !autoclose) {
                 buttons['$ok'] = function() {
@@ -261,8 +264,7 @@ $.formpost = function(form, options) {
         }
     }
     $.extend(fp, $overrides);
-    const props = ['message', 'progress', 'xhr', 'url', 'paramName', 'onsubmit', 'onconfirm'];
-    $.util.applyProp(props, options, fp, true);
+    $.util.applyProp(['message', 'progress', 'xhr', 'url', 'paramName', 'onsubmit', 'onconfirm'], options, fp, true);
     fp.bind(form);
     fp.errhelper = $.errhelper(form, $erroptions);
     fp.onalways = function() {
@@ -288,9 +290,11 @@ EOF;
             $options['message'] = $this->trans($message);
         }
         $options = JSValue::create($options);
-        $this->add(<<<EOF
+        $this
+            ->add(
+                <<<EOF
 $.formpost($('$selector'), $options);
 EOF
-        );
+            );
     }
 }

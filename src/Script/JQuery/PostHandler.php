@@ -34,11 +34,14 @@ use NTLAB\JS\Repository;
  * mark the error returned.
  *
  * Usage:
+ *
+ * ```js
  * $.urlPost('/path/to/url', function(data) {
  *     // do something with data
  * });
+ * ```
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class PostHandler extends Base
 {
@@ -54,16 +57,16 @@ class PostHandler extends Base
 $.extend({
     handlePostData: function(data, errhelper, success_cb, error_cb) {
         $.postErr = null;
-        let json = typeof(data) === 'object' ? data : $.parseJSON(data);
+        let json = typeof data === 'object' ? data : $.parseJSON(data);
         if (json.success) {
-            if (typeof success_cb == 'function') {
+            if (typeof success_cb === 'function') {
                 success_cb(json);
             }
         } else {
             if (json.error) {
-                $.map($.isArray(json.error) || $.isPlainObject(json.error) ? json.error : new Array(json.error), errhelper.handleError);
+                $.map(Array.isArray(json.error) || $.isPlainObject(json.error) ? json.error : [json.error], errhelper.handleError);
             }
-            if (typeof error_cb == 'function') {
+            if (typeof error_cb === 'function') {
                 error_cb(json);
             }
         }

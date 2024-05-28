@@ -32,12 +32,15 @@ use NTLAB\JS\Repository;
  * Bootstrap input modal.
  *
  * Usage:
+ *
+ * ```js
  * let myvalue = '';
  * $.ntdlg.input('my', 'Input something', 'Please input something:', myvalue, function(value) {
  *     alert('You give me ' + value);
  * });
+ * ```
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Input extends Base
 {
@@ -55,10 +58,10 @@ class Input extends Base
         return <<<EOF
 $.define('ntdlg', {
     input: function(id, title, message, value, size, icon, callback) {
-        if (typeof size == 'function') {
+        if (typeof size === 'function') {
             callback = size;
             size = null;
-        } else if (typeof icon == 'function') {
+        } else if (typeof icon === 'function') {
             callback = icon;
             icon = null;
         }

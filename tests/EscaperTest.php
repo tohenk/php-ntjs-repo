@@ -35,7 +35,9 @@ class EscaperTest extends BaseTest
     {
         $this->assertEquals('null', Escaper::escapeValue(null, true), 'Proper escape value of null');
         $this->assertEquals('true', Escaper::escapeValue(true, true), 'Proper escape value of boolean');
-        $this->assertEquals('49', Escaper::escapeValue(49, true), 'Proper escape value of numeric');
+        $this->assertEquals('49', Escaper::escapeValue(49, true), 'Proper escape value of integer');
+        $this->assertEquals('49.5', Escaper::escapeValue(49.5, true), 'Proper escape value of float');
+        $this->assertEquals('\'49\'', Escaper::escapeValue('49', true), 'Proper escape value of numeric string');
         $this->assertEquals("'It\'s me'", Escaper::escapeValue('It\'s me', true), 'Proper escape value of string');
     }
 

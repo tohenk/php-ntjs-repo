@@ -28,6 +28,7 @@ namespace NTLAB\JS;
 
 use NTLAB\JS\Util\Asset;
 use NTLAB\JS\Util\CDN;
+use NTLAB\JS\Util\Composer;
 use NTLAB\JS\Util\Escaper;
 
 /**
@@ -35,7 +36,7 @@ use NTLAB\JS\Util\Escaper;
  * such as script backend, script compressor, and script resolver for script
  * itself.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Manager
 {
@@ -58,6 +59,11 @@ class Manager
      * @var \NTLAB\JS\CompressorInterface
      */
     protected $compressor = null;
+
+    /**
+     * @var \NTLAB\JS\ConsumerInterface
+     */
+    protected $consumer = null;
 
     /**
      * @var \NTLAB\JS\DependencyResolverInterface[]
@@ -83,21 +89,20 @@ class Manager
     }
 
     /**
-     * Get CDN info file.
-     *
-     * @return string
-     */
-    public static function getCdnInfoFile()
-    {
-        return realpath(__DIR__.'/../cdn.json');
-    }
-
-    /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->addResolver(new DependencyResolver());
+        $composer = new Composer();
+        foreach ($composer->getPackages() as $package) {
+            if (isset($package['extra']) && isset($package['extra']['script-resolvers'])) {
+                foreach ($package['extra']['script-resolvers'] as $key => $class) {
+                    if (class_exists($class)) {
+                        $this->addResolver(new $class($key));
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -146,6 +151,32 @@ class Manager
     public function getCompressor()
     {
         return $this->compressor;
+    }
+
+    /**
+     * Set script variables consumer.
+     *
+     * @param \NTLAB\JS\ConsumerInterface $consumer  Script var consumer
+     * @throws \InvalidArgumentException
+     * @return \NTLAB\JS\Manager
+     */
+    public function setConsumer($consumer)
+    {
+        if (!$consumer instanceof ConsumerInterface) {
+            throw new \InvalidArgumentException('Consumer must be a ConsumerInterface.');
+        }
+        $this->consumer = $consumer;
+        return $this;
+    }
+
+    /**
+     * Get script variables consumer.
+     *
+     * @return \NTLAB\JS\ConsumerInterface
+     */
+    public function getConsumer()
+    {
+        return $this->consumer;
     }
 
     /**
@@ -292,6 +323,11 @@ class Manager
     public function getScript($includeTag = false)
     {
         $content = null;
+        if (count($vars = Script::getVars())) {
+            if ($this->consumer) {
+                $content = $this->consumer->consume($vars);
+            }
+        }
         foreach ($this->repositories as $repository) {
             if ($script = $repository->getContent()) {
                 if ($content) {
@@ -351,10 +387,8 @@ EOF;
     {
         foreach ($this->resolvers as $resolver) {
             if (strlen($class = $resolver->resolve($dep))) {
-                foreach ([$class, 'NTLAB\\JS\Script\\'.$class] as $rClass) {
-                    if ($this->isScript($rClass)) {
-                        return $rClass;
-                    }
+                if ($this->isScript($class)) {
+                    return $class;
                 }
             }
         }

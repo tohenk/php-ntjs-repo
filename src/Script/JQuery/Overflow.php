@@ -33,12 +33,15 @@ use NTLAB\JS\Repository;
  * Document body overflow utility.
  *
  * Usage:
+ *
+ * ```js
  * // disable overflow
  * $.overflow.hide();
  * // restore overflow
  * $.overflow.restore();
+ * ```
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Overflow extends Base
 {
@@ -59,8 +62,7 @@ $.define('overflow', {
             $(document.body).css('overflow', 'hidden');
         }
     },
-    restore: function(force) {
-        force = force || false;
+    restore: function(force = false) {
         if ($.overflow.active || force) {
             $.overflow.active = false;
             $(document.body).css('overflow', 'inherit');

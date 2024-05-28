@@ -33,13 +33,16 @@ use NTLAB\JS\Repository;
  * JQuery UI wait dialog to show a waiting dialog while in progress.
  *
  * Usage:
+ *
+ * ```js
  * $.ntdlg.wait('I\'m doing something');
  * // do something here
  * $.ntdlg.wait('I\'m doing another thing');
  * // close wait dialog
  * $.ntdlg.wait();
+ * ```
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Wait extends Base
 {
@@ -63,7 +66,7 @@ $.define('ntdlg', {
         active: false,
         create: function() {
             const self = this;
-            if (self.d == null) {
+            if (self.d === null) {
                 $(document.body).append('<div id="wdialog" title="$title">$message</div>');
                 self.d = $('#wdialog').dialog({
                     autoOpen: false,
@@ -90,7 +93,9 @@ $.define('ntdlg', {
         },
         show: function(msg) {
             const self = this;
-            if (self.active) self.close();
+            if (self.active) {
+                self.close();
+            }
             self.create();
             if (msg) {
                 $(self.d).text(msg);

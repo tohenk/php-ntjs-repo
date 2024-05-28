@@ -30,9 +30,9 @@ use NTLAB\JS\Util\Escaper;
 
 class Repository
 {
-    const POSITION_FIRST = 'first';
-    const POSITION_MIDDLE = 'middle';
-    const POSITION_LAST = 'last';
+    public const POSITION_FIRST = 'first';
+    public const POSITION_MIDDLE = 'middle';
+    public const POSITION_LAST = 'last';
 
     /**
      * @var string

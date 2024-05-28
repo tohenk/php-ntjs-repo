@@ -30,12 +30,12 @@ use NTLAB\JS\Script\JQuery\UI as Base;
 use NTLAB\JS\Repository;
 
 /**
- * JQuery iframe dialog auto-height implementation to resize the
+ * JQuery UI iframe dialog auto-height implementation to resize the
  * parent dialog height according to its frame content height.
  *
  * Simply include this script into the iframe content (not the dialog).
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class IframeResize extends Base
 {
@@ -93,9 +93,11 @@ EOF
 
     public function getInitScript()
     {
-        $this->add(<<<EOF
+        $this
+            ->add(
+                <<<EOF
 $.dlgresize.init();
 EOF
-        );
+            );
     }
 }

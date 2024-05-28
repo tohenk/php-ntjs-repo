@@ -30,9 +30,9 @@ use NTLAB\JS\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
- * Redirection helper to allow an Ajax Iframe to reload.
+ * Bootstrap redirection helper to allow an Ajax iframe to reload.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class IframeRedir extends Base
 {
@@ -51,7 +51,7 @@ $.define('ntdlg', {
         if (!pIframe.length) {
             pIframe = $('div.modal.show div.ui-dialog-iframe-container:last');
         }
-        if (!pIframe.length || pIframe[0].nodeName == 'IFRAME') {
+        if (!pIframe.length || pIframe[0].nodeName === 'IFRAME') {
             window.location.href = url;
         } else {
             $.ntdlg.iframeLoader(pIframe.parents('div.modal.show'), {url: url});

@@ -30,9 +30,9 @@ use NTLAB\JS\Script as Base;
 use NTLAB\JS\Util\Asset;
 
 /**
- * Popper.js javascript code repository for PHP.
+ * Include Popper.js assets.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Popper extends Base
 {

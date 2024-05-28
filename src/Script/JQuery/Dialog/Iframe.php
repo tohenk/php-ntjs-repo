@@ -34,10 +34,13 @@ use NTLAB\JS\Util\JSValue;
  * JQuery UI iframe dialog.
  *
  * Usage:
+ *
+ * ```js
  * $.ntdlg.iframe('/path/to/url', 'my', 'My Iframe Dialog', true, 500, 400);
+ * ```
  *
  * @method string call(string $title, string $content, string $url, array $options = [])
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Iframe extends Base
 {
@@ -67,11 +70,11 @@ $.define('ntdlg', {
     iframe: function(id, url, options) {
         const self = this;
         options = options || {};
-        let title = options.title || '';
+        const title = options.title || '';
         let w = options.w || 600;
         let h = options.h || 500;
-        let overflow = options.overflow || 'hidden';
-        let close_cb = options.close_cb || null;
+        const overflow = options.overflow || 'hidden';
+        const close_cb = options.close_cb || null;
         const params = {
             resizable: false,
             buttons: [],
@@ -82,22 +85,26 @@ $.define('ntdlg', {
                 $.overflow.restore();
             },
             open: function() {
-                let d = $(this);
-                let h = Math.floor(d.height());
-                let w = Math.floor(d.width());
+                const d = $(this);
+                const h = Math.floor(d.height());
+                const w = Math.floor(d.width());
                 url += (url.indexOf('?') > -1 ? '&' : '?') + 'height=' + h + '&width=' + w + '&closecb=' + (close_cb ? close_cb : '') + '&_dialog=1';
                 d.html('<iframe src="' + url + '" frameborder="0" hspace="0" width="' + w + '" height="' + h + '" style="overflow: ' + overflow + ';"></iframe>');
                 d.addClass('ui-dialog-iframe-container');
             }
         };
         // adjust dialog size
-        let win = $(window);
-        if (typeof(h) == 'number') {
-            if (h > win.height()) h = win.height() - 10;
+        const win = $(window);
+        if (typeof h === 'number') {
+            if (h > win.height()) {
+                h = win.height() - 10;
+            }
             params.height = h;
         }
-        if (typeof(w) == 'number') {
-            if (w > win.width()) w = win.width() - 10;
+        if (typeof w === 'number') {
+            if (w > win.width()) {
+                w = win.width() - 10;
+            }
             params.width = w;
         }
         $.ntdlg.create(id, title, '', params);
@@ -136,7 +143,9 @@ EOF;
         }
         $iframeOptions['close_cb'] = '$.ntdlg.closeIframe'.$dlg;
         $iframeOptions = JSValue::create($iframeOptions)->setIndent(1);
-        $this->add(<<<EOF
+        $this
+            ->add(
+                <<<EOF
 $.ntdlg.closeIframe$dlg = function() {
     $.ntdlg.close('dlg$dlg');
 }
@@ -145,7 +154,7 @@ $('#ref-dlg$dlg').on('click', function(e) {
     $.ntdlg.iframe('dlg$dlg', $(this).attr('href'), $iframeOptions);
 });
 EOF
-        );
+            );
         $url = $this->getBackend()->url($url);
         if (isset($options['query_string'])) {
             $url .= (false !== strpos($url, '?') ? '&' : '?').$options['query_string'];

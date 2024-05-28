@@ -32,7 +32,7 @@ use NTLAB\JS\Repository;
 /**
  * Handling ajax form submission error.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class PostErrorHelper extends Base
 {
@@ -49,6 +49,7 @@ class PostErrorHelper extends Base
         return <<<EOF
 $.errformat = {REPLACE: 0, INPLACE: 1, ASLIST: 2}
 $.errhelper = function(container, options) {
+    options = options || {};
     const helper = {
         container: null,
         errorContainer: null,
@@ -64,11 +65,11 @@ $.errhelper = function(container, options) {
         visibilityUseClass: false,
         getError: function(err, fmt, sep) {
             let error = '';
-            $.map($.isArray(err) ? err : new Array(err), function(e) {
+            $.map(Array.isArray(err) ? err : [err], function(e) {
                 if (error.length && sep) {
                     error = error + sep;
                 }
-                e = $.isArray(e) ? e.join(': ') : e;
+                e = Array.isArray(e) ? e.join(': ') : e;
                 if (fmt) {
                     error = error + $.util.template(fmt, {error: e});
                 } else {
@@ -132,7 +133,7 @@ $.errhelper = function(container, options) {
                     break;
                 case $.errformat.INPLACE:
                     error = self.getError(err, null, ', ');
-                    if (typeof self.inplace == 'function') {
+                    if (typeof self.inplace === 'function') {
                         let iel = self.inplace(el, error);
                         self.addErrorClass(iel);
                         self.showError(iel);
@@ -154,12 +155,12 @@ $.errhelper = function(container, options) {
         handleError: function(err) {
             let handled = false;
             // reference self using variable
-            if ($.isArray(err)) {
+            if (Array.isArray(err)) {
                 const el = $('#' + err[0]);
                 // check if error element is exist
                 if (el.length) {
                     handled = true;
-                    helper.addError(err[1], helper.errorFormat == $.errformat.ASLIST ? el.parent() : el, helper.errorFormat);
+                    helper.addError(err[1], helper.errorFormat === $.errformat.ASLIST ? el.parent() : el, helper.errorFormat);
                     if (helper.parentClass) {
                         if (helper.parentSelector) {
                             el.parents(helper.parentSelector).addClass(helper.parentClass).show();
@@ -167,7 +168,7 @@ $.errhelper = function(container, options) {
                             el.parent().addClass(helper.parentClass).show();
                         }
                     }
-                    if (helper.focused == null) {
+                    if (helper.focused === null) {
                         if (el.is('input[type="hidden"]')) {
                             helper.focused = el.siblings('input');
                         } else {
@@ -193,7 +194,7 @@ $.errhelper = function(container, options) {
         },
         focusError: function() {
             const self = this;
-            if (self.focused != null) {
+            if (self.focused !== null) {
                 $.scrollto(self.focused);
                 self.focused.focus();
             }
@@ -223,21 +224,22 @@ $.errhelper = function(container, options) {
                     self.doShow(self.errorContainer, false);
                 }
             }
-            if (typeof self.onErrReset == 'function') {
+            if (typeof self.onErrReset === 'function') {
                 self.onErrReset(self);
             }
         }
     }
     helper.container = container;
-    options = options ? options : {};
     $.util.applyProp(['errorContainer', 'errorFormat', 'requiredSelector', 'parentSelector', 'parentClass',
         'errClass', 'listClass', 'toggleClass', 'visibilityUseClass', 'inplace', 'onErrReset'], options, helper);
-    if (typeof helper.errorContainer == 'string' && helper.container) {
+    if (typeof helper.errorContainer === 'string' && helper.container) {
         let p = helper.container;
         let containers = helper.errorContainer.split(' ');
         let items = [];
         while (true) {
-            if (containers.length == 0) break;
+            if (containers.length === 0) {
+                break;
+            }
             let selector = containers.shift();
             let el = p.find(selector);
             if (el.length) {

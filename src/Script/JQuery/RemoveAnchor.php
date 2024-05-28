@@ -32,9 +32,12 @@ use NTLAB\JS\Repository;
  * Replace html tag into span tag. e.g. an anchor tag.
  *
  * Usage:
- * $.removeAnchor($('a.mylink'));
  *
- * @author Toha
+ * ```js
+ * $.removeAnchor($('a.mylink'));
+ * ```
+ *
+ * @author Toha <tohenk@yahoo.com>
  */
 class RemoveAnchor extends Base
 {

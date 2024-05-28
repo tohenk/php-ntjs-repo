@@ -31,7 +31,7 @@ use NTLAB\JS\Script\Bootstrap;
 /**
  * Bootstrap default theme.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class DefaultTheme extends Bootstrap
 {

@@ -32,8 +32,7 @@ use NTLAB\JS\Repository;
 /**
  * Ajax request helper.
  *
- * @author Toha
- *
+ * @author Toha <tohenk@yahoo.com>
  */
 class AjaxHelper extends Base
 {
@@ -72,7 +71,7 @@ $.ajaxhelper = function(el) {
             self.el.data(self.dataKey, xhr);
         }
     }
-    if (typeof el == 'string') {
+    if (typeof el === 'string') {
         helper.el = $(el);
     } else {
         helper.el = el;

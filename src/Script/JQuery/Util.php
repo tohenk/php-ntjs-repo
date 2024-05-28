@@ -33,10 +33,12 @@ use NTLAB\JS\Repository;
  * Common utility for javascript.
  *
  * Usage:
+ *
+ * ```js
  * $.util.dump($('#me'));
+ * ```
  *
- * @author Toha
- *
+ * @author Toha <tohenk@yahoo.com>
  */
 class Util extends Base
 {
@@ -51,14 +53,14 @@ class Util extends Base
         return <<<EOF
 $.define('util', {
     template: function(tmpl, replaces) {
-        for (let n in replaces) {
-            let re = new RegExp('%' + n + '%', 'g');
+        for (const n in replaces) {
+            const re = new RegExp('%' + n + '%', 'g');
             tmpl = tmpl.replace(re, replaces[n]);
         }
         return tmpl;
     },
     copyProp: function(prop, src, dest, remove) {
-        if (typeof src[prop] != 'undefined') {
+        if (src[prop] !== undefined) {
             dest[prop] = src[prop];
             if (remove) {
                 delete src[prop];
@@ -68,14 +70,14 @@ $.define('util', {
     applyProp: function(props, src, dest, remove) {
         const self = this;
         if (src && dest) {
-            if (typeof props == 'object') {
-                if ($.isArray(props)) {
+            if (typeof props === 'object') {
+                if (Array.isArray(props)) {
                     for (let i = 0; i < props.length; i++) {
-                        let prop = props[i];
+                        const prop = props[i];
                         self.copyProp(prop, src, dest, remove);
                     }
                 } else {
-                    for (prop in props) {
+                    for (const prop in props) {
                         self.copyProp(prop, src, dest, remove);
                     }
                 }
@@ -83,30 +85,32 @@ $.define('util', {
         }
     },
     bindEvent: function(el, event, handlers) {
-        if (typeof handlers[event] == 'function') {
+        if (typeof handlers[event] === 'function') {
             el.on(event, handlers[event]);
         }
     },
     applyEvent: function(el, events, handlers) {
         const self = this;
-        if (typeof events == 'object') {
-            if ($.isArray(events)) {
+        if (typeof events === 'object') {
+            if (Array.isArray(events)) {
                 for (let i = 0; i < events.length; i++) {
-                    let event = events[i];
+                    const event = events[i];
                     self.bindEvent(el, event, handlers);
                 }
             } else {
-                for (event in events) {
+                for (const event in events) {
                     self.bindEvent(el, event, handlers);
                 }
             }
         }
     },
     dump: function(o, p) {
-        if (typeof o == 'object') {
-            for (a in o) $.util.dump(o[a], (p != undefined ? p + '.' : '') + a);
+        if (typeof o === 'object') {
+            for (const a in o) {
+                $.util.dump(o[a], (p !== undefined ? p + '.' : '') + a);
+            }
         } else {
-            alert((p != undefined ? p + ' = ' : '') + o);
+            alert((p !== undefined ? p + ' = ' : '') + o);
         }
     }
 });
