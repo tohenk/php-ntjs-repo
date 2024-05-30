@@ -67,6 +67,12 @@ class Highcharts extends Base
         if ($theme = $this->getOption('theme')) {
             $this->useJavascript(sprintf('themes/%s', $theme));
         }
+        if ($this->getOption('accessibility', true)) {
+            $module = 'accessibility';
+            if (!in_array($module, $this->modules)) {
+                array_unshift($this->modules, $module);
+            }
+        }
         foreach ($this->modules as $module) {
             $this->useJavascript(sprintf('modules/%s', $module));
         }
