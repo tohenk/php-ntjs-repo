@@ -148,6 +148,7 @@ This table below contains collection of scripts and its usage.
 | [`Bootswatch`](/src/Script/Bootswatch.php)                                                             | Include Bootswatch assets                                                |
 | [`CanvasToBlob`](/src/Script/CanvasToBlob.php)                                                         | Include BlueImp Javascript-Canvas-to-Blob assets                         |
 | [`CKEditor`](/src/Script/CKEditor.php)                                                                 | Include CKEditor assets                                                  |
+| [`Cropper`](/src/Script/Cropper.php)                                                                   | Include Cropper.js assets                                                |
 | [`DataTables`](/src/Script/DataTables.php)                                                             | Include DataTables assets                                                |
 | [`DataTablesI18N`](/src/Script/DataTablesI18N.php)                                                     | Include DataTables plugins I18N assets                                   |
 | [`DataTablesResponsive`](/src/Script/DataTablesResponsive.php)                                         | Include DataTables Responsive extension assets                           |
@@ -210,6 +211,7 @@ This table below contains collection of scripts and its usage.
 | [`Strophe`](/src/Script/Strophe.php)                                                                   | Include Strophe assets                                                   |
 | [`Templates`](/src/Script/Templates.php)                                                               | Include BlueImp JavaScript-Templates assets                              |
 | [`TinyMCE`](/src/Script/TinyMCE.php)                                                                   | Include TinyMCE assets                                                   |
+| [`Upload`](/src/Script/Upload.php)                                                                     | Include BlueImp JQuery-File-Upload assets                                |
 
 Live Demo
 ---------
