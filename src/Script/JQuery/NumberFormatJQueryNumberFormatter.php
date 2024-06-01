@@ -70,9 +70,10 @@ EOF;
     {
         if ($this->getOption('register', true)) {
             $this
-                ->useScript(<<<EOF
-if ($.nf && !$.nf.internal) {
-    $.nf.internal = $.nfJQueryNumberFormatter;
+                ->useScript(
+                    <<<EOF
+if (!$.nfFactory) {
+    $.nfFactory = $.nfJQueryNumberFormatter;
 }
 EOF
                 );

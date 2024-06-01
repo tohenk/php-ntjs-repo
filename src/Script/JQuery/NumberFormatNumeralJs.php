@@ -93,9 +93,10 @@ EOF;
     {
         if ($this->getOption('register', true)) {
             $this
-                ->useScript(<<<EOF
-if ($.nf && !$.nf.internal) {
-    $.nf.internal = $.nfNumeralJs;
+                ->useScript(
+                    <<<EOF
+if (!$.nfFactory) {
+    $.nfFactory = $.nfNumeralJs;
 }
 EOF
                 );

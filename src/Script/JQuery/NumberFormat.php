@@ -50,21 +50,23 @@ class NumberFormat extends Base
 $.define('nf', {
     format: function(el) {
         const self = this;
-        $.nf.internal.init(el.data('nf'));
+        const f = self.factory();
+        f.init(el.data('nf'));
         let v = el.val();
         if (v !== '') {
             if (!el.data('nf_formatted')) {
                 v = parseFloat(v);
             }
-            el.val($.nf.internal.format(v));
+            el.val(f.format(v));
             el.data('nf_formatted', true);
         }
     },
     apply: function(el) {
         const self = this;
-        $.nf.internal.init(el.data('nf'));
+        const f = self.factory();
+        f.init(el.data('nf'));
         const ref = el.data('nf_value');
-        const v = $.nf.internal.value(el.val());
+        const v = f.value(el.val());
         if (v) {
             this.format(el);
         }
@@ -74,6 +76,16 @@ $.define('nf', {
             ref.trigger('change');
             ref.data('nf_skip', false);
         }
+    },
+    factory: function() {
+        const self = this;
+        if (self.internal) {
+            return self.internal;
+        }
+        if ($.nfFactory) {
+            return $.nfFactory;
+        }
+        throw new Error('Number formatter factory is required!');
     },
     init: function(display, value, options) {
         const self = this;
