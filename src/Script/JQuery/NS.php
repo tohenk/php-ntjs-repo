@@ -92,8 +92,8 @@ if (!$.define) {
             $.extend($.namespace.create(ns), o);
         }
     }
-    $.define = $.namespace.define;
-    $.assert = $.namespace.assert;
+    $.define = $.namespace.define.bind($.namespace);
+    $.assert = $.namespace.assert.bind($.namespace);
 }
 EOF;
     }
