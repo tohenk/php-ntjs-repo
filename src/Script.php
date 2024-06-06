@@ -324,6 +324,18 @@ abstract class Script
     }
 
     /**
+     * Get script configuration.
+     *
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
+    protected function getConfig($name, $default = null)
+    {
+        return $this->getBackend()->getConfig($name, $default);
+    }
+
+    /**
      * Add script dependencies.
      *
      * @param array $dependencies  The dependencies
@@ -679,7 +691,7 @@ abstract class Script
      */
     protected function getLocale($short = null)
     {
-        if ($locale = $this->getOption('locale', (string) $this->getBackend()->getConfig('locale'))) {
+        if ($locale = $this->getOption('locale', (string) $this->getConfig('locale'))) {
             if ($short) {
                 $locale = substr($locale, 0, 2);
             }
@@ -734,8 +746,8 @@ abstract class Script
             $name .= '%s';
         }
         $asset   = $asset ?: $this->getAsset();
-        $baseDir = $this->getBackend()->getConfig('base-dir').DIRECTORY_SEPARATOR.$asset->getDir();
-        $culture = $culture ?: $this->getBackend()->getConfig('default-culture');
+        $baseDir = $this->getConfig('base-dir').DIRECTORY_SEPARATOR.$asset->getDir();
+        $culture = $culture ?: $this->getLocale();
         // check file
         foreach ($this->getLocales($culture, $default ?: 'en') as $locale) {
             foreach ($asset->getExtension(Asset::ASSET_JAVASCRIPT) as $extension) {

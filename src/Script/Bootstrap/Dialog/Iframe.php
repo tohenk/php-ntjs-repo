@@ -64,7 +64,7 @@ class Iframe extends Base
         $this->addDependencies('JQuery.NS', 'JQuery.Util', 'Bootstrap.Dialog', 'Bootstrap.Dialog.IframeLoader');
         $this->setPosition(Repository::POSITION_FIRST);
         if (null === self::$dlg_rand) {
-            self::$dlg_rand = mt_rand();
+            self::$dlg_rand = $this->getConfig('random-dlg-id', mt_rand());
         }
     }
 
@@ -101,7 +101,7 @@ EOF;
      */
     protected function getDlgId()
     {
-        return sprintf('%d_%d', static::$dlg_rand, ++static::$dlg_id);
+        return sprintf('%s_%d', static::$dlg_rand, ++static::$dlg_id);
     }
 
     /**
