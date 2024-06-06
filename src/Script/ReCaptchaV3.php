@@ -69,8 +69,7 @@ grecaptcha.my = {
         }
         if (id.length) {
             grecaptcha.ready(() => {
-                for (let i = 0; i < id.length; i++) {
-                    const cid = id[i];
+                for (const cid of id) {
                     const action = self.ids[cid].action;
                     grecaptcha.execute(self.key, {action: action})
                         .then(token => {
@@ -91,9 +90,7 @@ EOF;
                 <<<EOF
 (() => {
     grecaptcha.my.init();
-    const captchas = Object.keys(grecaptcha.my.ids);
-    for (let i = 0; i <= captchas.length; i++) {
-        const cid = captchas[i];
+    for (const cid in grecaptcha.my.ids) {
         $('#' + cid).parents('form').on('formerror', () => {
             grecaptcha.my.init(cid);
         });

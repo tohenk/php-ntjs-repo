@@ -27,14 +27,14 @@
 namespace NTLAB\JS\Script;
 
 /**
- * Include DataTables RowGroup extension assets.
+ * Include DataTables FixedColumns extension assets.
  *
  * @author Toha <tohenk@yahoo.com>
  */
-class DataTablesRowGroup extends DataTables
+class DataTablesFixedColumns extends DataTables
 {
     protected function configure()
     {
-        $this->setupAsset('RowGroup', 'Extensions');
+        $this->setupAsset('FixedColumns', 'Extensions');
     }
 }

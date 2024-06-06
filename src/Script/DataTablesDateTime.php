@@ -27,14 +27,15 @@
 namespace NTLAB\JS\Script;
 
 /**
- * Include DataTables RowGroup extension assets.
+ * Include DataTables DateTime extension assets.
  *
  * @author Toha <tohenk@yahoo.com>
  */
-class DataTablesRowGroup extends DataTables
+class DataTablesDateTime extends DataTables
 {
     protected function configure()
     {
-        $this->setupAsset('RowGroup', 'Extensions');
+        $this->useStyle = false;
+        $this->setupAsset('DateTime', 'Extensions');
     }
 }

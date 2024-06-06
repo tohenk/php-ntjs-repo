@@ -27,14 +27,14 @@
 namespace NTLAB\JS\Script;
 
 /**
- * Include DataTables RowGroup extension assets.
+ * Include DataTables SearchBuilder extension assets.
  *
  * @author Toha <tohenk@yahoo.com>
  */
-class DataTablesRowGroup extends DataTables
+class DataTablesSearchBuilder extends DataTables
 {
     protected function configure()
     {
-        $this->setupAsset('RowGroup', 'Extensions');
+        $this->setupAsset('SearchBuilder', 'Extensions');
     }
 }

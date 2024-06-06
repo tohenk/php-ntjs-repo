@@ -61,25 +61,29 @@ class NS extends Base
 if (!$.define) {
     'use strict';
     $.namespace = {
-        create: function(ns) {
-            let o = $;
-            const p = ns.split('.');
-            for (let i = 0; i < p.length; i++) {
-                o[p[i]] = o[p[i]] || {};
-                o = o[p[i]];
+        factory: function(ns, create = false) {
+            let res = true, o = $;
+            const props = ns.split('.');
+            for (const prop of props) {
+                if (!create && !o[prop]) {
+                    res = false;
+                    break;
+                }
+                o[prop] = o[prop] || {};
+                o = o[prop];
             }
-            return o;
+            return [res, o];
+        },
+        create: function(ns) {
+            return this.factory(ns, true)[1];
         },
         has: function(ns) {
-            let o = $;
-            const p = ns.split('.');
-            for (let i = 0; i < p.length; i++) {
-                if (!o[p[i]]) {
-                    return false;
-                }
-                o = o[p[i]];
+            return this.factory(ns, false)[0];
+        },
+        assert: function(ns) {
+            if (!this.has(ns)) {
+                throw new Error(`Namespace \${ns} is not defined!`);
             }
-            return true;
         },
         define: function(ns, o, e) {
             if (!e && $.namespace.has(ns)) {
@@ -89,6 +93,7 @@ if (!$.define) {
         }
     }
     $.define = $.namespace.define;
+    $.assert = $.namespace.assert;
 }
 EOF;
     }

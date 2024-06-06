@@ -35,7 +35,6 @@ class DataTablesResponsive extends DataTables
 {
     protected function configure()
     {
-        $this->useStyle = false;
         $this->setupAsset('Responsive', 'Extensions');
     }
 }

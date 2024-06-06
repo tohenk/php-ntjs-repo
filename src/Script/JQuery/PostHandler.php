@@ -57,7 +57,7 @@ class PostHandler extends Base
 $.extend({
     handlePostData: function(data, errhelper, success_cb, error_cb) {
         $.postErr = null;
-        let json = typeof data === 'object' ? data : $.parseJSON(data);
+        const json = typeof data === 'object' ? data : $.parseJSON(data);
         if (json.success) {
             if (typeof success_cb === 'function') {
                 success_cb(json);

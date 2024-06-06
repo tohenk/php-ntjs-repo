@@ -35,7 +35,6 @@ class DataTablesSelect extends DataTables
 {
     protected function configure()
     {
-        $this->useStyle = false;
         $this->setupAsset('Select', 'Extensions');
     }
 }
