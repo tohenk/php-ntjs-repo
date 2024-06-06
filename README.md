@@ -117,7 +117,6 @@ This table below contains collection of scripts and its usage.
 |--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
 | [`BigNumber`](/src/Script/BigNumber.php)                                                               | Include BigNumber assets                                                 |
 | [`Bloodhound`](/src/Script/Bloodhound.php)                                                             | Include Bloodhound assets                                                |
-| [`BlueimpGallery`](/src/Script/BlueimpGallery.php)                                                     | Include BlueImp Gallery assets                                           |
 | [`Bootstrap`](/src/Script/Bootstrap.php)                                                               | Include Bootstrap assets                                                 |
 | [`Bootstrap.DateTimePicker`](/src/Script/Bootstrap/DateTimePicker.php)                                 | Include Bootstrap DateTimePicker assets                                  |
 | [`Bootstrap.DateTimePickerLocale`](/src/Script/Bootstrap/DateTimePickerLocale.php)                     | Include Bootstrap DateTimePicker locale assets                           |
@@ -150,11 +149,25 @@ This table below contains collection of scripts and its usage.
 | [`CKEditor`](/src/Script/CKEditor.php)                                                                 | Include CKEditor assets                                                  |
 | [`Cropper`](/src/Script/Cropper.php)                                                                   | Include Cropper.js assets                                                |
 | [`DataTables`](/src/Script/DataTables.php)                                                             | Include DataTables assets                                                |
+| [`DataTablesAutoFill`](/src/Script/DataTablesAutoFill.php)                                             | Include DataTables AutoFill extension assets                             |
+| [`DataTablesButtons`](/src/Script/DataTablesButtons.php)                                               | Include DataTables Buttons extension assets                              |
+| [`DataTablesColReorder`](/src/Script/DataTablesColReorder.php)                                         | Include DataTables ColReorder extension assets                           |
+| [`DataTablesDateTime`](/src/Script/DataTablesDateTime.php)                                             | Include DataTables DateTime extension assets                             |
+| [`DataTablesFixedColumns`](/src/Script/DataTablesFixedColumns.php)                                     | Include DataTables FixedColumns extension assets                         |
+| [`DataTablesFixedHeader`](/src/Script/DataTablesFixedHeader.php)                                       | Include DataTables FixedHeader extension assets                          |
 | [`DataTablesI18N`](/src/Script/DataTablesI18N.php)                                                     | Include DataTables plugins I18N assets                                   |
+| [`DataTablesKeyTable`](/src/Script/DataTablesKeyTable.php)                                             | Include DataTables KeyTable extension assets                             |
 | [`DataTablesResponsive`](/src/Script/DataTablesResponsive.php)                                         | Include DataTables Responsive extension assets                           |
 | [`DataTablesRowGroup`](/src/Script/DataTablesRowGroup.php)                                             | Include DataTables RowGroup extension assets                             |
+| [`DataTablesRowReorder`](/src/Script/DataTablesRowReorder.php)                                         | Include DataTables RowReorder extension assets                           |
+| [`DataTablesScroller`](/src/Script/DataTablesScroller.php)                                             | Include DataTables Scroller extension assets                             |
+| [`DataTablesSearchBuilder`](/src/Script/DataTablesSearchBuilder.php)                                   | Include DataTables SearchBuilder extension assets                        |
+| [`DataTablesSearchPanes`](/src/Script/DataTablesSearchPanes.php)                                       | Include DataTables SearchPanes extension assets                          |
 | [`DataTablesSelect`](/src/Script/DataTablesSelect.php)                                                 | Include DataTables Select extension assets                               |
+| [`DataTablesStateRestore`](/src/Script/DataTablesStateRestore.php)                                     | Include DataTables StateRestore extension assets                         |
+| [`FileUpload`](/src/Script/FileUpload.php)                                                             | Include BlueImp JQuery-File-Upload assets                                |
 | [`FontAwesome`](/src/Script/FontAwesome.php)                                                           | Include FontAwesome assets                                               |
+| [`Gallery`](/src/Script/Gallery.php)                                                                   | Include BlueImp Gallery assets                                           |
 | [`GoogleFonts`](/src/Script/GoogleFonts.php)                                                           | Include Google Fonts assets                                              |
 | [`Highcharts`](/src/Script/Highcharts.php)                                                             | Include Highcharts assets                                                |
 | [`Hotkeys`](/src/Script/Hotkeys.php)                                                                   | Include JQuery Hotkeys assets                                            |
@@ -211,7 +224,6 @@ This table below contains collection of scripts and its usage.
 | [`Strophe`](/src/Script/Strophe.php)                                                                   | Include Strophe assets                                                   |
 | [`Templates`](/src/Script/Templates.php)                                                               | Include BlueImp JavaScript-Templates assets                              |
 | [`TinyMCE`](/src/Script/TinyMCE.php)                                                                   | Include TinyMCE assets                                                   |
-| [`Upload`](/src/Script/Upload.php)                                                                     | Include BlueImp JQuery-File-Upload assets                                |
 
 Live Demo
 ---------

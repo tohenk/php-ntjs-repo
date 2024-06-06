@@ -34,7 +34,7 @@ use NTLAB\JS\Util\Asset;
  *
  * @author Toha <tohenk@yahoo.com>
  */
-class BlueimpGallery extends Base
+class Gallery extends Base
 {
     protected function configure()
     {

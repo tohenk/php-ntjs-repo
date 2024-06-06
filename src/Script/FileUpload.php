@@ -34,7 +34,7 @@ use NTLAB\JS\Util\Asset;
  *
  * @author Toha <tohenk@yahoo.com>
  */
-class Upload extends Base
+class FileUpload extends Base
 {
     protected function configure()
     {
