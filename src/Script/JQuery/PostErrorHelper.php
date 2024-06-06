@@ -234,14 +234,11 @@ $.errhelper = function(container, options) {
         'errClass', 'listClass', 'toggleClass', 'visibilityUseClass', 'inplace', 'onErrReset'], options, helper);
     if (typeof helper.errorContainer === 'string' && helper.container) {
         let p = helper.container;
-        let containers = helper.errorContainer.split(' ');
-        let items = [];
-        while (true) {
-            if (containers.length === 0) {
-                break;
-            }
-            let selector = containers.shift();
-            let el = p.find(selector);
+        const items = [];
+        const containers = helper.errorContainer.split(' ');
+        while (containers.length) {
+            const selector = containers.shift();
+            const el = p.find(selector);
             if (el.length) {
                 p = el;
                 items.push(el);
