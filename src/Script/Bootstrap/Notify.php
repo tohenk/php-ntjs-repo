@@ -46,7 +46,7 @@ class Notify extends Base
     {
         $title = $this->trans('Notification');
         $close = $this->trans('Close');
-        $useToast = $this->getConfig('notification_toast') ? 'true' : 'false';
+        $useToast = $this->getConfig('notification-toast') ? 'true' : 'false';
 
         return <<<EOF
 $.define('notif', {
