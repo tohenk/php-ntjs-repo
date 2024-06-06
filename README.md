@@ -113,117 +113,131 @@ Available Scripts
 
 This table below contains collection of scripts and its usage.
 
-| Script                                                                                                 | Usage                                                                    |
-|--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
-| [`BigNumber`](/src/Script/BigNumber.php)                                                               | Include BigNumber assets                                                 |
-| [`Bloodhound`](/src/Script/Bloodhound.php)                                                             | Include Bloodhound assets                                                |
-| [`Bootstrap`](/src/Script/Bootstrap.php)                                                               | Include Bootstrap assets                                                 |
-| [`Bootstrap.DateTimePicker`](/src/Script/Bootstrap/DateTimePicker.php)                                 | Include Bootstrap DateTimePicker assets                                  |
-| [`Bootstrap.DateTimePickerLocale`](/src/Script/Bootstrap/DateTimePickerLocale.php)                     | Include Bootstrap DateTimePicker locale assets                           |
-| [`Bootstrap.DateTimePickerLocaleCustom`](/src/Script/Bootstrap/DateTimePickerLocaleCustom.php)         | Include Bootstrap DateTimePicker custom locale assets                    |
-| [`Bootstrap.DateTimePickerPlugins`](/src/Script/Bootstrap/DateTimePickerPlugins.php)                   | Include Bootstrap DateTimePicker plugins assets                          |
-| [`Bootstrap.Dialog`](/src/Script/Bootstrap/Dialog.php)                                                 | Bootstrap modal wrapper to create and handle dialog                      |
-| [`Bootstrap.Dialog.Confirm`](/src/Script/Bootstrap/Dialog/Confirm.php)                                 | Bootstrap confirm modal                                                  |
-| [`Bootstrap.Dialog.Iframe`](/src/Script/Bootstrap/Dialog/Iframe.php)                                   | Bootstrap iframe modal                                                   |
-| [`Bootstrap.Dialog.IframeLoader`](/src/Script/Bootstrap/Dialog/IframeLoader.php)                       | Bootstrap iframe loader helper                                           |
-| [`Bootstrap.Dialog.IframeRedir`](/src/Script/Bootstrap/Dialog/IframeRedir.php)                         | Bootstrap redirection helper to allow an Ajax iframe to reload           |
-| [`Bootstrap.Dialog.IframeResize`](/src/Script/Bootstrap/Dialog/IframeResize.php)                       | Bootstrap iframe dialog auto-height                                      |
-| [`Bootstrap.Dialog.Input`](/src/Script/Bootstrap/Dialog/Input.php)                                     | Bootstrap input modal                                                    |
-| [`Bootstrap.Dialog.Message`](/src/Script/Bootstrap/Dialog/Message.php)                                 | Bootstrap message modal                                                  |
-| [`Bootstrap.Dialog.Wait`](/src/Script/Bootstrap/Dialog/Wait.php)                                       | Bootstrap modal to show a waiting dialog while in progress               |
-| [`Bootstrap.FormPost`](/src/Script/Bootstrap/FormPost.php)                                             | Handling form submission using ajax                                      |
-| [`Bootstrap.Notify`](/src/Script/Bootstrap/Notify.php)                                                 | Handle notification either using Web Notification or Bootstrap Toast     |
-| [`Bootstrap.Select`](/src/Script/Bootstrap/Select.php)                                                 | Include Bootstrap Select assets                                          |
-| [`Bootstrap.StarRating`](/src/Script/Bootstrap/StarRating.php)                                         | Include Bootstrap StarRating assets                                      |
-| [`Bootstrap.StarRatingLocale`](/src/Script/Bootstrap/StarRatingLocale.php)                             | Include Bootstrap StarRating locale assets                               |
-| [`Bootstrap.StarRatingTheme`](/src/Script/Bootstrap/StarRatingTheme.php)                               | Include Bootstrap StarRating theme assets                                |
-| [`Bootstrap.StarRatingThemeFa`](/src/Script/Bootstrap/StarRatingThemeFa.php)                           | Include Bootstrap StarRating FontAwesome theme assets                    |
-| [`Bootstrap.StarRatingThemeFas`](/src/Script/Bootstrap/StarRatingThemeFas.php)                         | Include Bootstrap StarRating FontAwesome Solid theme assets              |
-| [`Bootstrap.StarRatingThemeSvg`](/src/Script/Bootstrap/StarRatingThemeSvg.php)                         | Include Bootstrap StarRating SVG theme assets                            |
-| [`Bootstrap.StarRatingThemeUnicode`](/src/Script/Bootstrap/StarRatingThemeUnicode.php)                 | Include Bootstrap StarRating Unicode theme assets                        |
-| [`Bootstrap.Theme.DefaultTheme`](/src/Script/Bootstrap/Theme/DefaultTheme.php)                         | Bootstrap default theme                                                  |
-| [`Bootstrap.Typeahead`](/src/Script/Bootstrap/Typeahead.php)                                           | Include Bootstrap Typeahead assets                                       |
-| [`BootstrapIcons`](/src/Script/BootstrapIcons.php)                                                     | Include Bootstrap Icons assets                                           |
-| [`Bootswatch`](/src/Script/Bootswatch.php)                                                             | Include Bootswatch assets                                                |
-| [`CanvasToBlob`](/src/Script/CanvasToBlob.php)                                                         | Include BlueImp Javascript-Canvas-to-Blob assets                         |
-| [`CKEditor`](/src/Script/CKEditor.php)                                                                 | Include CKEditor assets                                                  |
-| [`Cropper`](/src/Script/Cropper.php)                                                                   | Include Cropper.js assets                                                |
-| [`DataTables`](/src/Script/DataTables.php)                                                             | Include DataTables assets                                                |
-| [`DataTablesAutoFill`](/src/Script/DataTablesAutoFill.php)                                             | Include DataTables AutoFill extension assets                             |
-| [`DataTablesButtons`](/src/Script/DataTablesButtons.php)                                               | Include DataTables Buttons extension assets                              |
-| [`DataTablesColReorder`](/src/Script/DataTablesColReorder.php)                                         | Include DataTables ColReorder extension assets                           |
-| [`DataTablesDateTime`](/src/Script/DataTablesDateTime.php)                                             | Include DataTables DateTime extension assets                             |
-| [`DataTablesFixedColumns`](/src/Script/DataTablesFixedColumns.php)                                     | Include DataTables FixedColumns extension assets                         |
-| [`DataTablesFixedHeader`](/src/Script/DataTablesFixedHeader.php)                                       | Include DataTables FixedHeader extension assets                          |
-| [`DataTablesI18N`](/src/Script/DataTablesI18N.php)                                                     | Include DataTables plugins I18N assets                                   |
-| [`DataTablesKeyTable`](/src/Script/DataTablesKeyTable.php)                                             | Include DataTables KeyTable extension assets                             |
-| [`DataTablesResponsive`](/src/Script/DataTablesResponsive.php)                                         | Include DataTables Responsive extension assets                           |
-| [`DataTablesRowGroup`](/src/Script/DataTablesRowGroup.php)                                             | Include DataTables RowGroup extension assets                             |
-| [`DataTablesRowReorder`](/src/Script/DataTablesRowReorder.php)                                         | Include DataTables RowReorder extension assets                           |
-| [`DataTablesScroller`](/src/Script/DataTablesScroller.php)                                             | Include DataTables Scroller extension assets                             |
-| [`DataTablesSearchBuilder`](/src/Script/DataTablesSearchBuilder.php)                                   | Include DataTables SearchBuilder extension assets                        |
-| [`DataTablesSearchPanes`](/src/Script/DataTablesSearchPanes.php)                                       | Include DataTables SearchPanes extension assets                          |
-| [`DataTablesSelect`](/src/Script/DataTablesSelect.php)                                                 | Include DataTables Select extension assets                               |
-| [`DataTablesStateRestore`](/src/Script/DataTablesStateRestore.php)                                     | Include DataTables StateRestore extension assets                         |
-| [`FileUpload`](/src/Script/FileUpload.php)                                                             | Include BlueImp JQuery-File-Upload assets                                |
-| [`FontAwesome`](/src/Script/FontAwesome.php)                                                           | Include FontAwesome assets                                               |
-| [`Gallery`](/src/Script/Gallery.php)                                                                   | Include BlueImp Gallery assets                                           |
-| [`GoogleFonts`](/src/Script/GoogleFonts.php)                                                           | Include Google Fonts assets                                              |
-| [`Highcharts`](/src/Script/Highcharts.php)                                                             | Include Highcharts assets                                                |
-| [`Hotkeys`](/src/Script/Hotkeys.php)                                                                   | Include JQuery Hotkeys assets                                            |
-| [`Interact`](/src/Script/Interact.php)                                                                 | Include Interact assets                                                  |
-| [`JqGrid`](/src/Script/JqGrid.php)                                                                     | Include JqGrid assets                                                    |
-| [`JqGridDefault`](/src/Script/JqGridDefault.php)                                                       | Provide Bootstrap Icons integration in JqGrid                            |
-| [`JQuery`](/src/Script/JQuery.php)                                                                     | Include JQuery assets                                                    |
-| [`JQuery.AjaxHelper`](/src/Script/JQuery/AjaxHelper.php)                                               | Ajax request helper                                                      |
-| [`JQuery.Blob`](/src/Script/JQuery/Blob.php)                                                           | Retrieve content from an URL and transform it as blob for download       |
-| [`JQuery.Callback.SetHtml`](/src/Script/JQuery/Callback/SetHtml.php)                                   | A callback handler to set html content of an element                     |
-| [`JQuery.Callback.SetValue`](/src/Script/JQuery/Callback/SetValue.php)                                 | A callback handler to set the value of an element, such as an input tag  |
-| [`JQuery.Dialog`](/src/Script/JQuery/Dialog.php)                                                       | JQuery UI dialog wrapper to create and handling dialog                   |
-| [`JQuery.Dialog.Confirm`](/src/Script/JQuery/Dialog/Confirm.php)                                       | JQuery UI confirm dialog                                                 |
-| [`JQuery.Dialog.Iframe`](/src/Script/JQuery/Dialog/Iframe.php)                                         | JQuery UI iframe dialog                                                  |
-| [`JQuery.Dialog.IframeResize`](/src/Script/JQuery/Dialog/IframeResize.php)                             | JQuery UI iframe dialog auto-height                                      |
-| [`JQuery.Dialog.Input`](/src/Script/JQuery/Dialog/Input.php)                                           | JQuery UI input dialog                                                   |
-| [`JQuery.Dialog.Message`](/src/Script/JQuery/Dialog/Message.php)                                       | JQuery UI message dialog                                                 |
-| [`JQuery.Dialog.Wait`](/src/Script/JQuery/Dialog/Wait.php)                                             | JQuery UI wait dialog to show a waiting dialog while in progress         |
-| [`JQuery.FormPost`](/src/Script/JQuery/FormPost.php)                                                   | Handling form submission using ajax                                      |
-| [`JQuery.NS`](/src/Script/JQuery/NS.php)                                                               | JQuery namespace helper, to avoid javascript function redefine           |
-| [`JQuery.NumberFormat`](/src/Script/JQuery/NumberFormat.php)                                           | A JQuery number formatter helper                                         |
-| [`JQuery.NumberFormatJQueryNumberFormatter`](/src/Script/JQuery/NumberFormatJQueryNumberFormatter.php) | Provide number formatting internal using JQuery Number Formatter         |
-| [`JQuery.NumberFormatNumeralJs`](/src/Script/JQuery/NumberFormatNumeralJs.php)                         | Provide number formatting internal using NumeralJs                       |
-| [`JQuery.Observer`](/src/Script/JQuery/Observer.php)                                                   | Observer and event handling                                              |
-| [`JQuery.Overflow`](/src/Script/JQuery/Overflow.php)                                                   | Document body overflow utility                                           |
-| [`JQuery.PostErrorHelper`](/src/Script/JQuery/PostErrorHelper.php)                                     | Handling ajax form submission error                                      |
-| [`JQuery.PostHandler`](/src/Script/JQuery/PostHandler.php)                                             | Ajax POST handler                                                        |
-| [`JQuery.RemoveAnchor`](/src/Script/JQuery/RemoveAnchor.php)                                           | Replace html tag into span tag. e.g. an anchor tag                       |
-| [`JQuery.Resolver`](/src/Script/JQuery/Resolver.php)                                                   | Javascript namespace resolver                                            |
-| [`JQuery.ScrollTo`](/src/Script/JQuery/ScrollTo.php)                                                   | Update window scroll top based on element                                |
-| [`JQuery.Spinner`](/src/Script/JQuery/Spinner.php)                                                     | Include JQuery Spinner assets and provide a helper                       |
-| [`JQuery.Swipe`](/src/Script/JQuery/Swipe.php)                                                         | Provide swipe support to an element                                      |
-| [`JQuery.Typeahead`](/src/Script/JQuery/Typeahead.php)                                                 | A JQuery typeahead (auto complete)                                       |
-| [`JQuery.UI`](/src/Script/JQuery/UI.php)                                                               | JQuery UI base class for script that is depends on JQuery UI             |
-| [`JQuery.UI.AutoComplete`](/src/Script/JQuery/UI/AutoComplete.php)                                     | A JQuery UI auto complete                                                |
-| [`JQuery.UI.FormPost`](/src/Script/JQuery/UI/FormPost.php)                                             | Handling form submission using ajax                                      |
-| [`JQuery.Util`](/src/Script/JQuery/Util.php)                                                           | Common utility for javascript                                            |
-| [`JsCookie`](/src/Script/JsCookie.php)                                                                 | Include JsCookie assets                                                  |
-| [`Jhashtable`](/src/Script/Jshashtable.php)                                                            | Include Jhashtable assets                                                |
-| [`Jstree`](/src/Script/Jstree.php)                                                                     | Include Jstree assets                                                    |
-| [`Keyboard`](/src/Script/Keyboard.php)                                                                 | Include an on-screen keyboard javascript and assets                      |
-| [`Leaflet`](/src/Script/Leaflet.php)                                                                   | Include Leaflet assets                                                   |
-| [`LoadImage`](/src/Script/LoadImage.php)                                                               | Include BlueImp JavaScript-Load-Image assets                             |
-| [`MomentJs`](/src/Script/MomentJs.php)                                                                 | Include MomentJs assets                                                  |
-| [`NumberFormatter`](/src/Script/NumberFormatter.php)                                                   | Include JQuery NumberFormatter assets                                    |
-| [`NumeralJs`](/src/Script/NumeralJs.php)                                                               | Include NumeralJs assets                                                 |
-| [`Pdfjs`](/src/Script/Pdfjs.php)                                                                       | Include PdfJs assets                                                     |
-| [`PdfjsViewer`](/src/Script/PdfjsViewer.php)                                                           | Include PdfJs Viewer assets                                              |
-| [`Popper`](/src/Script/Popper.php)                                                                     | Include Popper.js assets                                                 |
-| [`ReCaptchaV2`](/src/Script/ReCaptchaV2.php)                                                           | Include Google ReCaptcha V2 assets                                       |
-| [`ReCaptchaV3`](/src/Script/ReCaptchaV3.php)                                                           | Include Google ReCaptcha V3 assets                                       |
-| [`SCEditor`](/src/Script/SCEditor.php)                                                                 | Include SCEditor assets                                                  |
-| [`SocketIO`](/src/Script/SocketIO.php)                                                                 | Include Socket.io assets                                                 |
-| [`Strophe`](/src/Script/Strophe.php)                                                                   | Include Strophe assets                                                   |
-| [`Templates`](/src/Script/Templates.php)                                                               | Include BlueImp JavaScript-Templates assets                              |
-| [`TinyMCE`](/src/Script/TinyMCE.php)                                                                   | Include TinyMCE assets                                                   |
+| Script                                                                                                 | Usage                                                                                                           |
+|--------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
+| [`BigNumber`](/src/Script/BigNumber.php)                                                               | Include BigNumber assets                                                                                        |
+| [`Bloodhound`](/src/Script/Bloodhound.php)                                                             | Include Bloodhound assets                                                                                       |
+| [`Bootstrap`](/src/Script/Bootstrap.php)                                                               | Include Bootstrap assets                                                                                        |
+| [`Bootstrap.DateTimePicker`](/src/Script/Bootstrap/DateTimePicker.php)                                 | Include Bootstrap DateTimePicker assets                                                                         |
+| [`Bootstrap.DateTimePickerLocale`](/src/Script/Bootstrap/DateTimePickerLocale.php)                     | Include Bootstrap DateTimePicker locale assets                                                                  |
+| [`Bootstrap.DateTimePickerLocaleCustom`](/src/Script/Bootstrap/DateTimePickerLocaleCustom.php)         | Include Bootstrap DateTimePicker custom locale assets                                                           |
+| [`Bootstrap.DateTimePickerPlugins`](/src/Script/Bootstrap/DateTimePickerPlugins.php)                   | Include Bootstrap DateTimePicker plugins assets                                                                 |
+| [`Bootstrap.Dialog`](/src/Script/Bootstrap/Dialog.php)                                                 | Bootstrap modal wrapper to create and handle dialog                                                             |
+| [`Bootstrap.Dialog.Confirm`](/src/Script/Bootstrap/Dialog/Confirm.php)                                 | Bootstrap confirm modal                                                                                         |
+| [`Bootstrap.Dialog.Iframe`](/src/Script/Bootstrap/Dialog/Iframe.php)                                   | Bootstrap iframe modal                                                                                          |
+| [`Bootstrap.Dialog.IframeLoader`](/src/Script/Bootstrap/Dialog/IframeLoader.php)                       | Bootstrap iframe loader helper                                                                                  |
+| [`Bootstrap.Dialog.IframeRedir`](/src/Script/Bootstrap/Dialog/IframeRedir.php)                         | Bootstrap redirection helper to allow an Ajax iframe to reload                                                  |
+| [`Bootstrap.Dialog.IframeResize`](/src/Script/Bootstrap/Dialog/IframeResize.php)                       | Bootstrap iframe dialog auto-height                                                                             |
+| [`Bootstrap.Dialog.Input`](/src/Script/Bootstrap/Dialog/Input.php)                                     | Bootstrap input modal                                                                                           |
+| [`Bootstrap.Dialog.Message`](/src/Script/Bootstrap/Dialog/Message.php)                                 | Bootstrap message modal                                                                                         |
+| [`Bootstrap.Dialog.Wait`](/src/Script/Bootstrap/Dialog/Wait.php)                                       | Bootstrap modal to show a waiting dialog while in progress                                                      |
+| [`Bootstrap.FormPost`](/src/Script/Bootstrap/FormPost.php)                                             | Handling form submission using ajax                                                                             |
+| [`Bootstrap.Notify`](/src/Script/Bootstrap/Notify.php)                                                 | Handle notification either using Web Notification or Bootstrap Toast                                            |
+| [`Bootstrap.Select`](/src/Script/Bootstrap/Select.php)                                                 | Include Bootstrap Select assets                                                                                 |
+| [`Bootstrap.StarRating`](/src/Script/Bootstrap/StarRating.php)                                         | Include Bootstrap StarRating assets                                                                             |
+| [`Bootstrap.StarRatingLocale`](/src/Script/Bootstrap/StarRatingLocale.php)                             | Include Bootstrap StarRating locale assets                                                                      |
+| [`Bootstrap.StarRatingTheme`](/src/Script/Bootstrap/StarRatingTheme.php)                               | Include Bootstrap StarRating theme assets                                                                       |
+| [`Bootstrap.StarRatingThemeFa`](/src/Script/Bootstrap/StarRatingThemeFa.php)                           | Include Bootstrap StarRating FontAwesome theme assets                                                           |
+| [`Bootstrap.StarRatingThemeFas`](/src/Script/Bootstrap/StarRatingThemeFas.php)                         | Include Bootstrap StarRating FontAwesome Solid theme assets                                                     |
+| [`Bootstrap.StarRatingThemeSvg`](/src/Script/Bootstrap/StarRatingThemeSvg.php)                         | Include Bootstrap StarRating SVG theme assets                                                                   |
+| [`Bootstrap.StarRatingThemeUnicode`](/src/Script/Bootstrap/StarRatingThemeUnicode.php)                 | Include Bootstrap StarRating Unicode theme assets                                                               |
+| [`Bootstrap.Theme.DefaultTheme`](/src/Script/Bootstrap/Theme/DefaultTheme.php)                         | Bootstrap default theme                                                                                         |
+| [`Bootstrap.Typeahead`](/src/Script/Bootstrap/Typeahead.php)                                           | Include Bootstrap Typeahead assets                                                                              |
+| [`BootstrapIcons`](/src/Script/BootstrapIcons.php)                                                     | Include Bootstrap Icons assets                                                                                  |
+| [`Bootswatch`](/src/Script/Bootswatch.php)                                                             | Include Bootswatch assets                                                                                       |
+| [`CanvasToBlob`](/src/Script/CanvasToBlob.php)                                                         | Include BlueImp Javascript-Canvas-to-Blob assets                                                                |
+| [`CKEditor`](/src/Script/CKEditor.php)                                                                 | Include CKEditor assets                                                                                         |
+| [`Cropper`](/src/Script/Cropper.php)                                                                   | Include Cropper.js assets                                                                                       |
+| [`DataTables`](/src/Script/DataTables.php)                                                             | Include DataTables assets                                                                                       |
+| [`DataTablesAutoFill`](/src/Script/DataTablesAutoFill.php)                                             | Include DataTables AutoFill extension assets                                                                    |
+| [`DataTablesButtons`](/src/Script/DataTablesButtons.php)                                               | Include DataTables Buttons extension assets                                                                     |
+| [`DataTablesColReorder`](/src/Script/DataTablesColReorder.php)                                         | Include DataTables ColReorder extension assets                                                                  |
+| [`DataTablesDateTime`](/src/Script/DataTablesDateTime.php)                                             | Include DataTables DateTime extension assets                                                                    |
+| [`DataTablesFixedColumns`](/src/Script/DataTablesFixedColumns.php)                                     | Include DataTables FixedColumns extension assets                                                                |
+| [`DataTablesFixedHeader`](/src/Script/DataTablesFixedHeader.php)                                       | Include DataTables FixedHeader extension assets                                                                 |
+| [`DataTablesI18N`](/src/Script/DataTablesI18N.php)                                                     | Include DataTables plugins I18N assets                                                                          |
+| [`DataTablesKeyTable`](/src/Script/DataTablesKeyTable.php)                                             | Include DataTables KeyTable extension assets                                                                    |
+| [`DataTablesResponsive`](/src/Script/DataTablesResponsive.php)                                         | Include DataTables Responsive extension assets                                                                  |
+| [`DataTablesRowGroup`](/src/Script/DataTablesRowGroup.php)                                             | Include DataTables RowGroup extension assets                                                                    |
+| [`DataTablesRowReorder`](/src/Script/DataTablesRowReorder.php)                                         | Include DataTables RowReorder extension assets                                                                  |
+| [`DataTablesScroller`](/src/Script/DataTablesScroller.php)                                             | Include DataTables Scroller extension assets                                                                    |
+| [`DataTablesSearchBuilder`](/src/Script/DataTablesSearchBuilder.php)                                   | Include DataTables SearchBuilder extension assets                                                               |
+| [`DataTablesSearchPanes`](/src/Script/DataTablesSearchPanes.php)                                       | Include DataTables SearchPanes extension assets                                                                 |
+| [`DataTablesSelect`](/src/Script/DataTablesSelect.php)                                                 | Include DataTables Select extension assets                                                                      |
+| [`DataTablesStateRestore`](/src/Script/DataTablesStateRestore.php)                                     | Include DataTables StateRestore extension assets                                                                |
+| [`FileUpload`](/src/Script/FileUpload.php)                                                             | Include BlueImp JQuery-File-Upload assets                                                                       |
+| [`FontAwesome`](/src/Script/FontAwesome.php)                                                           | Include FontAwesome assets                                                                                      |
+| [`Gallery`](/src/Script/Gallery.php)                                                                   | Include BlueImp Gallery assets                                                                                  |
+| [`GoogleFonts`](/src/Script/GoogleFonts.php)                                                           | Include Google Fonts assets                                                                                     |
+| [`Highcharts`](/src/Script/Highcharts.php)                                                             | Include Highcharts assets                                                                                       |
+| [`Hotkeys`](/src/Script/Hotkeys.php)                                                                   | Include JQuery Hotkeys assets                                                                                   |
+| [`Interact`](/src/Script/Interact.php)                                                                 | Include Interact assets                                                                                         |
+| [`JqGrid`](/src/Script/JqGrid.php)                                                                     | Include JqGrid assets                                                                                           |
+| [`JqGridDefault`](/src/Script/JqGridDefault.php)                                                       | Provide Bootstrap Icons integration in JqGrid                                                                   |
+| [`JQuery`](/src/Script/JQuery.php)                                                                     | Include JQuery assets                                                                                           |
+| [`JQuery.AjaxData`](/src/Script/JQuery/AjaxData.php)                                                   | Ajax data loader                                                                                                |
+| [`JQuery.AjaxForm`](/src/Script/JQuery/AjaxForm.php)                                                   | Provides form handling using Ajax                                                                               |
+| [`JQuery.AjaxHelper`](/src/Script/JQuery/AjaxHelper.php)                                               | Ajax request helper                                                                                             |
+| [`JQuery.Blob`](/src/Script/JQuery/Blob.php)                                                           | Retrieve content from an URL and transform it as blob for download                                              |
+| [`JQuery.Callback.SetHtml`](/src/Script/JQuery/Callback/SetHtml.php)                                   | A callback handler to set html content of an element                                                            |
+| [`JQuery.Callback.SetValue`](/src/Script/JQuery/Callback/SetValue.php)                                 | A callback handler to set the value of an element, such as an input tag                                         |
+| [`JQuery.Checklist`](/src/Script/JQuery/Checklist.php)                                                 | Allow to set checked or unchecked state of check boxes                                                          |
+| [`JQuery.DeleteConfirm`](/src/Script/JQuery/DeleteConfirm.php)                                         | Apply delete confirmation to element using attribute `data-delete-confirm` and do post request with its `href`  |
+| [`JQuery.Dialog`](/src/Script/JQuery/Dialog.php)                                                       | JQuery UI dialog wrapper to create and handling dialog                                                          |
+| [`JQuery.Dialog.Confirm`](/src/Script/JQuery/Dialog/Confirm.php)                                       | JQuery UI confirm dialog                                                                                        |
+| [`JQuery.Dialog.Iframe`](/src/Script/JQuery/Dialog/Iframe.php)                                         | JQuery UI iframe dialog                                                                                         |
+| [`JQuery.Dialog.IframeResize`](/src/Script/JQuery/Dialog/IframeResize.php)                             | JQuery UI iframe dialog auto-height                                                                             |
+| [`JQuery.Dialog.Input`](/src/Script/JQuery/Dialog/Input.php)                                           | JQuery UI input dialog                                                                                          |
+| [`JQuery.Dialog.Message`](/src/Script/JQuery/Dialog/Message.php)                                       | JQuery UI message dialog                                                                                        |
+| [`JQuery.Dialog.Wait`](/src/Script/JQuery/Dialog/Wait.php)                                             | JQuery UI wait dialog to show a waiting dialog while in progress                                                |
+| [`JQuery.FileUpload`](/src/Script/JQuery/FileUpload.php)                                               | Handle file upload using BlueImp File Upload                                                                    |
+| [`JQuery.FileUploadDialog`](/src/Script/JQuery/FileUploadDialog.php)                                   | Provides file upload dialog either by statically include it in the document or dynamically loaded from an URL   |
+| [`JQuery.FormPost`](/src/Script/JQuery/FormPost.php)                                                   | Handling form submission using ajax                                                                             |
+| [`JQuery.Gallery`](/src/Script/JQuery/Gallery.php)                                                     | BlueImp gallery helper                                                                                          |
+| [`JQuery.ImageOp`](/src/Script/JQuery/ImageOp.php)                                                     | Provides image manipulation such as cropping, orientation, and others                                           |
+| [`JQuery.ImageOpCrop`](/src/Script/JQuery/ImageOpCrop.php)                                             | Image crop operation                                                                                            |
+| [`JQuery.ImageOpHelper`](/src/Script/JQuery/ImageOpHelper.php)                                         | Provides all image operation                                                                                    |
+| [`JQuery.ImageOpOrientation`](/src/Script/JQuery/ImageOpOrientation.php)                               | Image orientation operation                                                                                     |
+| [`JQuery.ImageOpResize`](/src/Script/JQuery/ImageOpResize.php)                                         | Image resize operation                                                                                          |
+| [`JQuery.ImageOpRotate`](/src/Script/JQuery/ImageOpRotate.php)                                         | Image rotate operation                                                                                          |
+| [`JQuery.ImageOpSave`](/src/Script/JQuery/ImageOpSave.php)                                             | Image save operation                                                                                            |
+| [`JQuery.NS`](/src/Script/JQuery/NS.php)                                                               | JQuery namespace helper, to avoid javascript function redefine                                                  |
+| [`JQuery.NumberFormat`](/src/Script/JQuery/NumberFormat.php)                                           | A JQuery number formatter helper                                                                                |
+| [`JQuery.NumberFormatJQueryNumberFormatter`](/src/Script/JQuery/NumberFormatJQueryNumberFormatter.php) | Provide number formatting internal using JQuery Number Formatter                                                |
+| [`JQuery.NumberFormatNumeralJs`](/src/Script/JQuery/NumberFormatNumeralJs.php)                         | Provide number formatting internal using NumeralJs                                                              |
+| [`JQuery.Observer`](/src/Script/JQuery/Observer.php)                                                   | Observer and event handling                                                                                     |
+| [`JQuery.Overflow`](/src/Script/JQuery/Overflow.php)                                                   | Document body overflow utility                                                                                  |
+| [`JQuery.PostErrorHelper`](/src/Script/JQuery/PostErrorHelper.php)                                     | Handling ajax form submission error                                                                             |
+| [`JQuery.PostHandler`](/src/Script/JQuery/PostHandler.php)                                             | Ajax POST handler                                                                                               |
+| [`JQuery.RemoveAnchor`](/src/Script/JQuery/RemoveAnchor.php)                                           | Replace html tag into span tag. e.g. an anchor tag                                                              |
+| [`JQuery.Resolver`](/src/Script/JQuery/Resolver.php)                                                   | Javascript namespace resolver                                                                                   |
+| [`JQuery.ScrollTo`](/src/Script/JQuery/ScrollTo.php)                                                   | Update window scroll top based on element                                                                       |
+| [`JQuery.Spinner`](/src/Script/JQuery/Spinner.php)                                                     | Include JQuery Spinner assets and provide a helper                                                              |
+| [`JQuery.Swipe`](/src/Script/JQuery/Swipe.php)                                                         | Provide swipe support to an element                                                                             |
+| [`JQuery.Typeahead`](/src/Script/JQuery/Typeahead.php)                                                 | A JQuery typeahead (auto complete)                                                                              |
+| [`JQuery.UI`](/src/Script/JQuery/UI.php)                                                               | JQuery UI base class for script that is depends on JQuery UI                                                    |
+| [`JQuery.UI.AutoComplete`](/src/Script/JQuery/UI/AutoComplete.php)                                     | A JQuery UI auto complete                                                                                       |
+| [`JQuery.UI.FormPost`](/src/Script/JQuery/UI/FormPost.php)                                             | Handling form submission using ajax                                                                             |
+| [`JQuery.Util`](/src/Script/JQuery/Util.php)                                                           | Common utility for javascript                                                                                   |
+| [`JsCookie`](/src/Script/JsCookie.php)                                                                 | Include JsCookie assets                                                                                         |
+| [`Jhashtable`](/src/Script/Jshashtable.php)                                                            | Include Jhashtable assets                                                                                       |
+| [`Jstree`](/src/Script/Jstree.php)                                                                     | Include Jstree assets                                                                                           |
+| [`Keyboard`](/src/Script/Keyboard.php)                                                                 | Include an on-screen keyboard javascript and assets                                                             |
+| [`Leaflet`](/src/Script/Leaflet.php)                                                                   | Include Leaflet assets                                                                                          |
+| [`LoadImage`](/src/Script/LoadImage.php)                                                               | Include BlueImp JavaScript-Load-Image assets                                                                    |
+| [`MomentJs`](/src/Script/MomentJs.php)                                                                 | Include MomentJs assets                                                                                         |
+| [`NumberFormatter`](/src/Script/NumberFormatter.php)                                                   | Include JQuery NumberFormatter assets                                                                           |
+| [`NumeralJs`](/src/Script/NumeralJs.php)                                                               | Include NumeralJs assets                                                                                        |
+| [`Pdfjs`](/src/Script/Pdfjs.php)                                                                       | Include PdfJs assets                                                                                            |
+| [`PdfjsViewer`](/src/Script/PdfjsViewer.php)                                                           | Include PdfJs Viewer assets                                                                                     |
+| [`Popper`](/src/Script/Popper.php)                                                                     | Include Popper.js assets                                                                                        |
+| [`ReCaptchaV2`](/src/Script/ReCaptchaV2.php)                                                           | Include Google ReCaptcha V2 assets                                                                              |
+| [`ReCaptchaV3`](/src/Script/ReCaptchaV3.php)                                                           | Include Google ReCaptcha V3 assets                                                                              |
+| [`SCEditor`](/src/Script/SCEditor.php)                                                                 | Include SCEditor assets                                                                                         |
+| [`SocketIO`](/src/Script/SocketIO.php)                                                                 | Include Socket.io assets                                                                                        |
+| [`Strophe`](/src/Script/Strophe.php)                                                                   | Include Strophe assets                                                                                          |
+| [`Templates`](/src/Script/Templates.php)                                                               | Include BlueImp JavaScript-Templates assets                                                                     |
+| [`TinyMCE`](/src/Script/TinyMCE.php)                                                                   | Include TinyMCE assets                                                                                          |
 
 Live Demo
 ---------
