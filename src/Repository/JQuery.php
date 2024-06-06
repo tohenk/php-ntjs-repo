@@ -26,6 +26,8 @@
 
 namespace NTLAB\JS\Repository;
 
+use NTLAB\JS\Manager;
+
 /**
  * JQuery repository initializer.
  *
@@ -40,8 +42,10 @@ class JQuery
      */
     public static function initialize($repo)
     {
-        $repo
-            ->setWrapper(<<<EOF
+        if (Manager::getInstance()->getBackend()->getConfig('xhr')) {
+            // setup repository for XHR
+            $repo
+                ->setWrapper(<<<EOF
 (function($) {
     (function loader(f) {
         if (document.ntloader && !document.ntloader.isScriptLoaded()) {
@@ -54,8 +58,18 @@ class JQuery
     })(function($) {%s});
 })(jQuery);
 EOF
-            )
-            ->setWrapSize(2)
-        ;
+                )
+                ->setWrapSize(2)
+            ;
+        } else {
+            // setup repository for normal request
+            $repo
+                ->setWrapper(<<<EOF
+(function($) {%s})(jQuery);
+EOF
+                )
+                ->setWrapSize(1)
+            ;
+        }
     }
 }
