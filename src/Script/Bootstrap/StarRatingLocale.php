@@ -44,7 +44,7 @@ class StarRatingLocale extends StarRating
 
     public function getScript()
     {
-        $locale = $this->getOption('locale', substr((string) $this->getBackend()->getConfig('locale'), 0, 2));
+        $locale = $this->getLocale(true);
         if (in_array($locale, static::$locales)) {
             $this->useJavascript($locale);
         } else {

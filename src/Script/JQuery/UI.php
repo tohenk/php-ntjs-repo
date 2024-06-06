@@ -55,7 +55,7 @@ class UI extends Base
      */
     public function getTheme($default = 'ui-lightness')
     {
-        return $this->getBackend()->getConfig('jquery-ui-theme', $default);
+        return $this->getConfig('jquery-ui-theme', $default);
     }
 
     protected static function createInstance()

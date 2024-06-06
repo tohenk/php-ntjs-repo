@@ -75,7 +75,7 @@ class Bootswatch extends Base
 
     public function getScript()
     {
-        $theme = $this->getOption('theme', $this->getBackend()->getConfig('bootswatch_theme', 'cerulean'));
+        $theme = $this->getOption('theme', $this->getConfig('bootswatch_theme', 'cerulean'));
         if (count($themes = array_keys(static::$themes))) {
             if (!in_array($theme, $themes)) {
                 $theme = $themes[0];
