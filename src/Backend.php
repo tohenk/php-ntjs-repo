@@ -49,6 +49,15 @@ class Backend implements BackendInterface
 
     /**
      * {@inheritDoc}
+     * @see \NTLAB\JS\BackendInterface::queryDependencies()
+     */
+    public function queryDependencies($name)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritDoc}
      * @see \NTLAB\JS\BackendInterface::trans()
      */
     public function trans($text, $vars = [], $domain = null)

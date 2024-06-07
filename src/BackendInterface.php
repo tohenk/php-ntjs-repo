@@ -54,6 +54,13 @@ interface BackendInterface
     public function getDefaultRepository();
 
     /**
+     * Get additional dependencies for a script.
+     *
+     * @return array
+     */
+    public function queryDependencies($name);
+
+    /**
      * Translate text for internationalization.
      *
      * @param string $text  Text to translate

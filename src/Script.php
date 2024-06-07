@@ -155,6 +155,9 @@ abstract class Script
      */
     public static function alias($class)
     {
+        if (is_object($class)) {
+            $class = get_class($class);
+        }
         foreach (static::$maps as $name => $map) {
             if (isset($map['class']) && $class === $map['class']) {
                 return $name;
@@ -420,6 +423,13 @@ abstract class Script
             $this->markAsIncluded();
             $this->includeDefaults();
             $this->includeDepedencies();
+            if (
+                is_array($additionalDependencies = $this->getBackend()
+                    ->queryDependencies(static::alias($this))) &&
+                count($additionalDependencies)
+            ) {
+                $this->includeDepedencies($additionalDependencies);
+            }
             $this->buildScript();
         }
         return $this;
