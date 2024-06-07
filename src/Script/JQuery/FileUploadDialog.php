@@ -91,6 +91,7 @@ $.define('uploaderdlg', {
     },
     show: function(title) {
         const self = this;
+        $.assert('ntdlg');
         self.getEl(function(el) {
             self.dlg = el.parents('.modal');
             self.dlg.find('.modal-title').text(title || '$title');

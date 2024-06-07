@@ -50,6 +50,7 @@ class AjaxData extends Base
 
         return <<<EOF
 $.ajaxData = function(el, params) {
+    $.assert('ntdlg.confirm', 'ntdlg.iframe');
     const _ajaxData = {
         title: null,
         container: null,

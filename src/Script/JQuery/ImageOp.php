@@ -110,9 +110,15 @@ $.define('imgop', {
                 data: self.data
             }).done(function(json) {
                 if (json.success) {
-                    if (json.imgname) self.imgname = json.imgname;
-                    if (json.imgver) self.imgver = json.imgver;
-                    if (json.image) self.imgurl = json.image;
+                    if (json.imgname) {
+                        self.imgname = json.imgname;
+                    }
+                    if (json.imgver) {
+                        self.imgver = json.imgver;
+                    }
+                    if (json.image) {
+                        self.imgurl = json.image;
+                    }
                     self.saveImage();
                 }
                 if (json.error) {

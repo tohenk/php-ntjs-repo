@@ -80,9 +80,11 @@ if (!$.define) {
         has: function(ns) {
             return this.factory(ns, false)[0];
         },
-        assert: function(ns) {
-            if (!this.has(ns)) {
-                throw new Error(`Namespace \${ns} is not defined!`);
+        assert: function(...args) {
+            for (const ns of args) {
+                if (!this.has(ns)) {
+                    throw new Error(`Namespace \${ns} is not defined!`);
+                }
             }
         },
         define: function(ns, o, e) {

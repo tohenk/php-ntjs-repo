@@ -40,7 +40,7 @@ class ImageOpSave extends Base
 {
     protected function configure()
     {
-        $this->addDependencies(['JQuery.ImageOp', 'JQuery.Util']);
+        $this->addDependencies(['JQuery.Util', 'JQuery.ImageOp']);
         $this->setPosition(Repository::POSITION_MIDDLE);
     }
 
@@ -48,6 +48,7 @@ class ImageOpSave extends Base
     {
         return <<<EOF
 $.imgop.saveimg = function(options) {
+    $.assert('ntdlg.message');
     const _saveimg = {
         url: null,
         el: null,
@@ -58,7 +59,7 @@ $.imgop.saveimg = function(options) {
         reloadImage: function(src) {
             const self = this;
             if (self.img) {
-                let img = $(self.img);
+                const img = $(self.img);
                 img.attr('src', (src ? src : img.attr('src')) + '?_x=' + Date.now());
             }
         },
