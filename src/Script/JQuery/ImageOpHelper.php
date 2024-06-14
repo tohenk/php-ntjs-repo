@@ -103,7 +103,7 @@ $('$selector').uploader({
     select: function(filename, data) {
         $.imgop.handleUpload({name: filename, type: data.type}, $params);
     }
-}).click(function(e) {
+}).on('click', function(e) {
     e.preventDefault();
     $.uploader.target = $(this);
     $(this).uploader('show');

@@ -119,17 +119,20 @@ $.imgop.saveimg = function(options) {
             $.imgop.onsaved(function(e, imgop) {
                 self.save(imgop);
             });
+            return this;
         }
     }
-    _saveimg.init(options || {});
-
-    return _saveimg;
+    return _saveimg.init(options || {});
 }
-$.fn.saveimg = function(data) {
+$.fn.saveimg = function(options) {
     this.each(function() {
-        if (data && typeof data.save === 'function') {
+        const imgsave = options || $(this).data('saveimg-opts');
+        if (imgsave && typeof imgsave.save === 'function') {
+            if (!imgsave.url && $(this).data('save-url')) {
+                imgsave.url = $(this).data('save-url');
+            }
             $(this).on('imagesaved', function(e, imgop) {
-                data.save(imgop);
+                imgsave.save(imgop);
             });
         }
     });
@@ -147,11 +150,13 @@ EOF;
      */
     public function doCall($selector, $options = [])
     {
-        $options = JSValue::create($options);
+        $options = JSValue::create($options)->setIndent(1);
         $this
             ->add(
                 <<<EOF
-$('$selector').saveimg(new $.imgop.saveimg($options));
+$('$selector')
+    .data('saveimg-opts', $.imgop.saveimg($options))
+    .saveimg();
 EOF
             );
     }

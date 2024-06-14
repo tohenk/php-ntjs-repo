@@ -75,10 +75,9 @@ $.define('imgop', {
         self.imgurl = null;
         self.init();
         self.data = {file: imgname};
-        for (let i = 0; i < self.operations.length; i++) {
-            const op = self.operations[i];
+        for (const op of self.operations) {
             if (self.handlers[op.name]) {
-                let handler = self.handlers[op.name];
+                const handler = self.handlers[op.name];
                 if (typeof handler.callback === 'function') {
                     cnt++;
                     self.el.queue(function(next) {
@@ -95,11 +94,7 @@ $.define('imgop', {
     },
     apply: function() {
         const self = this;
-        let cnt = 0;
-        for (const a in self.data) {
-            cnt++;
-        }
-        if (cnt > 1) {
+        if (Object.keys(self.data).length > 1) {
             if (!self.url) {
                 throw new Error('Image op url is missing!');
             }
