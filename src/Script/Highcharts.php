@@ -51,8 +51,11 @@ class Highcharts extends Base
      */
     public function useModule($module)
     {
-        if (!in_array($module, $this->modules)) {
-            $this->modules[] = $module;
+        $modules = is_array($module) ? $module : [$module];
+        foreach ($modules as $module) {
+            if (!in_array($module, $this->modules)) {
+                $this->modules[] = $module;
+            }
         }
 
         return $this;
@@ -61,6 +64,9 @@ class Highcharts extends Base
     public function getScript()
     {
         $this->useJavascript('highcharts');
+        if ($this->getOption('more')) {
+            $this->useJavascript('highcharts-more');
+        }
         if ($this->getOption('3d')) {
             $this->useJavascript('highcharts-3d');
         }
