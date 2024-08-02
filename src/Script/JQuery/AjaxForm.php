@@ -38,7 +38,7 @@ class AjaxForm extends Base
 {
     protected function configure()
     {
-        $this->addDependencies(['JQuery.Util', 'JQuery.FormPost']);
+        $this->addDependencies(['JQuery.Util']);
         $this->setPosition(Repository::POSITION_MIDDLE);
     }
 
@@ -113,6 +113,9 @@ $.ajaxform = function(options) {
                     self.dlg = $.ntdlg.create(self.id, self.title, html, opts);
                     const form = self.dlg.find('form');
                     if (form.length) {
+                        if (typeof $.formpost !== 'function') {
+                            console.error('FormPost is not included!');
+                        }
                         $.formpost(form, {
                             progress: false,
                             url: self.posturl
