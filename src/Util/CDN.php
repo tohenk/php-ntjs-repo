@@ -314,6 +314,9 @@ class CDN
             case Asset::ASSET_STYLESHEET:
                 $file = empty($this->css) ? $name : $this->getCss($name);
                 break;
+            case Asset::ASSET_OTHER:
+                $file = $name;
+                break;
         }
         if ($file) {
             $file = $this->replaceVersion($file);
