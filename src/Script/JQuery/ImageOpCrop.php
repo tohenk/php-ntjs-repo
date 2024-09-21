@@ -105,8 +105,7 @@ $.define('imgop.crop', {
             maxWidth: $(window).width() - offset,
             maxHeight: $(window).height() - (offset * 2)
         };
-        self.options = params || {};
-        $.extend(self.options, {
+        self.options = Object.assign({}, params || {}, {
             crop: function(e) {
                 self.selection = {
                     x: e.x,

@@ -319,7 +319,7 @@ $.define('ntdlg', {
     },
     init: function() {
         // icon set
-        $.extend(this, $icons);
+        Object.assign(this, $icons);
         // https://stackoverflow.com/questions/19305821/multiple-modals-overlay
         // fix z-index
         const p = bootstrap.Modal.prototype;

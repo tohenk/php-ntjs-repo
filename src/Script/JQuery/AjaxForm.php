@@ -65,7 +65,7 @@ $.ajaxform = function(options) {
         dlg: null,
         init: function(data) {
             const self = this;
-            $.extend(self, data);
+            Object.assign(self, data);
             $.get(self.formurl, self.params || {})
                 .done(function(html) {
                     const buttons = {};

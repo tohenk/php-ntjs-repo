@@ -87,7 +87,7 @@ $.bstypeahead = function(el, url, options) {
         delay: 1000,
         init: function(options) {
             const self = this;
-            $.extend(self.options, options);
+            Object.assign(self.options, options);
             if (self.options.source === undefined) {
                 self.options.source = function(query, process) {
                     self.query = query;

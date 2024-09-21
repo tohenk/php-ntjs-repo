@@ -263,7 +263,7 @@ $.formpost = function(form, options) {
             }, callback);
         }
     }
-    $.extend(fp, $overrides);
+    Object.assign(fp, $overrides);
     $.util.applyProp(['message', 'progress', 'xhr', 'url', 'paramName', 'onsubmit', 'onconfirm'], options, fp, true);
     fp.bind(form);
     fp.errhelper = $.errhelper(form, $erroptions);

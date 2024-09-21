@@ -52,8 +52,7 @@ class Typeahead extends Base
 
         return <<<EOF
 $.actypeahead = function(el, datasource, options) {
-    options = options || {};
-    $.extend(options, {
+    const opts = Object.assign({}, options || {}, {
         classNames: {
             menu: 'dropdown-menu tt-menu',
             dataset: 'dropdown-item tt-dataset'
@@ -62,7 +61,7 @@ $.actypeahead = function(el, datasource, options) {
     if (typeof datasource === 'function') {
         datasource = datasource(el);
     }
-    el.typeahead(options, datasource);
+    el.typeahead(opts, datasource);
 }
 EOF
         ;

@@ -62,7 +62,7 @@ $.define('JQuerySpinnerHelper', {
     evlockData: 'spinner-changing',
     create: function(selector, options) {
         const self = this;
-        $(selector).spinner($.extend({}, self.defaults, options));
+        $(selector).spinner(Object.assign({}, self.defaults, options));
         const spinner = $(selector).data('spinner');
         if (spinner.spinning.__proto__.ospin === undefined) {
             spinner.spinning.__proto__.ospin = spinner.spinning.__proto__.spin;
