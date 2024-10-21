@@ -96,6 +96,7 @@ $.define('uploaderdlg', {
             self.dlg = el.parents('.modal');
             self.dlg.find('.modal-title').text(title || '$title');
             $.ntdlg._create(self.dlg, {
+                backdrop: 'static',
                 'hidden.bs.modal': function(e) {
                     self.uploader.target = null;
                 }
