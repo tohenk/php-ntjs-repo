@@ -50,6 +50,8 @@ class FileUpload extends Base
         // to disable chunked upload, set to 0
         if ('auto' === ($chunkSize = $this->getConfig('fileupload-chunk-size', 'auto'))) {
             $chunkSize = min([$this->getConfigBytes(ini_get('upload_max_filesize')), 100 * 1024]);
+        } else {
+            $chunkSize = $this->getConfigBytes($chunkSize);
         }
         return $chunkSize;
     }
