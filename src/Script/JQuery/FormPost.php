@@ -124,7 +124,7 @@ $.formpost = function(form, options) {
                 }
             }
             fp.errhelper.resetError();
-            form.trigger('formrequest');
+            form.trigger('formrequest', [params]);
             if (fp.xhr) {
                 request = $.ajax({
                     url: url,
