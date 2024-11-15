@@ -115,6 +115,7 @@ This table below contains collection of scripts and its usage.
 
 | Script                                                                                                 | Usage                                                                                                           |
 |--------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
+| [`Base64`](/src/Script/Base64.php)                                                                     | Base64 encoding/decoding                                                                                        |
 | [`BigNumber`](/src/Script/BigNumber.php)                                                               | Include BigNumber assets                                                                                        |
 | [`Bloodhound`](/src/Script/Bloodhound.php)                                                             | Include Bloodhound assets                                                                                       |
 | [`Bootstrap`](/src/Script/Bootstrap.php)                                                               | Include Bootstrap assets                                                                                        |
