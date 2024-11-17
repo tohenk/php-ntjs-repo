@@ -47,6 +47,6 @@ class PdfjsViewer extends Base
 
     protected function getRepositoryName()
     {
-        return 'pdfjs';
+        return $this->getConfig('pdfjs-legacy') ? 'pdfjs-legacy' : 'pdfjs';
     }
 }
