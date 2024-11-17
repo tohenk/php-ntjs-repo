@@ -76,6 +76,9 @@ EOF
      */
     public function setupDatasource($url, $options = [])
     {
+        if (!$url instanceof JSValue) {
+            $url = JSValue::create($url);
+        }
         $source = JSValue::create([
             'queryTokenizer' => JSValue::createRaw('Bloodhound.tokenizers.whitespace'),
             'datumTokenizer' => JSValue::createRaw('Bloodhound.tokenizers.whitespace'),
@@ -102,7 +105,7 @@ EOF,
         return JSValue::createRaw(
             <<<EOF
 function(el) {
-    let url = '$url';
+    let url = $url;
     if (!url && el) {
         const dataUrl = el.data('url');
         if (dataUrl) {

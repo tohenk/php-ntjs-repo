@@ -68,7 +68,7 @@ EOF,
 
         return <<<EOF
 $.bstypeahead = function(el, url, options) {
-    if (typeof url === 'object') {
+    if (typeof url === 'object' && url.constructor.name === 'Object') {
         options = url;
         url = undefined;
     }
@@ -164,10 +164,13 @@ EOF;
         }
         $options = JSValue::create($options);
         if ($url) {
+            if (!$url instanceof JSValue) {
+                $url = JSValue::create($url);
+            }
             $this
                 ->add(
                     <<<EOF
-$.bstypeahead($('$el'), '$url', $options);
+$.bstypeahead($('$el'), $url, $options);
 EOF
                 );
         } else {
