@@ -104,7 +104,7 @@ $.ajaxform = function(options) {
                             });
                         },
                         close: function() {
-                            $(this).remove();
+                            $.ntdlg.close($(this));
                         }
                     }
                     if (self.size) {
