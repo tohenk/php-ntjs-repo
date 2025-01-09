@@ -79,7 +79,7 @@ $.ajaxData = function(el, params) {
         delete: function(a, message) {
             const self = this;
             const url = a.attr('href');
-            const title = a.attr('x-title');
+            const title = a.data('title');
             message = message || '$message';
             message = message.replace(/%me%/, title);
             $.ntdlg.confirm('$confirm_id', '$confirm', message, function() {
