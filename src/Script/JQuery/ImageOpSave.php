@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 use NTLAB\JS\Util\JSValue;
 
@@ -56,14 +56,14 @@ $.imgop.saveimg = function(options) {
         autoclose: true,
         delete: false,
         callback: null,
-        reloadImage: function(src) {
+        reloadImage(src) {
             const self = this;
             if (self.img) {
                 const img = $(self.img);
                 img.attr('src', (src ? src : img.attr('src')) + '?_x=' + Date.now());
             }
         },
-        saveImg: function(imgop) {
+        saveImg(imgop) {
             const self = this;
             $.ajax({
                 url: self.url,
@@ -91,7 +91,7 @@ $.imgop.saveimg = function(options) {
                 }
             });
         },
-        save: function(imgop) {
+        save(imgop) {
             const self = this;
             if (self.el) {
                 if (typeof self.el === 'string') {
@@ -113,7 +113,7 @@ $.imgop.saveimg = function(options) {
                 self.saveImg(imgop);
             }
         },
-        init: function(options) {
+        init(options) {
             const self = this;
             $.util.applyProp(['url', 'el', 'img', 'delete', 'callback'], options, self);
             $.imgop.onsaved(function(e, imgop) {

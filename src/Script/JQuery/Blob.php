@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
@@ -46,12 +46,12 @@ class Blob extends Base
     {
         return <<<EOF
 $.define('blob', {
-    save: function(url) {
+    save(url) {
         // https://stackoverflow.com/questions/17657184/using-jquerys-ajax-method-to-retrieve-images-as-a-blob
         $.ajax({
             url: url,
             method: 'GET',
-            xhr: function() {
+            xhr() {
                 let xhr = new XMLHttpRequest();
                 xhr.responseType = 'blob';
                 return xhr;

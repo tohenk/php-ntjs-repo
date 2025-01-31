@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
@@ -54,8 +54,8 @@ class PostHandler extends Base
     public function getScript()
     {
         return <<<EOF
-$.extend({
-    handlePostData: function(data, errhelper, success_cb, error_cb) {
+Object.assign($, {
+    handlePostData(data, errhelper, success_cb, error_cb) {
         $.postErr = null;
         const json = typeof data === 'object' ? data : $.parseJSON(data);
         if (json.success) {
@@ -64,14 +64,15 @@ $.extend({
             }
         } else {
             if (json.error) {
-                $.map(Array.isArray(json.error) || $.isPlainObject(json.error) ? json.error : [json.error], errhelper.handleError);
+                const errors = Array.isArray(json.error) ? json.error : [json.error];
+                errors.map(errhelper.handleError);
             }
             if (typeof error_cb === 'function') {
                 error_cb(json);
             }
         }
     },
-    urlPost: function(url, callback, errhelper) {
+    urlPost(url, callback, errhelper) {
         errhelper = errhelper ? errhelper : $.errhelper();
         $.post(url).done(function(data) {
             $.handlePostData(data, errhelper, callback);

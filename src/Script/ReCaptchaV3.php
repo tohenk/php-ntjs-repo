@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script;
+namespace NTLAB\JS\Repo\Script;
 
 use NTLAB\JS\Script as Base;
 use NTLAB\JS\Repository;
@@ -51,10 +51,10 @@ class ReCaptchaV3 extends Base
 grecaptcha.my = {
     key: '$key',
     ids: {},
-    add: function(id, action, auto = true) {
+    add(id, action, auto = true) {
         this.ids[id] = {id: id, action: action, auto: auto};
     },
-    init: function(id) {
+    init(id) {
         const self = this;
         if (id === undefined || id === null) {
             id = [];

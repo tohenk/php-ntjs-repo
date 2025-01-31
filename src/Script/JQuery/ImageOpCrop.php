@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
@@ -57,11 +57,11 @@ $.define('imgop.crop', {
     selection: null,
     imgop: null,
     next: null,
-    dialog: function(img) {
+    dialog(img) {
         $.imgop.crop.img = $(img);
         const dlg = $.ntdlg.create('imgcropper', '$title', '', {
             backdrop: 'static',
-            open: function() {
+            open() {
                 const bd = $.ntdlg.getBody($(this));
                 bd.append($(img));
                 bd.css({padding: 0});
@@ -70,7 +70,7 @@ $.define('imgop.crop', {
             buttons: {
                 '$apply': {
                     icon: $.ntdlg.BTN_ICON_OK,
-                    handler: function() {
+                    handler() {
                         if (null === $.imgop.crop.selection) {
                             $.ntdlg.message('img-crop-no-selection-msg', '$title', '$no_selection', $.ntdlg.ICON_ALERT);
                             return;
@@ -81,7 +81,7 @@ $.define('imgop.crop', {
                 },
                 '$cancel': {
                     icon: $.ntdlg.BTN_ICON_CANCEL,
-                    handler: function() {
+                    handler() {
                         $.ntdlg.close($(this));
                     }
                 }
@@ -89,7 +89,7 @@ $.define('imgop.crop', {
         });
         $.ntdlg.show(dlg);
     },
-    apply: function() {
+    apply() {
         const self = this;
         self.imgop.data['crop'] = {
             ratio: self.options.aspectRatio ? self.options.aspectRatio : 0,
@@ -99,14 +99,14 @@ $.define('imgop.crop', {
             self.next();
         }
     },
-    doit: function(imgop, imgname, imgurl, params, next) {
+    doit(imgop, imgname, imgurl, params, next) {
         const self = this;
         let offset = 100, options = {
             maxWidth: $(window).width() - offset,
             maxHeight: $(window).height() - (offset * 2)
         };
         self.options = Object.assign({}, params || {}, {
-            crop: function(e) {
+            crop(e) {
                 self.selection = {
                     x: e.x,
                     y: e.y,

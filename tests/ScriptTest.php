@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,78 +24,26 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Test;
+namespace NTLAB\JS\Repo\Test;
 
-use NTLAB\JS\DependencyResolver;
+use PHPUnit\Framework\TestCase;
 use NTLAB\JS\Manager;
 use NTLAB\JS\Backend;
 use NTLAB\JS\Script;
-use NTLAB\JS\Test\Script\TestScript;
+use NTLAB\JS\Util\Escaper;
 
-class ScriptTest extends BaseTest
+class ScriptTest extends TestCase
 {
     protected function setUp(): void
     {
         Manager::getInstance()
-            ->setBackend(new Backend())
-            ->addResolver(new DependencyResolver('NTLAB\JS\Test\Script'));
-    }
-
-    public function testCreate()
-    {
-        $this->assertEquals(TestScript::class, get_class(Script::create('TestScript')), 'Resolver can resolve script name to class name');
-    }
-
-    public function testCall()
-    {
-        $script = Script::create('TestScript');
-        $script
-            ->add('do_something()')
-            ->call('a message');
-        $this->assertEquals(<<<EOF
-do_something();
-// a message
-EOF
-        , $script->getRepository()->getContent(), 'Script call() should include script doCall()');
-    }
-
-    public function testAutoIncludeOff()
-    {
-        Script::setDefaultOption('autoInclude', false);
-
-        $script = Script::create('IncludeScript');
-        $script
-            ->add('call_include_script()');
-        $this->assertEquals(<<<EOF
-call_include_script();
-EOF
-        , $script->getRepository()->getContent(), 'Script auto include off should not add script content');
-    }
-
-    public function testAutoIncludeOn()
-    {
-        Script::setDefaultOption('autoInclude', true);
-
-        $script = Script::create('IncludeScript');
-        $script
-            ->add('call_include_script()');
-        $this->assertEquals(<<<EOF
-// include script test content
-call_include_script();
-EOF
-        , $script->getRepository()->getContent(), 'Script auto include on should add script content');
+            ->setBackend(new Backend());
+        Escaper::setEol("\r\n");
     }
 
     public function testScript()
     {
         $script = Script::create('JQuery');
-        $script->getRepository()
-            ->setWrapper(<<<EOF
-(function($) {%s})(jQuery);
-EOF
-            )
-            ->setWrapSize(1)
-        ;
         $script->add('$.test();');
         $this->assertTrue(Manager::getInstance()->has('jquery'), 'Repository properly initialized when script added');
         $this->assertEquals(<<<EOF

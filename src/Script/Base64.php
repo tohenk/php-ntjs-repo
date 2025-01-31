@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script;
+namespace NTLAB\JS\Repo\Script;
 
 use NTLAB\JS\Script as Base;
 
@@ -47,7 +47,7 @@ const Base64 = {
     _keyStr: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
 
     // public method for encoding
-    encode: function(input) {
+    encode(input) {
         let output = '';
         let chr1, chr2, chr3, enc1, enc2, enc3, enc4;
         let i = 0;
@@ -73,7 +73,7 @@ const Base64 = {
     },
 
     // public method for decoding
-    decode: function(input) {
+    decode(input) {
         let output = '';
         let chr1, chr2, chr3;
         let enc1, enc2, enc3, enc4;
@@ -99,7 +99,7 @@ const Base64 = {
     },
 
     // private method for UTF-8 encoding
-    _utf8_encode: function(string) {
+    _utf8_encode(string) {
         string = string.replace(/\\r\\n/g,'\\n');
         let utftext = '';
         for (let n = 0; n < string.length; n++) {
@@ -119,7 +119,7 @@ const Base64 = {
     },
 
     // private method for UTF-8 decoding
-    _utf8_decode: function(utftext) {
+    _utf8_decode(utftext) {
         let string = '';
         let i = 0;
         let c = c1 = c2 = 0;

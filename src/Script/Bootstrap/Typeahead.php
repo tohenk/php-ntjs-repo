@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\Bootstrap;
+namespace NTLAB\JS\Repo\Script\Bootstrap;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 use NTLAB\JS\Util\Asset;
 use NTLAB\JS\Util\JSValue;
@@ -85,7 +85,7 @@ $.bstypeahead = function(el, url, options) {
         options: $defaults,
         render: null,
         delay: 1000,
-        init: function(options) {
+        init(options) {
             const self = this;
             Object.assign(self.options, options);
             if (self.options.source === undefined) {

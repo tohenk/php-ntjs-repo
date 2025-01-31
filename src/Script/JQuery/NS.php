@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
@@ -36,7 +36,7 @@ use NTLAB\JS\Repository;
  *
  * ```js
  * $.define('my', {
- *     test: function() {
+ *     test() {
  *         alert('Test');
  *     }
  * });
@@ -61,7 +61,7 @@ class NS extends Base
 if (!$.define) {
     'use strict';
     $.namespace = {
-        factory: function(ns, create = false) {
+        factory(ns, create = false) {
             let res = true, o = $;
             const props = ns.split('.');
             for (const prop of props) {
@@ -74,20 +74,20 @@ if (!$.define) {
             }
             return [res, o];
         },
-        create: function(ns) {
+        create(ns) {
             return this.factory(ns, true)[1];
         },
-        has: function(ns) {
+        has(ns) {
             return this.factory(ns, false)[0];
         },
-        assert: function(...args) {
+        assert(...args) {
             for (const ns of args) {
                 if (!this.has(ns)) {
                     throw new Error(`Namespace \${ns} is not defined!`);
                 }
             }
         },
-        define: function(ns, o, e) {
+        define(ns, o, e) {
             if (!e && $.namespace.has(ns)) {
                 return;
             }

@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery\Dialog;
+namespace NTLAB\JS\Repo\Script\JQuery\Dialog;
 
 use NTLAB\JS\Script\JQuery\UI as Base;
 use NTLAB\JS\Repository;
@@ -54,9 +54,9 @@ class Message extends Base
 
         return <<<EOF
 $.define('ntdlg', {
-    message: function(id, title, message, icon) {
+    message(id, title, message, icon) {
         $.ntdlg.dialog(id, title, message, icon, {
-            '$ok': function() {
+            ['$ok']() {
                 $.ntdlg.close($(this));
             }
         });

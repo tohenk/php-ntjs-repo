@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
 use NTLAB\JS\Script\JQuery\UI as Base;
 use NTLAB\JS\Repository;
@@ -37,7 +37,7 @@ use NTLAB\JS\Repository;
  * ```js
  * $.ntdlg.dialog('mydlg', 'A Dialog', 'This is a dialog', {
  *     buttons: {
- *         'OK': function() {
+ *         OK() {
  *             $(this).dialog('close');
  *         }
  *     }
@@ -71,7 +71,7 @@ $.define('ntdlg', {
     dialogTmpl: '<div id="%ID%" class="ntdlg-container" title="%TITLE%">%CONTENT%</div>',
     iconTmpl: '<span class="ui-icon ui-icon-%ICON%"></span>',
     messageTmpl: '<div class="msg-container"><div class="msg-icon" style="float:left;margin:0 10px 0 0;padding:0 10px 0 10px;">%ICON%</div><div class="msg-content" style="margin-left: 50px;">%MESSAGE%</div></div>',
-    create: function(id, title, message, params) {
+    create(id, title, message, params) {
         const self = this;
         const dlg_id = '#' + id;
         const content = $.util.template(self.dialogTmpl, {
@@ -86,7 +86,7 @@ $.define('ntdlg', {
         $(document.body).append(content);
         $(dlg_id).dialog(params);
     },
-    dialog: function(id, title, message, icon, buttons, close_cb) {
+    dialog(id, title, message, icon, buttons, close_cb) {
         const self = this;
         icon = icon || $.ntdlg.ICON_INFO;
         buttons = buttons || [];
@@ -96,29 +96,29 @@ $.define('ntdlg', {
         });
         self.create(id, title, message, {
             width: 'auto',
-            create: function() {
+            create() {
                 if ($.ntdlg.hideOverflow) {
                     $.overflow.hide();
                 }
             },
-            open: function() {
+            open() {
                 const dlg = $(this);
                 if ($.ntdlg.minWidth && dlg.width() < $.ntdlg.minWidth) {
                     dlg.dialog('option', 'width', $.ntdlg.minWidth);
                 }
             },
-            close: function() {
+            close() {
                 if ($.ntdlg.hideOverflow) {
                     $.overflow.restore();
                 }
-                if (typeof close_cb == 'function') {
+                if (typeof close_cb === 'function') {
                     close_cb();
                 }
             },
             buttons: buttons
         });
     },
-    show: function(dlg) {
+    show(dlg) {
         if (dlg && !this.isVisible(dlg)) {
             if (typeof dlg === 'string') {
                 dlg = $('#' + dlg);
@@ -126,7 +126,7 @@ $.define('ntdlg', {
             dlg.dialog('open');
         }
     },
-    close: function(dlg) {
+    close(dlg) {
         if (dlg) {
             if (typeof dlg === 'string') {
                 dlg = $('#' + dlg);
@@ -134,7 +134,7 @@ $.define('ntdlg', {
             dlg.dialog('close');
         }
     },
-    isVisible: function(dlg) {
+    isVisible(dlg) {
         if (dlg) {
             if (typeof dlg === 'string') {
                 dlg = $('#' + dlg);
@@ -142,7 +142,7 @@ $.define('ntdlg', {
             return dlg.dialog('isOpen');
         }
     },
-    getBody: function(dlg) {
+    getBody(dlg) {
         if (dlg) {
             if (typeof dlg === 'string') {
                 dlg = $('#' + dlg);

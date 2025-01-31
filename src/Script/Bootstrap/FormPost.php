@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\Bootstrap;
+namespace NTLAB\JS\Repo\Script\Bootstrap;
 
-use NTLAB\JS\Script\JQuery\FormPost as Base;
+use NTLAB\JS\Repo\Script\JQuery\FormPost as Base;
 use NTLAB\JS\Util\JSValue;
 
 /**
@@ -58,42 +58,41 @@ class FormPost extends Base
         $ok = $this->trans('OK');
 
         return [
-            'showSuccessMessage' => JSValue::createRaw(<<<EOF
+            'showSuccessMessage' => <<<EOF
 function(title, message, opts) {
-            opts = opts || {};
-            const autoclose = opts.autoClose !== undefined ? opts.autoClose : false;
-            const withokay = opts.withOkay !== undefined ? opts.withOkay : true;
-            const buttons = {};
-            if (withokay && !autoclose) {
-                buttons['$ok'] = {
-                    icon: $.ntdlg.BTN_ICON_OK,
-                    handler: function() {
-                        $.ntdlg.close($(this));
-                    }
-                }
-            }
-            const dlg = $.ntdlg.dialog('form_post_success', title, message, $.ntdlg.ICON_SUCCESS, buttons);
-            if (autoclose) {
-                dlg.on('shown.bs.modal', function() {
+        opts = opts || {};
+        const autoclose = opts.autoClose !== undefined ? opts.autoClose : false;
+        const withokay = opts.withOkay !== undefined ? opts.withOkay : true;
+        const buttons = {};
+        if (withokay && !autoclose) {
+            buttons['$ok'] = {
+                icon: $.ntdlg.BTN_ICON_OK,
+                handler() {
                     $.ntdlg.close($(this));
-                });
+                }
             }
         }
-EOF
-            ),
-            'showErrorMessage' => JSValue::createRaw(<<<EOF
-function(title, message, callback) {
-            $.ntdlg.dialog('form_post_error', title, message, $.ntdlg.ICON_ERROR, {
-                '$ok': {
-                    icon: $.ntdlg.BTN_ICON_OK,
-                    handler: function() {
-                        $.ntdlg.close($(this));
-                    }
-                }
-            }, callback);
+        const dlg = $.ntdlg.dialog('form_post_success', title, message, $.ntdlg.ICON_SUCCESS, buttons);
+        if (autoclose) {
+            dlg.on('shown.bs.modal', function() {
+                $.ntdlg.close($(this));
+            });
         }
+    }
 EOF
-            ),
+            ,
+            'showErrorMessage' => <<<EOF
+function(title, message, callback) {
+        $.ntdlg.dialog('form_post_error', title, message, $.ntdlg.ICON_ERROR, {
+            '$ok': {
+                icon: $.ntdlg.BTN_ICON_OK,
+                handler() {
+                    $.ntdlg.close($(this));
+                }
+            }
+        }, callback);
+    }
+EOF
         ];
     }
 
@@ -107,64 +106,63 @@ EOF
             'toggleClass' => 'd-none',
             'listClass' => 'list-unstyled mb-0',
             'visibilityUseClass' => true,
-            'inplace' => JSValue::createRaw(<<<EOF
+            'inplace' => <<<EOF
 function(el, error) {
-            if (el.hasClass('alert-danger')) {
-                el.html(error);
+        if (el.hasClass('alert-danger')) {
+            el.html(error);
+        } else {
+            let tt = el;
+            const f = function(x, a, p) {
+                const errDisp = x.attr(a);
+                if (errDisp) {
+                    const xel = p ? x.parents(errDisp) : x.siblings(errDisp);
+                    if (xel.length) {
+                        return xel;
+                    }
+                }
+            }
+            let xel = f(tt, 'data-err-display');
+            if (!xel) {
+                xel = f(tt, 'data-err-display-parent', true);
+            }
+            if (xel) {
+                tt = xel;
+            }
+            // don't add tooltip on hidden input
+            if (tt.is('input[type="hidden"]')) {
+                tt = tt.siblings('input');
+            }
+            let tooltip = bootstrap.Tooltip.getInstance(tt[0]);
+            if (tooltip) {
+                tooltip._config.title = error;
             } else {
-                let tt = el;
-                const f = function(x, a, p) {
-                    const errDisp = x.attr(a);
-                    if (errDisp) {
-                        const xel = p ? x.parents(errDisp) : x.siblings(errDisp);
-                        if (xel.length) {
-                            return xel;
-                        }
-                    }
-                }
-                let xel = f(tt, 'data-err-display');
-                if (!xel) {
-                    xel = f(tt, 'data-err-display-parent', true);
-                }
-                if (xel) {
-                    tt = xel;
-                }
-                // don't add tooltip on hidden input
-                if (tt.is('input[type="hidden"]')) {
-                    tt = tt.siblings('input');
-                }
-                let tooltip = bootstrap.Tooltip.getInstance(tt[0]);
-                if (tooltip) {
-                    tooltip._config.title = error;
-                } else {
-                    tooltip = new bootstrap.Tooltip(tt[0], {title: error, placement: 'right'});
-                }
-                xel = f(el, 'data-err-target');
-                el = xel ? xel : tt;
-                el.data('err-tt', tt);
+                tooltip = new bootstrap.Tooltip(tt[0], {title: error, placement: 'right'});
             }
-            return el;
+            xel = f(el, 'data-err-target');
+            el = xel ? xel : tt;
+            el.data('err-tt', tt);
         }
+        return el;
+    }
 EOF
-            ),
-            'onErrReset' => JSValue::createRaw(<<<EOF
+            ,
+            'onErrReset' => <<<EOF
 function(helper) {
-            if (helper.container) {
-                helper.container.find('.' + helper.errClass).each(function() {
-                    const el = $(this);
-                    const tt = el.data('err-tt');
-                    if (tt) {
-                        const tooltip = bootstrap.Tooltip.getInstance(tt[0]);
-                        if (tooltip) {
-                            tooltip._config.title = '';
-                        }
+        if (helper.container) {
+            helper.container.find('.' + helper.errClass).each(function() {
+                const el = $(this);
+                const tt = el.data('err-tt');
+                if (tt) {
+                    const tooltip = bootstrap.Tooltip.getInstance(tt[0]);
+                    if (tooltip) {
+                        tooltip._config.title = '';
                     }
-                    el.removeClass(helper.errClass);
-                });
-            }
+                }
+                el.removeClass(helper.errClass);
+            });
         }
+    }
 EOF
-            ),
         ];
     }
 }

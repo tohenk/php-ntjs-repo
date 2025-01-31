@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -23,7 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-namespace NTLAB\JS\Script\JQuery\Dialog;
+namespace NTLAB\JS\Repo\Script\JQuery\Dialog;
 
 use NTLAB\JS\Script\JQuery\UI as Base;
 use NTLAB\JS\Repository;
@@ -57,7 +57,7 @@ class Input extends Base
 
         return <<<EOF
 $.define('ntdlg', {
-    input: function(id, title, message, value, size, icon, callback) {
+    input(id, title, message, value, size, icon, callback) {
         if (typeof size === 'function') {
             callback = size;
             size = null;
@@ -69,7 +69,7 @@ $.define('ntdlg', {
         icon = icon || $.ntdlg.ICON_INPUT;
         message = message + '<br/><input type="text" value="' + value + '" size="' + size + '">'
         $.ntdlg.dialog(id, title, message, icon, {
-            '$ok': function() {
+            ['$ok']() {
                 const dlg = $(this);
                 $.ntdlg.close(dlg);
                 if (typeof callback === 'function') {
@@ -77,7 +77,7 @@ $.define('ntdlg', {
                     callback(v);
                 }
             },
-            '$cancel': function() {
+            ['$cancel']() {
                 $.ntdlg.close($(this));
             }
         });

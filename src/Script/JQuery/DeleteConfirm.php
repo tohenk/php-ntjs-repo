@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 
 /**
  * Apply delete confirmation to element using attribute `data-delete-confirm`
@@ -72,7 +72,7 @@ if ($.confirmDelete === undefined) {
                                     $.ntdlg.dialog('data-delete-confirm-dlg', '$information', json.message, $.ntdlg.ICON_SUCCESS, {
                                         '$ok': {
                                             icon: $.ntdlg.BTN_ICON_OK,
-                                            handler: function() {
+                                            handler() {
                                                 $.ntdlg.close($(this));
                                             }
                                         },

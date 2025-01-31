@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\Bootstrap\Dialog;
+namespace NTLAB\JS\Repo\Script\Bootstrap\Dialog;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
@@ -62,7 +62,7 @@ class Confirm extends Base
 
         return <<<EOF
 $.define('ntdlg', {
-    confirm: function(id, title, message, icon, cb_yes, cb_no) {
+    confirm(id, title, message, icon, cb_yes, cb_no) {
         if (typeof icon === 'function') {
             cb_no = cb_yes;
             cb_yes = icon;
@@ -72,7 +72,7 @@ $.define('ntdlg', {
         $.ntdlg.dialog(id, title, message, icon, {
             '$yes': {
                 icon: $.ntdlg.BTN_ICON_OK,
-                handler: function() {
+                handler() {
                     $.ntdlg.close($(this));
                     if (typeof cb_yes === 'function') {
                         cb_yes();
@@ -81,7 +81,7 @@ $.define('ntdlg', {
             },
             '$no': {
                 icon: $.ntdlg.BTN_ICON_CANCEL,
-                handler: function() {
+                handler() {
                     $.ntdlg.close($(this));
                     if (typeof cb_no === 'function') {
                         cb_no();

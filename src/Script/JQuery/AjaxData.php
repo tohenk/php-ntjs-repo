@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Util\JSValue;
 
 /**
@@ -60,7 +60,7 @@ $.ajaxData = function(el, params) {
         callback: null,
         addValueParam: 'add',
         deleteClicker: 'a.del',
-        load: function() {
+        load() {
             const self = this;
             self.container.html($spinner);
             $.get(self.dataUrl, function(html) {
@@ -76,7 +76,7 @@ $.ajaxData = function(el, params) {
                 }
             });
         },
-        delete: function(a, message) {
+        delete(a, message) {
             const self = this;
             const url = a.attr('href');
             const title = a.data('title');
@@ -88,7 +88,7 @@ $.ajaxData = function(el, params) {
                 });
             });
         },
-        add: function(value, el) {
+        add(value, el) {
             const self = this;
             const params = {};
             params[self.addValueParam] = value;
@@ -99,7 +99,7 @@ $.ajaxData = function(el, params) {
                 });
             });
         },
-        browse: function(url) {
+        browse(url) {
             const self = this;
             url = url || self.browseUrl;
             $.ntdlg.iframe('ajax_data_browse_dlg', url, {
@@ -107,10 +107,10 @@ $.ajaxData = function(el, params) {
                 size: 'lg'
             });
         },
-        buttonHandler: function() {
+        buttonHandler() {
             this.browse();
         },
-        init: function(el, params) {
+        init(el, params) {
             const self = this;
             self.container = $(el);
             if (params.title) {

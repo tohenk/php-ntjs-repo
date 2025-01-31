@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 use NTLAB\JS\Util\Asset;
 use NTLAB\JS\Util\JSValue;
@@ -60,7 +60,7 @@ class Spinner extends Base
 $.define('JQuerySpinnerHelper', {
     defaults: $defaults,
     evlockData: 'spinner-changing',
-    create: function(selector, options) {
+    create(selector, options) {
         const self = this;
         $(selector).spinner(Object.assign({}, self.defaults, options));
         const spinner = $(selector).data('spinner');

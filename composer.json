@@ -1,13 +1,13 @@
 {
-	"name" : "ntlab/ntjs",
+	"name" : "ntlab/ntjs-repo",
 	"type" : "library",
-	"description" : "PHP Javascript Repository",
+	"description" : "PHP-NTJS Script Repository",
 	"keywords" : [
 		"ntjs",
 		"javascript",
 		"repository"
 	],
-	"homepage" : "https://github.com/tohenk/php-ntjs",
+	"homepage" : "https://github.com/tohenk/php-ntjs-repo",
 	"license" : "MIT",
 	"authors" : [{
 			"name" : "Toha",
@@ -16,23 +16,24 @@
 		}
 	],
 	"require" : {
-		"php" : ">=7.1"
+		"php" : ">=7.4",
+		"ntlab/ntjs": "^4.0"
 	},
 	"require-dev" : {
 		"phpunit/phpunit" : "^9.5"
 	},
 	"autoload" : {
 		"psr-4" : {
-			"NTLAB\\JS\\" : "src/",
-			"NTLAB\\JS\\Test\\" : "tests/"
+			"NTLAB\\JS\\Repo\\" : "src/",
+			"NTLAB\\JS\\Repo\\Test\\" : "tests/"
 		}
 	},
 	"extra": {
 		"script-resolvers": {
-			"NTLAB\\JS\\Script": "NTLAB\\JS\\DependencyResolver"
+			"NTLAB\\JS\\Repo\\Script": "NTLAB\\JS\\DependencyResolver"
 		},
 		"repository-initializers": {
-			"jquery": "NTLAB\\JS\\Repository\\JQuery"
+			"jquery": "NTLAB\\JS\\Repo\\Initializer\\JQuery"
 		}
 	}
 }

@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
@@ -56,13 +56,13 @@ class Overflow extends Base
         return <<<EOF
 $.define('overflow', {
     active: null,
-    hide: function() {
+    hide() {
         if (!$.overflow.active) {
             $.overflow.active = true;
             $(document.body).css('overflow', 'hidden');
         }
     },
-    restore: function(force = false) {
+    restore(force = false) {
         if ($.overflow.active || force) {
             $.overflow.active = false;
             $(document.body).css('overflow', 'inherit');

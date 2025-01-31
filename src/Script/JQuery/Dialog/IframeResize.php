@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery\Dialog;
+namespace NTLAB\JS\Repo\Script\JQuery\Dialog;
 
 use NTLAB\JS\Script\JQuery\UI as Base;
 use NTLAB\JS\Repository;
@@ -53,7 +53,7 @@ $.define('dlgresize', {
     pIframe: $(parent.document.body).find('div.ui-dialog-iframe-container iframe'),
     dlg: null,
     oHeight: null,
-    resize: function(grow) {
+    resize(grow) {
         const self = this;
         let doit = false;
         if (grow) {
@@ -70,7 +70,7 @@ $.define('dlgresize', {
             self.pIframe.height(self.bd.height());
         }
     },
-    init: function() {
+    init() {
         const self = this;
         self.dlg = self.pIframe.parents('div.ui-dialog-content');
         const h = self.dlg.attr('oheight');

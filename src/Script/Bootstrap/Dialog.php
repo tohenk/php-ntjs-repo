@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\Bootstrap;
+namespace NTLAB\JS\Repo\Script\Bootstrap;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 use NTLAB\JS\Util\JSValue;
 
@@ -38,7 +38,7 @@ use NTLAB\JS\Util\JSValue;
  * ```js
  * $.ntdlg.dialog('mydlg', 'A Dialog', 'This is a dialog', {
  *     buttons: {
- *         'OK': function() {
+ *         OK() {
  *             $(this).dialog('close');
  *         }
  *     }
@@ -126,7 +126,7 @@ $.define('ntdlg', {
           '<div class="%MODAL%">' +
             '<div class="modal-content">' +
               '<div class="modal-header">' +
-                '<h5 id="%ID%-title" class="modal-title">%TITLE%</h5>' +
+                '<h5 id="%ID%-title" class="modal-title text-truncate">%TITLE%</h5>' +
                 '%CLOSE%' +
               '</div>' +
               '<div class="modal-body">%CONTENT%</div>' +
@@ -149,7 +149,7 @@ $.define('ntdlg', {
         '<button id="%ID%" type="button" class="%BTNCLASS%">%CAPTION%</button>',
     closeTmpl:
         '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="$close"></button>',
-    create: function(id, title, message, options) {
+    create(id, title, message, options) {
         const self = this;
         const dlg_id = '#' + id;
         $(dlg_id).remove();
@@ -162,22 +162,23 @@ $.define('ntdlg', {
         const handlers = [];
         let cnt = 0;
         if (options.buttons) {
-            $.each(options.buttons, function(k, v) {
+            for (const btn of Object.keys(options.buttons)) {
+                const v = options.buttons[btn];
                 let caption, btnType, btnIcon, handler;
-                if (Array.isArray(v) || $.isPlainObject(v)) {
-                    caption = v.caption ? v.caption : k;
+                if (typeof v === 'object') {
+                    caption = v.caption ? v.caption : btn;
                     btnType = v.type ? v.type : (0 === cnt ? 'primary' : 'secondary');
                     if (v.icon) {
                         btnIcon = v.icon;
                     }
                     handler = typeof v.handler === 'function' ? v.handler : null;
                 } else {
-                    caption = k;
+                    caption = btn;
                     btnType = 0 === cnt ? 'primary' : 'secondary';
                     handler = typeof v === 'function' ? v : null;
                 }
-                let btnid = id + '_btn_' + caption.replace(/\W+/g, "-").toLowerCase();
-                let btnclass = $.util.template(self.buttonClass, {TYPE: btnType});
+                const btnid = id + '_btn_' + caption.replace(/\W+/g, '-').toLowerCase();
+                const btnclass = $.util.template(self.buttonClass, {TYPE: btnType});
                 if (btnIcon) {
                     caption = $.util.template(self.buttonIconTmpl, {CAPTION: caption, ICON: btnIcon});
                 }
@@ -187,10 +188,10 @@ $.define('ntdlg', {
                     CAPTION: caption
                 }));
                 if (typeof handler === 'function') {
-                    handlers.push({id: btnid, handler: handler});
+                    handlers.push({id: btnid, handler});
                 }
                 cnt++;
-            });
+            }
         }
         const m = ['modal-dialog', 'modal-dialog-centered'];
         if (options.size) {
@@ -222,25 +223,26 @@ $.define('ntdlg', {
         if (buttons.length === 0) {
             dlg.find('.modal-footer').hide();
         }
-        $.each(handlers, function(k, v) {
+        for (const v of handlers) {
             $('#' + v.id).on('click', function(e) {
                 e.preventDefault();
                 v.handler.apply(dlg);
             });
-        });
+        }
         const modal_options = {};
         $.util.applyProp(['backdrop', 'keyboard', 'show', 'remote'], options, modal_options);
         $.util.applyEvent(dlg, ['show.bs.modal', 'shown.bs.modal', 'hide.bs.modal', 'hidden.bs.modal', 'loaded.bs.modal'], options);
         // compatibility with JQuery UI dialog
-        $.each({open: 'shown.bs.modal', close: 'hidden.bs.modal'}, function(prop, event) {
-            if (typeof options[prop] === 'function') {
-                dlg.on(event, options[prop]);
+        const compatOptions = {open: 'shown.bs.modal', close: 'hidden.bs.modal'};
+        for (const opt in compatOptions) {
+            if (typeof options[opt] === 'function') {
+                dlg.on(compatOptions[opt], options[opt]);
             }
-        });
+        }
         self._create(dlg[0], modal_options);
         return dlg;
     },
-    dialog: function(id, title, message, icon, buttons, close_cb) {
+    dialog(id, title, message, icon, buttons, close_cb) {
         const self = this;
         icon = icon || self.ICON_INFO;
         buttons = buttons || [];
@@ -249,25 +251,25 @@ $.define('ntdlg', {
             MESSAGE: message
         });
         const dlg = self.create(id, title, message, {
-            'shown.bs.modal': function(e) {
+            ['shown.bs.modal'](e) {
                 e.preventDefault();
                 let focused = dlg.find('input.focused');
                 if (focused.length) {
                     focused.focus();
                 }
             },
-            'hidden.bs.modal': function(e) {
+            ['hidden.bs.modal'](e) {
                 e.preventDefault();
                 if (typeof close_cb === 'function') {
                     close_cb();
                 }
             },
-            buttons: buttons
+            buttons
         });
         $.ntdlg.show(dlg);
         return dlg;
     },
-    show: function(dlg) {
+    show(dlg) {
         const self = this;
         if (dlg && !this.isVisible(dlg)) {
             if (typeof dlg === 'string') {
@@ -280,7 +282,7 @@ $.define('ntdlg', {
             if (d) d.show();
         }
     },
-    close: function(dlg) {
+    close(dlg) {
         const self = this;
         if (dlg) {
             if (typeof dlg === 'string') {
@@ -290,7 +292,7 @@ $.define('ntdlg', {
             if (d) d.hide();
         }
     },
-    isVisible: function(dlg) {
+    isVisible(dlg) {
         if (dlg) {
             if (typeof dlg === 'string') {
                 dlg = $('#' + dlg);
@@ -303,7 +305,7 @@ $.define('ntdlg', {
             return false;
         }
     },
-    getBody: function(dlg) {
+    getBody(dlg) {
         if (dlg) {
             if (typeof dlg === 'string') {
                 dlg = $('#' + dlg);
@@ -311,13 +313,13 @@ $.define('ntdlg', {
             return dlg.find('.modal-body:first');
         }
     },
-    _create: function(el, options) {
+    _create(el, options) {
         return new bootstrap.Modal(el, options || {});
     },
-    _get: function(el) {
+    _get(el) {
         return bootstrap.Modal.getInstance(el);
     },
-    init: function() {
+    init() {
         // icon set
         Object.assign(this, $icons);
         // https://stackoverflow.com/questions/19305821/multiple-modals-overlay

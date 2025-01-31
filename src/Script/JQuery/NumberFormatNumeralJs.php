@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
@@ -47,7 +47,7 @@ class NumberFormatNumeralJs extends Base
         return <<<EOF
 $.define('nfNumeralJs', {
     fmt: '0,0',
-    init: function(options) {
+    init(options) {
         const self = this;
         if (!self.initialized) {
             self.initialized = true;
@@ -65,7 +65,7 @@ $.define('nfNumeralJs', {
                     billion: 'b',
                     trillion: 't'
                 },
-                ordinal: function(number) {
+                ordinal(number) {
                     return '.';
                 },
                 currency: {
@@ -75,12 +75,12 @@ $.define('nfNumeralJs', {
             numeral.locale(options.locale);
         }
     },
-    format: function(v) {
+    format(v) {
         const self = this;
         const n = numeral(v);
         return n.format(self.fmt);
     },
-    value: function(v) {
+    value(v) {
         const self = this;
         const n = numeral(v);
         return n.value();

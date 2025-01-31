@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery\Dialog;
+namespace NTLAB\JS\Repo\Script\JQuery\Dialog;
 
 use NTLAB\JS\Script\JQuery\UI as Base;
 use NTLAB\JS\Repository;
@@ -67,7 +67,7 @@ class Iframe extends Base
     {
         return <<<EOF
 $.define('ntdlg', {
-    iframe: function(id, url, options) {
+    iframe(id, url, options) {
         const self = this;
         options = options || {};
         const title = options.title || '';
@@ -78,13 +78,13 @@ $.define('ntdlg', {
         const params = {
             resizable: false,
             buttons: [],
-            create: function(event, ui) {
+            create(event, ui) {
                 $.overflow.hide();
             },
-            close: function(event, ui) {
+            close(event, ui) {
                 $.overflow.restore();
             },
-            open: function() {
+            open() {
                 const d = $(this);
                 const h = Math.floor(d.height());
                 const w = Math.floor(d.width());

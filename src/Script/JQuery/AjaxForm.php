@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
@@ -63,7 +63,7 @@ $.ajaxform = function(options) {
         loaded: null,
         callback: null,
         dlg: null,
-        init: function(data) {
+        init(data) {
             const self = this;
             Object.assign(self, data);
             $.get(self.formurl, self.params || {})
@@ -72,7 +72,7 @@ $.ajaxform = function(options) {
                     if (self.okay) {
                         buttons[self.okay] = {
                             icon: $.ntdlg.BTN_ICON_OK,
-                            handler: function() {
+                            handler() {
                                 const form = $(this).find('form');
                                 if (form.length) {
                                     form.submit();
@@ -85,7 +85,7 @@ $.ajaxform = function(options) {
                     if (self.cancel) {
                         buttons[self.cancel] = {
                             icon: $.ntdlg.BTN_ICON_CANCEL,
-                            handler: function() {
+                            handler() {
                                 $.ntdlg.close($(this));
                             }
                         }
@@ -93,17 +93,17 @@ $.ajaxform = function(options) {
                     const opts = {
                         buttons: buttons,
                         backdrop: 'static',
-                        open: function() {
+                        open() {
                             const form = self.dlg.find('form');
-                            $.each(['.focused', '.form-control'], function(k, v) {
+                            for (const v of ['.focused', '.form-control']) {
                                 const focused = form.find('CLASS:visible:not([readonly])'.replace(/CLASS/, v));
                                 if (focused.length) {
                                     focused[0].focus();
-                                    return false;
+                                    break;
                                 }
-                            });
+                            }
                         },
-                        close: function() {
+                        close() {
                             $.ntdlg.close($(this));
                         }
                     }
@@ -136,7 +136,7 @@ $.ajaxform = function(options) {
                 })
             ;
         },
-        show: function() {
+        show() {
             const self = this;
             if (self.dlg) {
                 $.ntdlg.show(self.dlg);

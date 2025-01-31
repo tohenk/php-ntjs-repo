@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\Bootstrap;
+namespace NTLAB\JS\Repo\Script\Bootstrap;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
@@ -51,7 +51,7 @@ class Notify extends Base
         return <<<EOF
 $.define('notif', {
     useToast: $useToast,
-    supported: function() {
+    supported() {
         const self = this;
         if ($.notif.allowed === undefined) {
             let allowed = false;
@@ -71,7 +71,7 @@ $.define('notif', {
         }
         return $.notif.allowed;
     },
-    notifyNotification: function(message, options) {
+    notifyNotification(message, options) {
         const self = this;
         const title = options.title || '$title';
         const content = {body: message};
@@ -99,7 +99,7 @@ $.define('notif', {
         setTimeout(n.close.bind(n), options.delay || 5000);
         return n; 
     },
-    notifyToast: function(message, options) {
+    notifyToast(message, options) {
         const self = this;
         let icon;
         switch (options) {
@@ -143,7 +143,7 @@ $.define('notif', {
         t.show();
         return t;
     },
-    notify: function(message, options) {
+    notify(message, options) {
         const self = this;
         if (!self.useToast && self.supported()) {
             self.notifyNotification(message, options);
@@ -151,7 +151,7 @@ $.define('notif', {
             self.notifyToast(message, options);
         }
     },
-    init: function() {
+    init() {
         const self = this;
         if ($.notify === undefined) {
             $.notify = self.notify.bind(self);

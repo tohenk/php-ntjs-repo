@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery\Dialog;
+namespace NTLAB\JS\Repo\Script\JQuery\Dialog;
 
 use NTLAB\JS\Script\JQuery\UI as Base;
 use NTLAB\JS\Repository;
@@ -64,7 +64,7 @@ $.define('ntdlg', {
     waitdlg: {
         d: null,
         active: false,
-        create: function() {
+        create() {
             const self = this;
             if (self.d === null) {
                 $(document.body).append('<div id="wdialog" title="$title">$message</div>');
@@ -74,15 +74,15 @@ $.define('ntdlg', {
                     width: $width,
                     height: $height,
                     button: [],
-                    create: function() {
+                    create() {
                         if ($.ntdlg.hideOverflow) {
                             $.overflow.hide();
                         }
                     },
-                    open: function() {
+                    open() {
                         $.ntdlg.waitdlg.active = true;
                     },
-                    close: function() {
+                    close() {
                         $.ntdlg.waitdlg.active = false;
                         if ($.ntdlg.hideOverflow) {
                             $.overflow.restore();
@@ -91,7 +91,7 @@ $.define('ntdlg', {
                 });
             }
         },
-        show: function(msg) {
+        show(msg) {
             const self = this;
             if (self.active) {
                 self.close();
@@ -102,14 +102,14 @@ $.define('ntdlg', {
             }
             $.ntdlg.show(self.d);
         },
-        close: function() {
+        close() {
             const self = this;
             if (self.d) {
                 $.ntdlg.close(self.d);
             }
         }
     },
-    wait: function(message) {
+    wait(message) {
         if (message) {
             $.ntdlg.waitdlg.show(message);
         } else {

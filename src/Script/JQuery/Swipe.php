@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
@@ -55,7 +55,7 @@ $.swiper = function(el, options) {
         touchstartY: 0,
         touchendX: 0,
         touchendY: 0,
-        updateTransition: function(prop) {
+        updateTransition(prop) {
             const self = this;
             const transition = [prop, self.transitionTime, self.transitionEffect].join(' ');
             if (self.el.style.transition.indexOf(transition) < 0) {
@@ -66,7 +66,7 @@ $.swiper = function(el, options) {
                 }
             }
         },
-        calcPosition: function(w1, w2, p1, p2, d) {
+        calcPosition(w1, w2, p1, p2, d) {
             const r = w2 - w1;
             const dist = p1 + d;
             if (d > 0 && dist > 0) {
@@ -78,13 +78,13 @@ $.swiper = function(el, options) {
             let pos = p2 + d;
             return pos + 'px';
         },
-        checkPosition: function(w1, w2, p1, p2, d) {
+        checkPosition(w1, w2, p1, p2, d) {
             const self = this;
             if (w2 > w1) {
                 return self.calcPosition(w1, w2, p1, p2, d);
             }
         },
-        adjustPosition: function(dx = null, dy = null) {
+        adjustPosition(dx = null, dy = null) {
             const self = this;
             let c, p;
             if (dx !== null && dx !== undefined) {
@@ -112,7 +112,7 @@ $.swiper = function(el, options) {
                 }
             }
         },
-        handleGesture: function(resize = null) {
+        handleGesture(resize = null) {
             const self = this;
             let delta;
             if (self.horizontal) {
@@ -140,7 +140,7 @@ $.swiper = function(el, options) {
                 }
             }
         },
-        init: function(el, options) {
+        init(el, options) {
             options = options || {};
             const self = this;
             if (el instanceof HTMLElement) {

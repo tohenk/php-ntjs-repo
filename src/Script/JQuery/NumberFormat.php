@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 use NTLAB\JS\Util\JSValue;
 
@@ -48,7 +48,7 @@ class NumberFormat extends Base
     {
         return <<<EOF
 $.define('nf', {
-    format: function(el) {
+    format(el) {
         const self = this;
         const f = self.factory();
         f.init(el.data('nf'));
@@ -61,7 +61,7 @@ $.define('nf', {
             el.data('nf_formatted', true);
         }
     },
-    apply: function(el) {
+    apply(el) {
         const self = this;
         const f = self.factory();
         f.init(el.data('nf'));
@@ -77,7 +77,7 @@ $.define('nf', {
             ref.data('nf_skip', false);
         }
     },
-    factory: function() {
+    factory() {
         const self = this;
         if (self.internal) {
             return self.internal;
@@ -87,7 +87,7 @@ $.define('nf', {
         }
         throw new Error('Number formatter factory is required!');
     },
-    init: function(display, value, options) {
+    init(display, value, options) {
         const self = this;
         options = options || {};
         $(display)

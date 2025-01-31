@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 
 /**
@@ -38,7 +38,7 @@ use NTLAB\JS\Repository;
  *
  * ```js
  * $.define('my', {
- *     doit: function() {
+ *     doit() {
  *         alert('I\'m doing it.');
  *     }
  * });
@@ -60,7 +60,7 @@ class Resolver extends Base
     {
         return <<<EOF
 $.define('resolver', {
-    resolve: function(n, o) {
+    resolve(n, o) {
         let i, l;
         o = o || parent || window;
         n = n.split('.');
@@ -72,7 +72,7 @@ $.define('resolver', {
         }
         return o;
     },
-    exec: function(cb) {
+    exec(cb) {
         if (typeof cb === 'function') {
             return cb.apply(cb, Array.prototype.slice.call(arguments, 1));
         }

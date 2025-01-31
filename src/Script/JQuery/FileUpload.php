@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 use NTLAB\JS\Util\JSValue;
 
@@ -114,7 +114,7 @@ $.define('uploader', {
         maxChunkSize: $chunkSize,
         sequentialUploads: true
     },
-    init: function(cb) {
+    init(cb) {
         const self = this;
         if ($.uploaderdlg) {
             $.uploaderdlg.uploader = self;
@@ -133,7 +133,7 @@ $.define('uploader', {
             });
         }
     },
-    bindHandler: function() {
+    bindHandler() {
         const self = this;
         self.el
             .on(self.startEvent, function(e, data) {
@@ -168,7 +168,7 @@ $.define('uploader', {
             })
         ;
     },
-    applyHandlers: function() {
+    applyHandlers() {
         const self = this;
         self.el.find('.template-download .select')
             .on('click', function(e) {
@@ -187,11 +187,11 @@ $.define('uploader', {
         // enable gallery
         $.ntgallery(self.el);
     },
-    clear: function() {
+    clear() {
         const self = this;
         self.el.find('.template-download').remove();
     },
-    list: function() {
+    list() {
         const self = this;
         self.el.each(function() {
             const that = this;
@@ -205,7 +205,7 @@ $.define('uploader', {
             ;
         });
     },
-    show: function(options) {
+    show(options) {
         const self = this;
         options = options || {};
         self.mimeTypes = options.mimeTypes !== undefined ? (Array.isArray(options.mimeTypes) ? options.mimeTypes : [options.mimeTypes]) : [];
@@ -219,12 +219,12 @@ $.define('uploader', {
             $.uploaderdlg.show(options.title);
         });
     },
-    close: function() {
+    close() {
         if ($.uploaderdlg) {
             $.uploaderdlg.close();
         }
     },
-    select: function(filename, file) {
+    select(filename, file) {
         const self = this;
         const f = self.el.data('fileuploadselect');
         if (typeof f === 'function') {

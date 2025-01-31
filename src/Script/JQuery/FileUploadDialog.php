@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 use NTLAB\JS\Util\JSValue;
 
@@ -56,7 +56,7 @@ $.define('uploaderdlg', {
     dlg: null,
     uploader: null,
     url: $url,
-    getEl: function(callback) {
+    getEl(callback) {
         const self = this;
         const done = function(el) {
             if (el) {
@@ -89,7 +89,7 @@ $.define('uploaderdlg', {
             }
         }
     },
-    show: function(title) {
+    show(title) {
         const self = this;
         $.assert('ntdlg');
         self.getEl(function(el) {
@@ -97,14 +97,14 @@ $.define('uploaderdlg', {
             self.dlg.find('.modal-title').text(title || '$title');
             $.ntdlg._create(self.dlg, {
                 backdrop: 'static',
-                'hidden.bs.modal': function(e) {
+                ['hidden.bs.modal'](e) {
                     self.uploader.target = null;
                 }
             });
             $.ntdlg.show(self.dlg);
         });
     },
-    close: function() {
+    close() {
         const self = this;
         $.ntdlg.close(self.dlg);
     }

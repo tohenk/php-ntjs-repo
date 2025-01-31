@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\Bootstrap;
+namespace NTLAB\JS\Repo\Script\Bootstrap;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 use NTLAB\JS\Util\Asset;
 use NTLAB\JS\Util\JSValue;
@@ -54,7 +54,7 @@ class DateTimePicker extends Base
         $this->useJavascript('tempus-dominus.min');
         $this->useStylesheet('tempus-dominus.min');
 
-        /** @var \NTLAB\JS\Script\Bootstrap\DateTimePickerLocaleCustom $script */
+        /** @var \NTLAB\JS\Repo\Script\Bootstrap\DateTimePickerLocaleCustom $script */
         $script = self::create('Bootstrap.DateTimePickerLocaleCustom');
         if (!$script->canUseLocale($locale = $this->getLocale(true))) {
             self::create('Bootstrap.DateTimePickerLocale')

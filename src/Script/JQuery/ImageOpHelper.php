@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,10 +24,10 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
 use NTLAB\JS\Script;
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Util\JSValue;
 
 /**
@@ -100,7 +100,7 @@ class ImageOpHelper extends Base
             ->add(
                 <<<EOF
 $('$selector').uploader({
-    select: function(filename, data) {
+    select(filename, data) {
         $.imgop.handleUpload({name: filename, type: data.type}, $params);
     }
 }).on('click', function(e) {
@@ -117,7 +117,7 @@ EOF
             $options['resize'], $options['pixel_size'], $options['resize_height'], $options['resize_width'], $options['resize_enlarge'], $options['resize_reduce'],
             $options['image_types']
         );
-        /** @var \NTLAB\JS\Script\JQuery\ImageOpSave $img_save */
+        /** @var \NTLAB\JS\Repo\Script\JQuery\ImageOpSave $img_save */
         $img_save = Script::create('JQuery.ImageOpSave');
         $img_save
             ->call($selector, $options);

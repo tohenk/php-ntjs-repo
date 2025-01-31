@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\JQuery;
+namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 use NTLAB\JS\Util\JSValue;
 
@@ -59,7 +59,7 @@ $.define('imgop', {
     operations: [],
     url: $url,
     data: {},
-    init: function() {
+    init() {
         $.assert('ntdlg.message');
         if (null === this.el) {
             this.el = $('<div id="img-op-queue" style="display: none;"></div>').appendTo(document.body);
@@ -67,7 +67,7 @@ $.define('imgop', {
         this.monitorQueue(false);
         this.el.clearQueue();
     },
-    process: function(imgname, imgurl) {
+    process(imgname, imgurl) {
         const self = this;
         let cnt = 0;
         self.imgname = imgname;
@@ -92,7 +92,7 @@ $.define('imgop', {
             self.apply();
         }
     },
-    apply: function() {
+    apply() {
         const self = this;
         if (Object.keys(self.data).length > 1) {
             if (!self.url) {
@@ -124,7 +124,7 @@ $.define('imgop', {
             self.saveImage();
         }
     },
-    saveImage: function() {
+    saveImage() {
         this.init();
         if ($.uploader.target) {
             $.uploader.target.trigger('imagesaved', [this]);
@@ -132,7 +132,7 @@ $.define('imgop', {
             this.el.trigger('imagesaved', [this]);
         }
     },
-    checkImageType: function(image_name, image_type) {
+    checkImageType(image_name, image_type) {
         let types, allowed = false;
         for (const type in this.imageTypes) {
             if (types) {
@@ -152,7 +152,7 @@ $.define('imgop', {
         }
         return allowed;
     },
-    handleUpload: function(data, options) {
+    handleUpload(data, options) {
         const self = this;
         if (options) {
             self.applyOptions(options);
@@ -166,26 +166,26 @@ $.define('imgop', {
             self.process(data.name, url);
         });
     },
-    applyOptions: function(options) {
+    applyOptions(options) {
         const self = this;
         options = options || {};
         if (options.ops) {
             self.operations = [];
-            $.each(options.ops, function(name, data) {
-                self.addOperation(name, data);
-            });
+            for (const op of Object.keys(options.ops)) {
+                self.addOperation(op, options.ops[op]);
+            }
         }
         if (options.images) {
            self.addImageTypes(options.images);
         }
     },
-    addHandler: function(handler, func, ctx) {
+    addHandler(handler, func, ctx) {
         this.handlers[handler] = {name: handler, callback: func, context: ctx || this};
     },
-    addOperation: function(name, data) {
+    addOperation(name, data) {
         this.operations.push({name: name, params: data});
     },
-    monitorQueue: function(active) {
+    monitorQueue(active) {
         const self = this;
         if (active) {
             self.pid = setTimeout(function() {
@@ -203,10 +203,10 @@ $.define('imgop', {
             }
         }
     },
-    addImageTypes: function(types) {
+    addImageTypes(types) {
         this.imageTypes = types || {};
     },
-    onsaved: function(handler) {
+    onsaved(handler) {
         this.init();
         this.el.on('imagesaved', handler);
     }

@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\Bootstrap\Dialog;
+namespace NTLAB\JS\Repo\Script\Bootstrap\Dialog;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 use NTLAB\JS\Util\JSValue;
 
@@ -72,7 +72,7 @@ class Iframe extends Base
     {
         return <<<EOF
 $.define('ntdlg', {
-    iframe: function(id, url, options) {
+    iframe(id, url, options) {
         const self = this;
         options = options || {};
         const title = options.title || '';
@@ -82,8 +82,8 @@ $.define('ntdlg', {
         url += (url.indexOf('?') > -1 ? '&' : '?') + 'closecb=' + (close_cb ? close_cb : '') + '&_dialog=1';
         const params = {
             buttons: [],
-            'shown.bs.modal': function() {
-                $.ntdlg.iframeLoader($(this), {ajax: ajax, url: url, overflow: overflow});
+            ['shown.bs.modal']() {
+                $.ntdlg.iframeLoader($(this), {ajax, url, overflow});
             }
         }
         $.util.applyProp(['size', 'closable', 'backdrop', 'keyboard', 'show', 'close', 'remote'], options, params);

@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2024-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\Bootstrap;
+namespace NTLAB\JS\Repo\Script\Bootstrap;
 
-use NTLAB\JS\Script\JQuery as Base;
+use NTLAB\JS\Repo\Script\JQuery as Base;
 use NTLAB\JS\Repository;
 use NTLAB\JS\Util\Asset;
 
@@ -63,7 +63,7 @@ $.define('bootstrapSelectHelper', {
     dropdownMenu: '.dropdown-menu',
     spinner: '<div class="spinner-border spinner-border-sm text-secondary float-end" role="status"><span class="visually-hidden">$loading</span></div>',
     spinnerClass: 'spinner-border',
-    fixHeight: function(el, strategy) {
+    fixHeight(el, strategy) {
         let maxHeight = el.css('max-height');
         let minHeight = el.css('min-height');
         switch (strategy) {
@@ -80,7 +80,7 @@ $.define('bootstrapSelectHelper', {
             break;
         }
     },
-    applyHandler: function(selector, handlers) {
+    applyHandler(selector, handlers) {
         const self = this;
         selector.each(function() {
             const el = $(this);
@@ -94,10 +94,10 @@ $.define('bootstrapSelectHelper', {
             el.data('bs-select-handlers', states);
         });
     },
-    apply: function() {
+    apply() {
         const self = this;
         self.applyHandler($('.' + self.bsClass), {
-            'loaded.bs.select': function() {
+            ['loaded.bs.select']() {
                 $(this).data('bs.select.loaded', true);
                 if ($(this).hasClass(self.loadingClass)) {
                     const dropdown = $(this).siblings(self.dropdown);
@@ -117,20 +117,20 @@ $.define('bootstrapSelectHelper', {
                     });
                 }
             },
-            'rendered.bs.select': function() {
+            ['rendered.bs.select']() {
                 if ($(this).attr('readonly') || $(this).attr('disabled')) {
                     $(this).siblings(self.dropdown)
                         .prop('disabled', true);
                     ;
                 }
             },
-            optionLoading: function() {
+            optionLoading() {
                 $(this).addClass(self.loadingClass);
                 if ($(this).data('bs.select.loaded')) {
                     $(this).trigger('loaded.bs.select');
                 }
             },
-            optionLoaded: function() {
+            optionLoaded() {
                 $(this).removeClass(self.loadingClass);
                 const dropdown = $(this).siblings(self.dropdown);
                 let spinner = dropdown.find('.' + self.spinnerClass);
@@ -140,15 +140,15 @@ $.define('bootstrapSelectHelper', {
                 spinner.remove();
                 $(this).selectpicker('refresh');
             },
-            change: function() {
+            change() {
                 $(this).selectpicker('refresh');
             },
-            refresh: function() {
+            refresh() {
                 $(this).selectpicker('refresh');
             }
         });
     },
-    observeState: function() {
+    observeState() {
         const self = this;
         const observer = new MutationObserver(function(mutationsList, observer) {
             for (const mutation of mutationsList) {
@@ -169,7 +169,7 @@ $.define('bootstrapSelectHelper', {
             observer.observe(node, {attributes: true});
         }
     },
-    init: function() {
+    init() {
         const self = this;
         self.apply();
         self.observeState();
