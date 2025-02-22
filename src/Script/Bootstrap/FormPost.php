@@ -136,7 +136,7 @@ function(el, error) {
             if (tooltip) {
                 tooltip._config.title = error;
             } else {
-                tooltip = new bootstrap.Tooltip(tt[0], {title: error, placement: 'right'});
+                tooltip = new bootstrap.Tooltip(tt[0], {title: error, placement: 'right', html: true});
             }
             xel = f(el, 'data-err-target');
             el = xel ? xel : tt;
