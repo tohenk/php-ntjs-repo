@@ -73,21 +73,24 @@ if (tempusDominus.locales && tempusDominus.locales[datetimepickerLocale]) {
     tempusDominus.locale(tempusDominus.locales[datetimepickerLocale].name);
 }
 $.fn.datetimepicker = function(options) {
+    options = options || {};
     this.each(function() {
-        options = options || {};
-        const tdOptions = {};
-        if (options.td) {
-            Object.assign(tdOptions, options.td);
+        const el = $(this).find('input');
+        if (!el.prop('readonly') || options.ignoreReadonly) {
+            const tdOptions = {};
+            if (options.td) {
+                Object.assign(tdOptions, options.td);
+            }
+            let format = tempusDominus.DefaultOptions.localization.dateFormats.L;
+            if (options.withTime) {
+                format += ' ' + tempusDominus.DefaultOptions.localization.dateFormats.LT;
+            } else {
+                Object.assign(tdOptions, {display: {components: {clock: false}}});
+            }
+            Object.assign(tdOptions, {localization: {format: format}});
+            const picker = new tempusDominus.TempusDominus($(this)[0], tdOptions);
+            $(this).data('dtpicker', picker);
         }
-        let format = tempusDominus.DefaultOptions.localization.dateFormats.L;
-        if (options.withTime) {
-            format += ' ' + tempusDominus.DefaultOptions.localization.dateFormats.LT;
-        } else {
-            Object.assign(tdOptions, {display: {components: {clock: false}}});
-        }
-        Object.assign(tdOptions, {localization: {format: format}});
-        const picker = new tempusDominus.TempusDominus($(this)[0], tdOptions);
-        $(this).data('dtpicker', picker);
     });
 }
 EOF;
