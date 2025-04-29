@@ -53,6 +53,7 @@ class FileUpload extends Base
         } else {
             $chunkSize = $this->getConfigBytes($chunkSize);
         }
+
         return $chunkSize;
     }
 
@@ -76,6 +77,7 @@ class FileUpload extends Base
             case 'k':
                 $value *= 1024;
         }
+
         return $this->fixIntegerOverflow($value);
     }
 
@@ -90,6 +92,7 @@ class FileUpload extends Base
         if ($size < 0) {
             $size += 2.0 * (PHP_INT_MAX + 1);
         }
+
         return $size;
     }
 

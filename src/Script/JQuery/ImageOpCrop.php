@@ -57,26 +57,77 @@ $.define('imgop.crop', {
     selection: null,
     imgop: null,
     next: null,
+    createTemplate(ratio) {
+        return `<cropper-canvas background style="min-height: 60vh;">
+                <cropper-image rotatable scalable skewable translatable></cropper-image>
+                <cropper-shade hidden></cropper-shade>
+                <cropper-handle action="select" plain></cropper-handle>
+                <cropper-selection aspect-ratio="\${ratio}" initial-coverage="1.0" keyboard movable precise resizable>
+                    <cropper-grid role="grid" bordered covered></cropper-grid>
+                    <cropper-crosshair centered></cropper-crosshair>
+                    <cropper-handle action="move" theme-color="rgba(255, 255, 255, 0.35)"></cropper-handle>
+                    <cropper-handle action="n-resize"></cropper-handle>
+                    <cropper-handle action="e-resize"></cropper-handle>
+                    <cropper-handle action="s-resize"></cropper-handle>
+                    <cropper-handle action="w-resize"></cropper-handle>
+                    <cropper-handle action="ne-resize"></cropper-handle>
+                    <cropper-handle action="nw-resize"></cropper-handle>
+                    <cropper-handle action="se-resize"></cropper-handle>
+                    <cropper-handle action="sw-resize"></cropper-handle>
+                </cropper-selection>
+            </cropper-canvas>`;
+    },
     dialog(img) {
-        $.imgop.crop.img = $(img);
+        const self = this;
+        self.img = $(img);
         const dlg = $.ntdlg.create('imgcropper', '$title', '', {
             backdrop: 'static',
+            size: 'lg',
             open() {
                 const bd = $.ntdlg.getBody($(this));
                 bd.append($(img));
                 bd.css({padding: 0});
-                new Cropper($(img)[0], $.imgop.crop.options || {});
+                const options = self.options;
+                const cropper = new Cropper.default($(img)[0], {
+                    template: self.createTemplate(options.aspectRatio || '')
+                });
+                const cropperCanvas = cropper.getCropperCanvas();
+                const cropperImage = cropper.getCropperImage();
+                const cropperSelection = cropper.getCropperSelection();
+                cropperImage.\$ready(im => {
+                    const canvasRect = cropperCanvas.getBoundingClientRect();
+                    cropperSelection.addEventListener('change', function(e) {
+                        const imageRect = cropperImage.getBoundingClientRect();
+                        const r = {
+                            x: imageRect.left - canvasRect.left,
+                            y: imageRect.top - canvasRect.top,
+                            width: imageRect.width,
+                            height: imageRect.height
+                        }
+                        self.cropdata.width = r.width;
+                        self.cropdata.height = r.height;
+                        self.cropdata.selection = null;
+                        if (self.inSelection(e.detail, r)) {
+                            self.cropdata.selection = {
+                                x: e.detail.x - r.x,
+                                y: e.detail.y - r.y,
+                                w: e.detail.width,
+                                h: e.detail.height,
+                            }
+                        }
+                    });
+                });
             },
             buttons: {
                 '$apply': {
                     icon: $.ntdlg.BTN_ICON_OK,
                     handler() {
-                        if (null === $.imgop.crop.selection) {
+                        if (null === self.cropdata.selection) {
                             $.ntdlg.message('img-crop-no-selection-msg', '$title', '$no_selection', $.ntdlg.ICON_ALERT);
                             return;
                         }
                         $.ntdlg.close($(this));
-                        $.imgop.crop.apply();
+                        self.apply();
                     }
                 },
                 '$cancel': {
@@ -89,39 +140,41 @@ $.define('imgop.crop', {
         });
         $.ntdlg.show(dlg);
     },
+    inSelection(check, against) {
+        return (
+            check.x >= against.x
+            && check.y >= against.y
+            && (check.x + check.width) <= (against.x + against.width)
+            && (check.y + check.height) <= (against.y + against.height)
+        );
+    },
     apply() {
         const self = this;
-        self.imgop.data['crop'] = {
-            ratio: self.options.aspectRatio ? self.options.aspectRatio : 0,
-            selection: self.selection
-        };
+        if (self.cropdata.selection) {
+            self.imgop.data['crop'] = self.cropdata;
+        }
         if (self.next) {
             self.next();
         }
     },
     doit(imgop, imgname, imgurl, params, next) {
         const self = this;
-        let offset = 100, options = {
+        const offset = 100, options = {
             maxWidth: $(window).width() - offset,
             maxHeight: $(window).height() - (offset * 2)
-        };
-        self.options = Object.assign({}, params || {}, {
-            crop(e) {
-                self.selection = {
-                    x: e.x,
-                    y: e.y,
-                    w: e.width,
-                    h: e.height
-                };
-            }
-        });
+        }
+        self.options = Object.assign({}, params || {});
         self.imgop = imgop;
         self.next = next;
         self.img = null;
         self.imgname = imgname;
         self.selection = null;
+        self.cropdata = {
+            ratio: self.options.aspectRatio ? self.options.aspectRatio : 0,
+            selection: self.selection
+        }
         // load image using Load Image plugin
-        loadImage(imgurl, self.dialog, options);
+        loadImage(imgurl, img => self.dialog(img), options);
     }
 });
 EOF;

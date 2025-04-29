@@ -149,6 +149,7 @@ EOF
         }
         unset($options['dialog_id'], $options['overflow'], $options['size'], $options['clicker_class'],
             $options['height'], $options['width'], $options['query_string']);
+
         return $this->getBackend()->ctag('a', $content, array_merge(['href' => $url, 'class' => 'dialog'.(null !== $clicker_class ? ' '.$clicker_class : ''), 'id' => 'ref-dlg'.$dlg], $options));
     }
 }

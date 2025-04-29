@@ -49,8 +49,8 @@ use NTLAB\JS\Util\JSValue;
  */
 class Dialog extends Base
 {
-    const ICON_BOOTSTRAP = 'Bootstrap';
-    const ICON_FONTAWESOME = 'FontAwesome';
+    public const ICON_BOOTSTRAP = 'Bootstrap';
+    public const ICON_FONTAWESOME = 'FontAwesome';
 
     protected function configure()
     {
@@ -78,7 +78,7 @@ class Dialog extends Base
             case static::ICON_BOOTSTRAP:
                 return [
                     'ICON_INFO' => 'bi-info-circle text-info fs-1',
-                    'ICON_ALERT' =>'bi-exclamation-circle text-warning fs-1',
+                    'ICON_ALERT' => 'bi-exclamation-circle text-warning fs-1',
                     'ICON_ERROR' => 'bi-x-circle text-danger fs-1',
                     'ICON_SUCCESS' => 'bi-check-circle text-success fs-1',
                     'ICON_QUESTION' => 'bi-question-circle text-primary fs-1',
@@ -91,7 +91,7 @@ class Dialog extends Base
             case static::ICON_FONTAWESOME:
                 return [
                     'ICON_INFO' => 'fas fa-info-circle text-info',
-                    'ICON_ALERT' =>'fas fa-exclamation-circle text-warning',
+                    'ICON_ALERT' => 'fas fa-exclamation-circle text-warning',
                     'ICON_ERROR' => 'fas fa-times-circle text-danger',
                     'ICON_SUCCESS' => 'fas fa-check-circle text-success',
                     'ICON_QUESTION' => 'fas fa-question-circle text-primary',

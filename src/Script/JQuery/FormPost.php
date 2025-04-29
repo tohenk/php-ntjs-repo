@@ -57,7 +57,7 @@ class FormPost extends Base
 
     protected function getOverrides()
     {
-      return [];
+        return [];
     }
 
     protected function getErrHelperOptions()

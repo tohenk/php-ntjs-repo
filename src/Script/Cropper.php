@@ -44,6 +44,5 @@ class Cropper extends Base
     public function getScript()
     {
         $this->useJavascript('cropper.min');
-        $this->useStylesheet('cropper.min');
     }
 }

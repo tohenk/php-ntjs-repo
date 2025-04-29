@@ -51,6 +51,6 @@ class ScriptTest extends TestCase
     $.test();
 })(jQuery);
 EOF
-        , $script->getRepository()->getContent(), 'Script properly added');
+            , $script->getRepository()->getContent(), 'Script properly added');
     }
 }

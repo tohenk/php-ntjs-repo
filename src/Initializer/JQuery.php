@@ -45,7 +45,8 @@ class JQuery
         if (Manager::getInstance()->getBackend()->getConfig('xhr')) {
             // setup repository for XHR
             $repo
-                ->setWrapper(<<<EOF
+                ->setWrapper(
+                    <<<EOF
 (function($) {
     (function loader(f) {
         if (document.ntloader && !document.ntloader.isScriptLoaded()) {
@@ -64,7 +65,8 @@ EOF
         } else {
             // setup repository for normal request
             $repo
-                ->setWrapper(<<<EOF
+                ->setWrapper(
+                    <<<EOF
 (function($) {%s})(jQuery);
 EOF
                 )

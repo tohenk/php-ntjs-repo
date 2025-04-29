@@ -41,7 +41,7 @@ use NTLAB\JS\Util\Asset;
  *
  * $script = Script::create('JQuery')
  *     ->includeDependencies(['JQuery.Dialog.Message']) // include dependency
- *     ->add(                                           // create code 
+ *     ->add(                                           // create code
  *         <<<EOF
  * $.post('/path/to/url', {data: mydata}, function(json) {
  *     if (json.success) {

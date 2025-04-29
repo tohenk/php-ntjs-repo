@@ -36,9 +36,9 @@ use NTLAB\JS\Util\Asset;
  */
 class Popper extends Base
 {
-    const UMD = 'umd';
-    const ESM = 'esm';
-    const CJS = 'cjs';
+    public const UMD = 'umd';
+    public const ESM = 'esm';
+    public const CJS = 'cjs';
 
     /**
      * @var string

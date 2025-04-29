@@ -38,8 +38,8 @@ class IframeLoader extends Base
 {
     protected function configure()
     {
-      $this->addDependencies('JQuery.NS');
-      $this->setPosition(Repository::POSITION_FIRST);
+        $this->addDependencies('JQuery.NS');
+        $this->setPosition(Repository::POSITION_FIRST);
     }
 
     public function getScript()

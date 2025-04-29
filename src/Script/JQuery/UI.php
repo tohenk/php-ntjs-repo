@@ -23,6 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 namespace NTLAB\JS\Repo\Script\JQuery;
 
 use NTLAB\JS\Repo\Script\JQuery as Base;
@@ -64,6 +65,7 @@ class UI extends Base
         if (null === $instance) {
             $instance = new self();
         }
+
         return $instance;
     }
 }

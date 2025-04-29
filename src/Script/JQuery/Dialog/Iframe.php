@@ -160,6 +160,7 @@ EOF
             $url .= (false !== strpos($url, '?') ? '&' : '?').$options['query_string'];
         }
         unset($options['dialog_id'], $options['height'], $options['width'], $options['overflow'], $options['query_string']);
+
         return $this->getBackend()->ctag('a', $content, array_merge(['href' => $url, 'class' => 'dialog', 'id' => 'ref-dlg'.$dlg], $options));
     }
 }

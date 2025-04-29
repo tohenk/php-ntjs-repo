@@ -88,7 +88,7 @@ $.define('dlgresize', {
     }
 });
 EOF
-;
+        ;
     }
 
     public function getInitScript()

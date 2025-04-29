@@ -23,6 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 namespace NTLAB\JS\Repo\Script\Bootstrap\Dialog;
 
 use NTLAB\JS\Repo\Script\JQuery as Base;
