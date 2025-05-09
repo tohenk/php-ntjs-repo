@@ -26,7 +26,7 @@
 
 namespace NTLAB\JS\Repo\Script\JQuery\Dialog;
 
-use NTLAB\JS\Script\JQuery\UI as Base;
+use NTLAB\JS\Repo\Script\JQuery\UI as Base;
 use NTLAB\JS\Repository;
 use NTLAB\JS\Util\JSValue;
 

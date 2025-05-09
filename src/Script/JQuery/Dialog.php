@@ -26,7 +26,7 @@
 
 namespace NTLAB\JS\Repo\Script\JQuery;
 
-use NTLAB\JS\Script\JQuery\UI as Base;
+use NTLAB\JS\Repo\Script\JQuery\UI as Base;
 use NTLAB\JS\Repository;
 
 /**
