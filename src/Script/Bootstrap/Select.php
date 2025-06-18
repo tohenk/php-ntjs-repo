@@ -184,21 +184,9 @@ if ($.fn.selectpicker.Constructor.VERSION === '1.14.0-beta3' && $.fn.selectpicke
     $.fn.selectpicker.Constructor.prototype.__buildData = $.fn.selectpicker.Constructor.prototype.buildData;
     $.fn.selectpicker.Constructor.prototype.buildData = function(data, type) {
         const retval = this.__buildData(data, type);
-        if (type === 'data' && this.selectpicker.main.data && this.selectpicker.main.data.length > 1) {
-            let i = 0;
-            while (true) {
-                if (i === this.selectpicker.main.data.length - 1) {
-                    break;
-                }
-                const values = this.selectpicker.main.data.map(data => data.value);
-                const value = values[i];
-                const rest = values.slice(i + 1);
-                if (rest.indexOf(value) < 0) {
-                    i++;
-                } else {
-                    this.selectpicker.main.data.splice(i, 1);
-                }
-            }
+        // remove previous select options
+        if (type === 'data' && retval.length && this.selectpicker.main.data && this.selectpicker.main.data.length > retval.length) {
+            this.selectpicker.main.data.splice(0, this.selectpicker.main.data.length - retval.length);
         }
         return retval;
     }
