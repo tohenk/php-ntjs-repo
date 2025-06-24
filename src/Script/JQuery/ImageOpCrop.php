@@ -57,8 +57,8 @@ $.define('imgop.crop', {
     selection: null,
     imgop: null,
     next: null,
-    createTemplate(ratio) {
-        return `<cropper-canvas background style="min-height: 60vh;">
+    createTemplate(height, ratio) {
+        return `<cropper-canvas background style="min-height:\${height}px;">
                 <cropper-image rotatable scalable skewable translatable></cropper-image>
                 <cropper-shade hidden></cropper-shade>
                 <cropper-handle action="select" plain></cropper-handle>
@@ -77,6 +77,53 @@ $.define('imgop.crop', {
                 </cropper-selection>
             </cropper-canvas>`;
     },
+    inSelection(check, against) {
+        return (
+            check.x >= against.x
+            && check.y >= against.y
+            && (check.x + check.width) <= (against.x + against.width)
+            && (check.y + check.height) <= (against.y + against.height)
+        );
+    },
+    update(selection) {
+        const self = this;
+        const canvasRect = self.instance.getCropperCanvas()
+            .getBoundingClientRect();
+        const imageRect = self.instance.getCropperImage()
+            .getBoundingClientRect();
+        const r = {
+            x: imageRect.left - canvasRect.left,
+            y: imageRect.top - canvasRect.top,
+            width: imageRect.width,
+            height: imageRect.height
+        }
+        self.cropdata.width = r.width;
+        self.cropdata.height = r.height;
+        self.cropdata.selection = null;
+        if (selection && self.inSelection(selection, r)) {
+            self.cropdata.selection = {
+                x: selection.x - r.x,
+                y: selection.y - r.y,
+                w: selection.width,
+                h: selection.height,
+            }
+        }
+    },
+    cropper(img, options) {
+        const self = this;
+        const h = Math.min(img.naturalHeight, Math.floor(window.innerHeight * 0.6));
+        self.instance = new Cropper.default(img, {
+            template: self.createTemplate(h, options.aspectRatio || '')
+        });
+        const cropperImage = self.instance.getCropperImage();
+        cropperImage.\$ready(im => {
+            const cropperSelection = self.instance.getCropperSelection();
+            cropperSelection.addEventListener('change', function(e) {
+                self.update(e.detail);
+            });
+            self.update(cropperSelection);
+        });
+    },
     dialog(img) {
         const self = this;
         self.img = $(img);
@@ -85,38 +132,9 @@ $.define('imgop.crop', {
             size: 'lg',
             open() {
                 const bd = $.ntdlg.getBody($(this));
-                bd.append($(img));
+                bd.append(self.img);
                 bd.css({padding: 0});
-                const options = self.options;
-                const cropper = new Cropper.default($(img)[0], {
-                    template: self.createTemplate(options.aspectRatio || '')
-                });
-                const cropperCanvas = cropper.getCropperCanvas();
-                const cropperImage = cropper.getCropperImage();
-                const cropperSelection = cropper.getCropperSelection();
-                cropperImage.\$ready(im => {
-                    const canvasRect = cropperCanvas.getBoundingClientRect();
-                    cropperSelection.addEventListener('change', function(e) {
-                        const imageRect = cropperImage.getBoundingClientRect();
-                        const r = {
-                            x: imageRect.left - canvasRect.left,
-                            y: imageRect.top - canvasRect.top,
-                            width: imageRect.width,
-                            height: imageRect.height
-                        }
-                        self.cropdata.width = r.width;
-                        self.cropdata.height = r.height;
-                        self.cropdata.selection = null;
-                        if (self.inSelection(e.detail, r)) {
-                            self.cropdata.selection = {
-                                x: e.detail.x - r.x,
-                                y: e.detail.y - r.y,
-                                w: e.detail.width,
-                                h: e.detail.height,
-                            }
-                        }
-                    });
-                });
+                self.cropper(img, self.options);
             },
             buttons: {
                 '$apply': {
@@ -139,14 +157,6 @@ $.define('imgop.crop', {
             }
         });
         $.ntdlg.show(dlg);
-    },
-    inSelection(check, against) {
-        return (
-            check.x >= against.x
-            && check.y >= against.y
-            && (check.x + check.width) <= (against.x + against.width)
-            && (check.y + check.height) <= (against.y + against.height)
-        );
     },
     apply() {
         const self = this;
