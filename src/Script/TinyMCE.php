@@ -53,7 +53,7 @@ class TinyMCE extends Base
     public function doCall($id, $options)
     {
         if (isset($options['language']) && ($cdn = $this->getManager()->getCdn('tinymce-i18n'))) {
-            $options['language_url'] = $cdn->get(Asset::ASSET_JAVASCRIPT, $options['language'].'.js', 'langs7');
+            $options['language_url'] = $cdn->get(Asset::ASSET_JAVASCRIPT, $options['language'].'.js', 'langs8');
         }
         $options = JSValue::create(array_merge(['selector' => "#$id"], $options));
         $this
