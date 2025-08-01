@@ -101,6 +101,7 @@ class FileUpload extends Base
         $chunkSize = $this->getChunkSize();
         $confirm = $this->trans('Confirm');
         $delete = $this->trans('Are you sure want to delete <code>%FILE%</code>?');
+        $delete_all = $this->trans('Are you sure want to delete all files?');
         $not_allowed = $this->trans('Filetype not allowed');
 
         return <<<EOF
@@ -140,10 +141,11 @@ $.define('uploader', {
         const self = this;
         self.el
             .on(self.startEvent, function(e, data) {
-                self.el.find('.fileupload-progress').removeClass('d-none');
+                self.setProgress(true);
             })
             .on(self.addEvent, function(e, data) {
                 if (data && data.files) {
+                    self.setEmpty(false);
                     for (const file of data.files) {
                         const ftype = file.type || 'application/octet-stream';
                         if (self.mimeTypes.length && self.mimeTypes.indexOf(ftype) < 0) {
@@ -154,7 +156,7 @@ $.define('uploader', {
                 }
             })
             .on(self.completeEvent, function(e, data) {
-                if (data && data.files) {
+                if (!self.hasPendingUpload() && data && data.files) {
                     let i = 0;
                     for (const file of data.files) {
                         const filename = data.result.files[i++].name;
@@ -166,10 +168,25 @@ $.define('uploader', {
                 }
             })
             .on(self.finishEvent, function(e, data) {
-                self.el.find('.fileupload-progress').addClass('d-none');
+                if (!self.hasPendingUpload()) {
+                    self.setProgress(false);
+                }
                 self.applyHandlers();
             })
         ;
+        self.el.find('.delete-all').on('click', function(e) {
+            e.preventDefault();
+            const files = self.el.find('.template-download .delete');
+            if (files.length) {
+                $.ntdlg.confirm('uploader-confirm-dlg', '$confirm', '$delete_all', function() {
+                    $.each(files, function() {
+                        $(this)
+                            .data('force-delete', true)
+                            .trigger('click');
+                    });
+                });
+            }
+        });
     },
     applyHandlers() {
         const self = this;
@@ -193,13 +210,20 @@ $.define('uploader', {
     clear() {
         const self = this;
         self.el.find('.template-download').remove();
+        self.setProgress(self.hasPendingUpload());
     },
     list() {
         const self = this;
         self.el.each(function() {
             const that = this;
+            self.setLoading(!self.hasPendingUpload());
+            self.setEmpty(false);
             $.get(this.action, {mime: self.mimeTypes})
                 .done(function(json) {
+                    self.setLoading(false);
+                    if (!json || (Array.isArray(json.files) && !json.files.length)) {
+                        self.setEmpty(true);
+                    }
                     if (json) {
                         const e = $.Event('click');
                         self.el.fileupload('option', 'done').call(that, e, {result: json});
@@ -207,6 +231,34 @@ $.define('uploader', {
                 })
             ;
         });
+    },
+    hasPendingUpload() {
+        const self = this;
+        return self.el.find('.template-upload').length ? true : false;
+    },
+    setProgress(state) {
+        const self = this;
+        if (state) {
+            self.el.find('.fileupload-progress').removeClass('d-none');
+        } else {
+            self.el.find('.fileupload-progress').addClass('d-none');
+        }
+    },
+    setLoading(state) {
+        const self = this;
+        if (state) {
+            self.el.find('.files .loading').removeClass('d-none');
+        } else {
+            self.el.find('.files .loading').addClass('d-none');
+        }
+    },
+    setEmpty(state) {
+        const self = this;
+        if (state) {
+            self.el.find('.files .empty').removeClass('d-none');
+        } else {
+            self.el.find('.files .empty').addClass('d-none');
+        }
     },
     show(options) {
         const self = this;
@@ -261,9 +313,16 @@ if ($.blueimp.fileupload.prototype.__deleteHandler === undefined) {
         e.preventDefault();
         const self = this;
         const file = $(e.currentTarget).data('file');
-        $.ntdlg.confirm('uploader-confirm-dlg', '$confirm', '$delete'.replace(/%FILE%/, file), function() {
+        const handler = function() {
             $.blueimp.fileupload.prototype.__deleteHandler.call(self, e);
-        });
+        }
+        if ($(e.target).data('force-delete')) {
+            handler();
+        } else {
+            $.ntdlg.confirm('uploader-confirm-dlg', '$confirm', '$delete'.replace(/%FILE%/, file), function() {
+                handler();
+            });
+        }
     }
 }
 EOF;
