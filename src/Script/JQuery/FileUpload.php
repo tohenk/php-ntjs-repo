@@ -115,8 +115,10 @@ $.define('uploader', {
     startEvent: 'fileuploadstarted',
     finishEvent: 'fileuploadfinished',
     fileuploadOptions: {
+        type: 'PUT',
+        multipart: false,
         maxChunkSize: $chunkSize,
-        sequentialUploads: true
+        sequentialUploads: true,
     },
     init(cb) {
         const self = this;
