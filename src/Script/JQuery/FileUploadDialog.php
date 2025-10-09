@@ -89,17 +89,32 @@ $.define('uploaderdlg', {
             }
         }
     },
+    setFlags(flags) {
+        const self = this;
+        if (self.dlg) {
+            self.dlg.find('.flag').remove();
+            for (const flag of flags) {
+                self.dlg.find('.btn-close').before(`<span class="badge bg-danger ms-1 flag">\${flag}</span>`);
+            }
+        }
+    },
     show(title) {
         const self = this;
         $.assert('ntdlg');
         self.getEl(function(el) {
             self.dlg = el.parents('.modal');
             self.dlg.find('.modal-title').text(title || '$title');
-            $.ntdlg._create(self.dlg, {
-                backdrop: 'static',
-                ['hidden.bs.modal'](e) {
-                    self.uploader.target = null;
+            $.ntdlg._create(self.dlg, {backdrop: 'static'});
+            self.dlg.on('shown.bs.modal', function(e) {
+                if (self.uploader.target) {
+                    self.uploader.target.trigger('shown.fileupload');
                 }
+            });
+            self.dlg.on('hidden.bs.modal', function(e) {
+                if (self.uploader.target) {
+                    self.uploader.target.trigger('hidden.fileupload');
+                }
+                self.uploader.target = null;
             });
             $.ntdlg.show(self.dlg);
         });

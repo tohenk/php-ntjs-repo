@@ -55,7 +55,7 @@ $.define('imgop', {
     imgname: null,
     imgver: null,
     imgurl: null,
-    imageTypes: [],
+    imageTypes: {},
     operations: [],
     url: $url,
     data: {},
@@ -133,12 +133,11 @@ $.define('imgop', {
         }
     },
     checkImageType(image_name, image_type) {
-        let types, allowed = false;
-        for (const type in this.imageTypes) {
-            if (types) {
-                types += ', ' + this.imageTypes[type];
-            } else {
-                types = this.imageTypes[type];
+        let allowed = false;
+        const types = [];
+        for (const [type, ext] of Object.entries(this.imageTypes)) {
+            if (!types.includes(ext.toUpperCase())) {
+                types.push(ext.toUpperCase());
             }
             if (image_type === type && !allowed) {
               allowed = true;
@@ -148,7 +147,7 @@ $.define('imgop', {
             allowed = true;
         }
         if (!allowed) {
-            $.ntdlg.message('img-op-error-msg', image_name, '$image_type'.replace(/%IMAGE_TYPES%/, types), $.ntdlg.ICON_ERROR);
+            $.ntdlg.message('img-op-error-msg', image_name, '$image_type'.replace(/%IMAGE_TYPES%/, types.join(', ')), $.ntdlg.ICON_ERROR);
         }
         return allowed;
     },

@@ -84,29 +84,41 @@ class ImageOpHelper extends Base
         }
         // image types
         if (isset($options['image_types'])) {
-            $imageTypes = [];
-            foreach ((array) $options['image_types'] as $k => $v) {
-                if (!is_string($k)) {
-                    list($mime_type, $mime_subtype) = explode('/', $v);
-                    $k = $v;
-                    $v = strtoupper($mime_subtype);
-                }
-                $imageTypes[$k] = $v;
-            }
-            $params['images'] = $imageTypes;
+            $params['images'] = $options['image_types'];
         }
         $params = JSValue::create($params)->setIndent(2);
         $this
             ->add(
                 <<<EOF
 $('$selector').uploader({
+    imgop: $params,
     select(filename, data) {
-        $.imgop.handleUpload({name: filename, type: data.type}, $params);
+        const xdata = $('$selector').data('uploader');
+        $.imgop.handleUpload({name: filename, type: data.type}, xdata.imgop);
     }
 }).on('click', function(e) {
     e.preventDefault();
     $.uploader.target = $(this);
     $(this).uploader('show');
+}).on('init.fileupload', function(e) {
+    const data = $(e.target).data('uploader');
+    if (data.imgop.images) {
+        $.uploader.mimeTypes = Object.keys(data.imgop.images);
+    }
+}).on('shown.fileupload', function(e) {
+    const data = $(e.target).data('uploader');
+    const flags = [];
+    if (data.imgop.images) {
+        Object.values(data.imgop.images)
+            .sort()
+            .map(ext => ext.toUpperCase())
+            .forEach(ext => {
+                if (!flags.includes(ext)) {
+                    flags.push(ext);
+                }
+            });
+    }
+    $.uploader.setFlags(flags);
 });
 EOF
             );

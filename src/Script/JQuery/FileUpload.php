@@ -131,6 +131,9 @@ $.define('uploader', {
                     self.el.fileupload(self.fileuploadOptions);
                     self.bindHandler();
                 }
+                if (self.target) {
+                    self.target.trigger('init.fileupload');
+                }
                 self.clear();
                 self.list();
                 if (typeof cb === 'function') {
@@ -174,8 +177,7 @@ $.define('uploader', {
                     self.setProgress(false);
                 }
                 self.applyHandlers();
-            })
-        ;
+            });
         self.el.find('.delete-all').on('click', function(e) {
             e.preventDefault();
             const files = self.el.find('.template-download .delete');
@@ -204,8 +206,7 @@ $.define('uploader', {
                     };
                     self.select(data.name, data);
                 }
-            })
-        ;
+            });
         // enable gallery
         $.ntgallery(self.el);
     },
@@ -230,8 +231,7 @@ $.define('uploader', {
                         const e = $.Event('click');
                         self.el.fileupload('option', 'done').call(that, e, {result: json});
                     }
-                })
-            ;
+                });
         });
     },
     hasPendingUpload() {
@@ -262,6 +262,12 @@ $.define('uploader', {
             self.el.find('.files .empty').addClass('d-none');
         }
     },
+    setFlags(flags) {
+        const self = this;
+        if ($.uploaderdlg) {
+            $.uploaderdlg.setFlags(flags);
+        }
+    },
     show(options) {
         const self = this;
         options = options || {};
@@ -272,6 +278,9 @@ $.define('uploader', {
                 self.el.data('fileuploadselect', options.select);
             } else {
                 self.el.data('fileuploadselect', null);
+            }
+            if (self.target) {
+                self.target.trigger('show.fileupload');
             }
             $.uploaderdlg.show(options.title);
         });
