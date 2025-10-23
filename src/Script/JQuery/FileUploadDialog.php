@@ -114,7 +114,6 @@ $.define('uploaderdlg', {
                 if (self.uploader.target) {
                     self.uploader.target.trigger('hidden.fileupload');
                 }
-                self.uploader.target = null;
             });
             $.ntdlg.show(self.dlg);
         });
