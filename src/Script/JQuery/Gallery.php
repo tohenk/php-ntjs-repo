@@ -51,11 +51,12 @@ class Gallery extends Base
 $.ntgallery = function(container, options) {
     options = options || {};
     const items = [];
-    const g = $(container ? container : document.body).find('a[data-gallery]');
-    g.each(function() {
-        items.push(this);
-    });
-    g.on('click', function(e){
+    const g = $(container ? container : document.body)
+        .find('a[data-gallery]')
+        .each(function() {
+            items.push(this);
+        });
+    g.off('click').on('click', function(e) {
         e.preventDefault();
         if (items.length) {
             options.index = this;
