@@ -42,7 +42,7 @@ class Typeahead extends Base
     protected function configure()
     {
         $this->setAsset(new Asset('bootstrap-typeahead'));
-        $this->addDependencies(['JQuery.NS', 'JQuery.AjaxHelper']);
+        $this->addDependencies(['JQueryMigrate', 'JQuery.NS', 'JQuery.AjaxHelper']);
         $this->setPosition(Repository::POSITION_MIDDLE);
     }
 

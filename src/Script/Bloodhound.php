@@ -38,6 +38,7 @@ class Bloodhound extends Base
 {
     protected function configure()
     {
+        $this->addDependencies(['JQueryMigrate']);
         $this->setAsset(new Asset('typeahead.js'));
     }
 

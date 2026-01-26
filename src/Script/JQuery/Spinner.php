@@ -40,11 +40,11 @@ class Spinner extends Base
 {
     protected function configure()
     {
+        $this->addDependencies(['JQueryMigrate', 'JQuery.NS']);
         $this->setAsset(new Asset('jquery.spinner', [
             Asset::ASSET_JAVASCRIPT => 'js',
             Asset::ASSET_STYLESHEET => 'css',
         ]));
-        $this->addDependencies(['JQuery.NS']);
         $this->setPosition(Repository::POSITION_MIDDLE);
     }
 

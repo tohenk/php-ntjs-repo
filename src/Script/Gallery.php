@@ -38,6 +38,7 @@ class Gallery extends Base
 {
     protected function configure()
     {
+        $this->addDependencies(['JQueryMigrate']);
         $this->setAsset(new Asset('Gallery', [
             Asset::ASSET_JAVASCRIPT => 'js',
             Asset::ASSET_STYLESHEET => 'css',

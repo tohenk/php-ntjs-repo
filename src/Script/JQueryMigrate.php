@@ -30,33 +30,19 @@ use NTLAB\JS\Script as Base;
 use NTLAB\JS\Util\Asset;
 
 /**
- * Include BlueImp JQuery-File-Upload assets.
+ * Include jquery-migrate assets.
  *
  * @author Toha <tohenk@yahoo.com>
  */
-class FileUpload extends Base
+class JQueryMigrate extends Base
 {
     protected function configure()
     {
-        $this->addDependencies(['JQueryMigrate']);
-        $this->setAsset(new Asset('jQuery-File-Upload', [
-            Asset::ASSET_JAVASCRIPT => 'js',
-            Asset::ASSET_STYLESHEET => 'css',
-        ]));
+        $this->setAsset(new Asset('jquery-migrate'));
     }
 
     public function getScript()
     {
-        $this->useJavascript('vendor/jquery.ui.widget');
-        $this->useJavascript('jquery.iframe-transport');
-        $this->useJavascript('jquery.fileupload');
-        $this->useJavascript('jquery.fileupload-process');
-        $this->useJavascript('jquery.fileupload-image');
-        $this->useJavascript('jquery.fileupload-audio');
-        $this->useJavascript('jquery.fileupload-video');
-        $this->useJavascript('jquery.fileupload-validate');
-        $this->useJavascript('jquery.fileupload-ui');
-        $this->useStylesheet('jquery.fileupload');
-        $this->useStylesheet('jquery.fileupload-ui');
+        $this->useJavascript('jquery-migrate.min');
     }
 }
