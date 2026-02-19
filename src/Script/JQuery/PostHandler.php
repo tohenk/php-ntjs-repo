@@ -57,7 +57,7 @@ class PostHandler extends Base
 Object.assign($, {
     handlePostData(data, errhelper, success_cb, error_cb) {
         $.postErr = null;
-        const json = typeof data === 'object' ? data : $.parseJSON(data);
+        const json = typeof data === 'object' ? data : JSON.parse(data);
         if (json.success) {
             if (typeof success_cb === 'function') {
                 success_cb(json);
