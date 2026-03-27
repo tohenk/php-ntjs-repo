@@ -62,11 +62,11 @@ class DataTables extends Base
         $this->assetRepository = $this->genRepoName($name);
 
         // build asset path
-        $dir = [static::DATATABLES_NAME];
+        $dir = [strtolower(static::DATATABLES_NAME)];
         if (null !== $type) {
-            $dir[] = $type;
+            $dir[] = strtolower($type);
         }
-        $dir[] = $name ? ($name === strtoupper($name) ? strtolower($name) : $name) : static::DATATABLES_NAME;
+        $dir[] = strtolower($this->assetName);
         $paths = $uniAsset ? [] : [Asset::ASSET_JAVASCRIPT => 'js', Asset::ASSET_STYLESHEET => 'css'];
 
         // set asset
@@ -92,6 +92,6 @@ class DataTables extends Base
 
     protected function genRepoName($name)
     {
-        return static::DATATABLES_NAME.(null !== $name ? '-'.$name : '');
+        return strtolower(static::DATATABLES_NAME.(null !== $name ? '-'.$name : ''));
     }
 }

@@ -39,7 +39,7 @@ class Gallery extends Base
     protected function configure()
     {
         $this->addDependencies(['JQueryMigrate']);
-        $this->setAsset(new Asset('Gallery', [
+        $this->setAsset(new Asset('blueimp-gallery', [
             Asset::ASSET_JAVASCRIPT => 'js',
             Asset::ASSET_STYLESHEET => 'css',
         ]));

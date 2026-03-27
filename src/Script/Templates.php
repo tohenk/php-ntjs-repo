@@ -30,7 +30,7 @@ use NTLAB\JS\Script as Base;
 use NTLAB\JS\Util\Asset;
 
 /**
- * Include BlueImp JavaScript-Templates assets.
+ * Include BlueImp Templates assets.
  *
  * @author Toha <tohenk@yahoo.com>
  */
@@ -38,7 +38,7 @@ class Templates extends Base
 {
     protected function configure()
     {
-        $this->setAsset(new Asset('JavaScript-Templates', [
+        $this->setAsset(new Asset('blueimp-tmpl', [
             Asset::ASSET_JAVASCRIPT => 'js',
             Asset::ASSET_STYLESHEET => 'css',
         ]));

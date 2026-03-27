@@ -61,7 +61,7 @@ class JqGrid extends Base
     protected function configure()
     {
         $this->addDependencies(['JQueryMigrate']);
-        $this->setAsset(new Asset('jqGrid', [Asset::ASSET_JAVASCRIPT => 'js', Asset::ASSET_STYLESHEET => 'css']));
+        $this->setAsset(new Asset('jqgrid', [Asset::ASSET_JAVASCRIPT => 'js', Asset::ASSET_STYLESHEET => 'css']));
         $this->addAsset(Asset::ASSET_JAVASCRIPT, 'jquery.jqGrid.min');
         $this->addLocaleAsset(Asset::ASSET_JAVASCRIPT, 'i18n/grid.locale-');
         switch (self::$style) {

@@ -30,7 +30,7 @@ use NTLAB\JS\Script as Base;
 use NTLAB\JS\Util\Asset;
 
 /**
- * Include BlueImp JavaScript-Load-Image assets.
+ * Include BlueImp Load Image assets.
  *
  * @author Toha <tohenk@yahoo.com>
  */
@@ -38,7 +38,7 @@ class LoadImage extends Base
 {
     protected function configure()
     {
-        $this->setAsset(new Asset('JavaScript-Load-Image', [
+        $this->setAsset(new Asset('blueimp-load-image', [
             Asset::ASSET_JAVASCRIPT => 'js',
             Asset::ASSET_STYLESHEET => 'css',
         ]));

@@ -30,7 +30,7 @@ use NTLAB\JS\Script as Base;
 use NTLAB\JS\Util\Asset;
 
 /**
- * Include BlueImp JQuery-File-Upload assets.
+ * Include BlueImp File Upload assets.
  *
  * @author Toha <tohenk@yahoo.com>
  */
@@ -39,7 +39,7 @@ class FileUpload extends Base
     protected function configure()
     {
         $this->addDependencies(['JQueryMigrate']);
-        $this->setAsset(new Asset('jQuery-File-Upload', [
+        $this->setAsset(new Asset('blueimp-file-upload', [
             Asset::ASSET_JAVASCRIPT => 'js',
             Asset::ASSET_STYLESHEET => 'css',
         ]));

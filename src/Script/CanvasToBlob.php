@@ -30,7 +30,7 @@ use NTLAB\JS\Script as Base;
 use NTLAB\JS\Util\Asset;
 
 /**
- * Include BlueImp Javascript-Canvas-to-Blob assets.
+ * Include BlueImp Canvas to Blob assets.
  *
  * @author Toha <tohenk@yahoo.com>
  */
@@ -38,7 +38,7 @@ class CanvasToBlob extends Base
 {
     protected function configure()
     {
-        $this->setAsset(new Asset('JavaScript-Canvas-to-Blob', [
+        $this->setAsset(new Asset('blueimp-canvas-to-blob', [
             Asset::ASSET_JAVASCRIPT => 'js',
             Asset::ASSET_STYLESHEET => 'css',
         ]));
