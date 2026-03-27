@@ -39,7 +39,6 @@ class PdfjsViewer extends Base
     protected function configure()
     {
         $this->addDependencies(['Pdfjs']);
-        $this->getAsset()->setPath(null, 'web');
         $this->addAsset(Asset::ASSET_JAVASCRIPT, 'viewer.mjs');
         $this->addAsset(Asset::ASSET_STYLESHEET, 'viewer.css');
         $this->addAsset(Asset::ASSET_OTHER, 'locale/locale.json', null, ['type' => 'application/l10n', 'rel' => 'resource']);
@@ -47,6 +46,6 @@ class PdfjsViewer extends Base
 
     protected function getRepositoryName()
     {
-        return $this->getConfig('pdfjs-legacy') ? 'pdfjs-legacy' : 'pdfjs';
+        return $this->getConfig('pdfjs-legacy') ? 'pdfjs-legacy-viewer' : 'pdfjs-viewer';
     }
 }

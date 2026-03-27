@@ -38,12 +38,12 @@ class Pdfjs extends Base
 {
     protected function configure()
     {
-        $this->getAsset()->setPath(Asset::ASSET_JAVASCRIPT, 'build');
-        $this->addAsset(Asset::ASSET_JAVASCRIPT, 'pdf.mjs');
+        $this->getAsset()->setPath(Asset::ASSET_JAVASCRIPT, $this->getConfig('pdfjs-legacy') ? 'legacy/build' : 'build');
+        $this->addAsset(Asset::ASSET_JAVASCRIPT, 'pdf.min.mjs');
     }
 
     protected function getRepositoryName()
     {
-        return $this->getConfig('pdfjs-legacy') ? 'pdfjs-legacy' : 'pdfjs';
+        return 'pdfjs';
     }
 }
