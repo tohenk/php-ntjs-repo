@@ -43,9 +43,10 @@ class AjaxData extends Base
 
     public function getScript()
     {
-        $confirm_id = 'ajax_data_confirm_del';
         $confirm = $this->trans('Confirm');
         $message = $this->trans('Do you really want to delete <code>%me%</code>?');
+        $error = $this->trans('Error');
+        $ok = $this->trans('OK');
         $spinner = JSValue::create($this->getConfig('spinner-template'));
 
         return <<<EOF
@@ -65,37 +66,53 @@ $.ajaxData = function(el, params) {
             self.container.html($spinner);
             $.get(self.dataUrl, function(html) {
                 const container = self.container.html(html);
-                // assign delete handler
                 container.find(self.deleteClicker).on('click', function(e) {
                     e.preventDefault();
                     self.delete($(this));
                 });
-                // callback
                 if (typeof self.callback === 'function') {
                     self.callback.apply(self, [container]);
                 }
             });
         },
-        delete(a, message) {
+        showError(message) {
             const self = this;
-            const url = a.attr('href');
-            const title = a.data('title');
-            message = message || '$message';
-            message = message.replace(/%me%/, title);
-            $.ntdlg.confirm('$confirm_id', '$confirm', message, function() {
-                $.urlPost(url, function() {
-                    self.load();
-                });
+            $.ntdlg.dialog('ajax_data_dlg', '$error', message, $.ntdlg.ICON_ERROR, {
+                '$ok': {
+                    icon: $.ntdlg.BTN_ICON_OK,
+                    handler() {
+                        $.ntdlg.close($(this));
+                    }
+                }
             });
         },
-        add(value, el) {
+        add(value) {
             const self = this;
-            const params = {};
-            params[self.addValueParam] = value;
+            const params = {[self.addValueParam]: value};
             $.ntdlg.close('ajax_data_browse_dlg');
             $.post(self.addUrl, params, function(data) {
                 $.handlePostData(data, $.errhelper(), function() {
                     self.load();
+                }, function(json) {
+                    if (json.error_msg) {
+                        self.showError(json.error_msg);
+                    }
+                });
+            });
+        },
+        delete(el, message = null) {
+            const self = this;
+            const url = el.attr('href');
+            const title = el.data('title');
+            message = message || '$message';
+            message = message.replace(/%me%/, title);
+            $.ntdlg.confirm('ajax_data_dlg', '$confirm', message, function() {
+                $.urlPost(url, function(json) {
+                    if (json.success) {
+                        self.load();
+                    } else if (json.error_msg) {
+                        self.showError(json.error_msg);
+                    }
                 });
             });
         },
