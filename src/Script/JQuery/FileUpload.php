@@ -114,6 +114,7 @@ $.define('uploader', {
     completeEvent: 'fileuploadcompleted',
     startEvent: 'fileuploadstarted',
     finishEvent: 'fileuploadfinished',
+    deletedEvent: 'fileuploaddestroyed',
     fileuploadOptions: {
         type: 'PUT',
         multipart: false,
@@ -134,7 +135,6 @@ $.define('uploader', {
                 if (self.target) {
                     self.target.trigger('init.fileupload');
                 }
-                self.clear();
                 self.list();
                 if (typeof cb === 'function') {
                     cb();
@@ -145,28 +145,31 @@ $.define('uploader', {
     bindHandler() {
         const self = this;
         self.el
+            .on(self.addEvent, function(e, data) {
+                if (Array.isArray(data?.files)) {
+                    let paramName = data.paramName;
+                    if (typeof paramName === 'string' && paramName.endsWith('[]')) {
+                        paramName = paramName.substr(0, paramName.length - 2);
+                    }
+                    self.setEmpty(false);
+                    self.validateFiles(data.files, paramName);
+                    self.refresh(data);
+                }
+            })
             .on(self.startEvent, function(e, data) {
                 self.setProgress(true);
             })
-            .on(self.addEvent, function(e, data) {
-                if (data && data.files) {
-                    self.setEmpty(false);
-                    for (const file of data.files) {
-                        const ftype = file.type || 'application/octet-stream';
-                        if (self.mimeTypes.length && self.mimeTypes.indexOf(ftype) < 0) {
-                            const error = self.mimeError || '$not_allowed';
-                            file.error = error.replace(/%mime_type%/, ftype);
-                        }
-                    }
-                }
-            })
             .on(self.completeEvent, function(e, data) {
-                if (!self.hasPendingUpload() && data && data.files) {
+                if (!self.hasPendingUpload() && Array.isArray(data?.files)) {
                     let i = 0;
                     for (const file of data.files) {
                         const filename = data.result.files[i++].name;
                         self.el.queue(function(next) {
-                            self.select(filename, file);
+                            if (file.selectable) {
+                                self.select(filename, file);
+                            } else if (typeof self.processFile === 'function') {
+                                return self.processFile(filename, file, next);
+                            }
                             next();
                         });
                     }
@@ -177,6 +180,10 @@ $.define('uploader', {
                     self.setProgress(false);
                 }
                 self.applyHandlers();
+                self.refresh(data);
+            })
+            .on(self.deletedEvent, function(e, data) {
+                self.refresh(data);
             });
         self.el.find('.delete-all').on('click', function(e) {
             e.preventDefault();
@@ -217,6 +224,7 @@ $.define('uploader', {
     },
     list() {
         const self = this;
+        self.clear();
         self.el.each(function() {
             const that = this;
             self.setLoading(!self.hasPendingUpload());
@@ -234,6 +242,36 @@ $.define('uploader', {
                 });
         });
     },
+    validateFiles(files, ref) {
+        const self = this;
+        for (const file of files) {
+            file.validated = true;
+            if (ref) {
+                file.ref = ref;
+            }
+            if (typeof self.validateFile === 'function') {
+                if (self.validateFile(file)) {
+                    continue;
+                }
+            }
+            file.selectable = self.isFileAllowed(file);
+        }
+    },
+    isFileAllowed(file) {
+        const self = this;
+        const ftype = file.type || 'application/octet-stream';
+        if (self.mimeTypes.length && !self.mimeTypes.includes(ftype)) {
+            const error = self.mimeError || '$not_allowed';
+            file.error = error.replace(/%mime_type%/, ftype);
+        } else {
+            delete file.error;
+        }
+        return file.error ? false : true;
+    },
+    refresh(data) {
+        const self = this;
+        setTimeout(() => self.el.trigger('refresh.fileupload', data || {}), 100);
+    },
     hasPendingUpload() {
         const self = this;
         return self.el.find('.template-upload').length ? true : false;
@@ -245,6 +283,7 @@ $.define('uploader', {
         } else {
             self.el.find('.fileupload-progress').addClass('d-none');
         }
+        self.el.find('.fileupload-progress .progress-message').addClass('d-none');
     },
     setLoading(state) {
         const self = this;
@@ -271,7 +310,9 @@ $.define('uploader', {
     show(options) {
         const self = this;
         options = options || {};
-        self.mimeTypes = options.mimeTypes !== undefined ? (Array.isArray(options.mimeTypes) ? options.mimeTypes : [options.mimeTypes]) : [];
+        self.mimeTypes = options.mimeTypes !== undefined ?
+            (Array.isArray(options.mimeTypes) ? options.mimeTypes : [options.mimeTypes]) :
+            [];
         self.mimeError = options.mimeError !== undefined ? options.mimeError : null;
         self.init(function() {
             if (typeof options.select === 'function') {
