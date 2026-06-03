@@ -104,7 +104,7 @@ class GoogleFonts extends Base
      * Use google fonts icon family.
      *
      * @param string $family  Icon family
-     * @return \NTLAB\JS\Script\GoogleFonts
+     * @return \NTLAB\JS\Repo\Script\GoogleFonts
      */
     public function useIcon($family)
     {
@@ -117,7 +117,7 @@ class GoogleFonts extends Base
      * Use google fonts font family.
      *
      * @param string $family  Font family
-     * @return \NTLAB\JS\Script\GoogleFonts
+     * @return \NTLAB\JS\Repo\Script\GoogleFonts
      */
     public function useFont($family)
     {

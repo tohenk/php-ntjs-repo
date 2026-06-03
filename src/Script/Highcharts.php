@@ -47,7 +47,7 @@ class Highcharts extends Base
      * Include highcharts module javascript.
      *
      * @param string $module  Module javascript
-     * @return \NTLAB\JS\Script\Highcharts
+     * @return \NTLAB\JS\Repo\Script\Highcharts
      */
     public function useModule($module)
     {
