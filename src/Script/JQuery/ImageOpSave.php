@@ -63,6 +63,18 @@ $.imgop.saveimg = function(options) {
                 img.attr('src', (src ? src : img.attr('src')) + '?_x=' + Date.now());
             }
         },
+        finishImage(imgop, res = {}) {
+            const self = this;
+            if (self.autoclose) {
+                $.uploader.close();
+            }
+            if (self.delete) {
+                $.uploader.delete(imgop.imgname);
+            }
+            if (typeof self.callback === 'function') {
+                self.callback(res, imgop.imgname);
+            }
+        },
         saveImg(imgop) {
             const self = this;
             $.ajax({
@@ -76,15 +88,7 @@ $.imgop.saveimg = function(options) {
             }).done(function(json) {
                 if (json.success) {
                     self.reloadImage();
-                    if (self.autoclose) {
-                        $.uploader.close();
-                    }
-                    if (self.delete) {
-                        $.uploader.delete(imgop.imgname);
-                    }
-                    if (typeof self.callback === 'function') {
-                        self.callback(json, imgop.imgname);
-                    }
+                    self.finishImage(imgop, json);
                 }
                 if (json.error) {
                     $.ntdlg.message('img-op-save-error-msg', imgop.imgname, json.error, $.ntdlg.ICON_ERROR);
@@ -111,6 +115,8 @@ $.imgop.saveimg = function(options) {
             }
             if (self.url) {
                 self.saveImg(imgop);
+            } else {
+                self.finishImage(imgop);
             }
         },
         init(options) {
