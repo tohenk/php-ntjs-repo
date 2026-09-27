@@ -118,10 +118,9 @@ $.define('bootstrapSelectHelper', {
                 }
             },
             ['rendered.bs.select']() {
-                if ($(this).attr('readonly') || $(this).attr('disabled')) {
+                if ($(this).prop('readonly') || $(this).prop('disabled')) {
                     $(this).siblings(self.dropdown)
                         .prop('disabled', true);
-                    ;
                 }
             },
             optionLoading() {
@@ -152,14 +151,14 @@ $.define('bootstrapSelectHelper', {
         const self = this;
         const observer = new MutationObserver(function(mutationsList, observer) {
             for (const mutation of mutationsList) {
-                if (mutation.attributeName == 'disabled') {
+                if (mutation.attributeName === 'disabled') {
                     const el = $(mutation.target);
                     const disabled = el.is(':disabled');
                     const dd = el.siblings(self.dropdown);
                     if (disabled) {
-                        dd.addClass('disabled');
+                        dd.prop('disabled', true);
                     } else {
-                        dd.removeClass('disabled');
+                        dd.prop('disabled', false);
                     }
                     dd.prop('disabled', disabled);
                 }
