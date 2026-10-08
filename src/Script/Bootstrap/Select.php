@@ -63,6 +63,7 @@ $.define('bootstrapSelectHelper', {
     dropdownMenu: '.dropdown-menu',
     spinner: '<div class="spinner-border spinner-border-sm text-secondary float-end" role="status"><span class="visually-hidden">$loading</span></div>',
     spinnerClass: 'spinner-border',
+    stateProp: ['readonly', 'disabled'],
     fixHeight(el, strategy) {
         let maxHeight = el.css('max-height');
         let minHeight = el.css('min-height');
@@ -118,9 +119,11 @@ $.define('bootstrapSelectHelper', {
                 }
             },
             ['rendered.bs.select']() {
-                if ($(this).prop('readonly') || $(this).prop('disabled')) {
-                    $(this).siblings(self.dropdown)
-                        .prop('disabled', true);
+                for (const prop of self.stateProp) {
+                    if ($(this).prop(prop) || $(this).attr(prop)) {
+                        self.setState($(this), true);
+                        break;
+                    }
                 }
             },
             optionLoading() {
@@ -147,20 +150,27 @@ $.define('bootstrapSelectHelper', {
             }
         });
     },
+    setState(el, state) {
+        const self = this;
+        el.siblings(self.dropdown)
+            .prop('disabled', state);
+        const p = el.parent('.dropdown');
+        if (p.length) {
+            const clicker = p.nextAll().find('a');
+            if (state) {
+                clicker.addClass('pe-none');
+            } else {
+                clicker.removeClass('pe-none');
+            }
+        }
+    },
     observeState() {
         const self = this;
         const observer = new MutationObserver(function(mutationsList, observer) {
             for (const mutation of mutationsList) {
-                if (mutation.attributeName === 'disabled') {
+                if (self.stateProp.includes(mutation.attributeName)) {
                     const el = $(mutation.target);
-                    const disabled = el.is(':disabled');
-                    const dd = el.siblings(self.dropdown);
-                    if (disabled) {
-                        dd.prop('disabled', true);
-                    } else {
-                        dd.prop('disabled', false);
-                    }
-                    dd.prop('disabled', disabled);
+                    self.setState(el, el.is(':disabled') || el.attr('readonly') ? true : false);
                 }
             }
         });
